@@ -18,7 +18,7 @@ class Logger:
         color_formatter = ColoredFormatter(
             "%(log_color)s %(asctime)s - %(name)s - %(levelname)s - %(message)s%(reset)s")
         sh = logging.StreamHandler()
-        sh.setLevel(logging.INFO)
+        sh.setLevel(logging.DEBUG)
         sh.setFormatter(color_formatter)
         hdlr = logging.FileHandler(self.log_filename, mode='w')
         hdlr.setLevel(logging.DEBUG)

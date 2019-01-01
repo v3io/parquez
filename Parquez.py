@@ -1,9 +1,9 @@
 from InputParser import InputParser
-from Logger import Logger
+from logger import Logger
 from ParquetTableGenerator import ParquetTableGenerator
 from Presto import Presto
 from CronGenerator import CronGenerator
-from Config import Config
+from config import Config
 
 
 def main():
