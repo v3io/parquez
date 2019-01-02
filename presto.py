@@ -1,5 +1,7 @@
 import os
 import re
+from kvtable import KVTable
+from config.appconf import AppConf
 
 STORED_AS_PARQUET_STR = " STORED AS PARQUET;"
 PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
@@ -47,23 +49,11 @@ class Presto:
         return schema_str
 
     def convert_schema(self):
-        with open(self.schema) as fp:
-            with open("converted_schema.txt","w") as wp:
-                line = fp.readline()
-                cnt = 1
-                while line:
-                    ls = line.split()
-                    #index = line.strip().find(' ')
-                    #l2 = line[0:index+2]
-                    l2 = ls[0]
-                    line = fp.readline()
-                    if line:
-                        l2 += ",\n"
-                    wp.write(l2)
-
-                    cnt += 1
-                str = self.generate_partition_by()
-                wp.write(str)
+        with open("converted_schema.txt","w") as wp:
+            kv = KVTable(self.conf.v3io_container,self.first_table,self.logger)
+            str = kv.get_table_schema()
+            str += self.generate_partition_by()
+            wp.write(str)
 
     def stored_by_parquet(self):
         str = " STORED AS PARQUET;"
