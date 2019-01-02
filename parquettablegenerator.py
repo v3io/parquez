@@ -8,7 +8,7 @@ PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
 
 
 class ParquetTableGenerator(object):
-    def __init__(self, logger: Logger, kv_table_name, schema_path, partition_by, conf):
+    def __init__(self, logger, kv_table_name, schema_path, partition_by, conf):
         self.logger = logger
         self.kv_table_name = kv_table_name
         self.schema = schema_path
