@@ -1,6 +1,6 @@
 from inputparser import InputParser
 from logger import Logger
-from ParquetTableGenerator import ParquetTableGenerator
+from parquettablegenerator import ParquetTableGenerator
 from Presto import Presto
 from CronGenerator import CronGenerator
 from config.appconf import AppConf

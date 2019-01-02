@@ -1,4 +1,5 @@
 import re
+from logger import Logger
 
 STORED_AS_PARQUET_STR = " STORED AS PARQUET;"
 PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
@@ -7,7 +8,7 @@ PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
 
 
 class ParquetTableGenerator(object):
-    def __init__(self, logger, kv_table_name, schema_path, partition_by, conf):
+    def __init__(self, logger: Logger, kv_table_name, schema_path, partition_by, conf):
         self.logger = logger
         self.kv_table_name = kv_table_name
         self.schema = schema_path
@@ -24,6 +25,7 @@ class ParquetTableGenerator(object):
 
     def generate_partition_by(self):
         part = re.match(PARTITION_INTERVAL_RE, self.partition_str).group(2)
+        self.logger.debug("generate_partition_by {0}".format(part))
         if part == 'y':
             self.partition_by += "year int"
         if part == 'm':
@@ -36,6 +38,7 @@ class ParquetTableGenerator(object):
         return self.partition_by
 
     def read_schema(self):
+        self.logger.debug("read schema {0}".format(self.schema))
         file = open(self.schema, "r")
         schema_str = file.read()
         schema_str += ")"
@@ -50,16 +53,18 @@ class ParquetTableGenerator(object):
 
     def generate_script(self):
         try:
+            self.logger.debug("generating script")
             parquet_command = self.generate_create_table_script()
             parquet_command += self.read_schema()
             parquet_command += self.generate_partition_by()
             parquet_command += " STORED AS PARQUET;"
+            self.logger.debug("create table script {}".format(parquet_command))
             f = open("create_table.txt", "w")
             f.write(parquet_command)
             f.close()
             self.create_table()
         except Exception as e:
-            self.logger.error(e.message)
+            self.logger.error(e)
             raise
 
 
