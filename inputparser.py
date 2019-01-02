@@ -69,7 +69,7 @@ class InputParser(object):
 
     def parse_args(self):
         args = self.parser.parse_args()
-        self.logger.info(self.args)
+        self.logger.info(args)
         return args
 
 
