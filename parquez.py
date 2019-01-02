@@ -27,7 +27,7 @@ def main():
     prest.execute_command()
 
     logger.info("generating cronJob")
-    cr = Crontab(logger, conf, args.real_time_table_name, args.partition_interval, args.key_value_window,
+    cr = Crontab(logger, conf, args.real_time_table_name, args.partition_interval, args.real_time_window,
                  args.historical_retention, args.partition_by)
     cr.create_cron_job()
 
