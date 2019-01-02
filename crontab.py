@@ -4,7 +4,7 @@ import re
 PARTITION_BY_RE = r"([0-9]+)([a-zA-Z]+)"
 
 
-class CronGenerator:
+class Crontab:
 
     def __init__(self, logger, conf, kv_table_name, partition_interval, key_value_window, historical_retention, partition_by):
         self.logger = logger

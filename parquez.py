@@ -2,7 +2,7 @@ from inputparser import InputParser
 from logger import Logger
 from parquettablegenerator import ParquetTableGenerator
 from presto import Presto
-from CronGenerator import CronGenerator
+from crontab import Crontab
 from config.appconf import AppConf
 
 
@@ -27,8 +27,8 @@ def main():
     prest.execute_command()
 
     logger.info("generating cronJob")
-    cr = CronGenerator(logger, conf, args.kv_table_name, args.partition_interval, args.key_value_window,
-                       args.historical_retention, args.partition_by)
+    cr = Crontab(logger, conf, args.kv_table_name, args.partition_interval, args.key_value_window,
+                 args.historical_retention, args.partition_by)
     cr.create_cron_job()
 
 
