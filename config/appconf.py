@@ -5,7 +5,7 @@ from logger import Logger
 
 class AppConf:
 
-    def __init__(self, logger: Logger, config_path='config/parquez.ini'):
+    def __init__(self, logger, config_path='config/parquez.ini'):
         self.logger = logger
         config = configparser.ConfigParser()
         config.read(config_path)

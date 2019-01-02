@@ -4,7 +4,7 @@ if ! [ -d venv  ] ; then
         mkdir venv
         virtualenv venv
         source venv/bin/activate
-        pip install colorlog
+        pip install -r config/requirements.txt
 else
         source venv/bin/activate
 fi
