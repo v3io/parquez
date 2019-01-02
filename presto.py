@@ -52,8 +52,10 @@ class Presto:
                 line = fp.readline()
                 cnt = 1
                 while line:
-                    index = line.strip().find(' ')
-                    l2 = line[0:index+2]
+                    ls = line.split()
+                    #index = line.strip().find(' ')
+                    #l2 = line[0:index+2]
+                    l2 = ls[0]
                     line = fp.readline()
                     if line:
                         l2 += ",\n"

@@ -7,7 +7,7 @@ from config.appconf import AppConf
 
 def test_generate():
     logger = Logger()
-    cf = AppConf(logger)
+    cf = AppConf(logger,config_path='../config/parquez.ini')
     assert cf.v3io_container == "bigdata"
     assert cf.v3io_path == "v3io://bigdata"
     assert cf.hive_home == "/opt/hive/bin/hive"
