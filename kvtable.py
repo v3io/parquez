@@ -53,8 +53,10 @@ class KVTable:
         parsed_schema = ""
         for ls in fields:
             field = ls['name']
-            type = ls['type']
-            parsed_schema += field + ' ' +type + ',\n'
+            field_type = ls['type']
+            if field_type == 'long':
+                field_type == 'bignit'
+            parsed_schema += field + ' ' +field_type + ',\n'
         parsed_schema = parsed_schema[:-2]
         self.logger.debug('schema_fields_and_types {}'.format(parsed_schema))
         return parsed_schema

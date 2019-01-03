@@ -41,7 +41,7 @@ class Presto:
 
     def convert_schema(self):
         schema_fields = self.kvtable.get_schema_fields()
-        schema_fields += ',' + self.generate_partition_by()
+        schema_fields += self.generate_partition_by()
         return schema_fields
 
     def stored_by_parquet(self):
