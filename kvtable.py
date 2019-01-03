@@ -7,6 +7,7 @@ V3IO_API_ENDPOINT_PORT = '8081'
 USERNAME = 'iguazio'
 PASSWORD = 'datal@ke!'
 SCHEMA = '.%23schema'
+PARTITION_BY_FIELDS = ['year', 'month', 'day', 'hour']
 
 
 def get_request_url(container_name, table_name):
@@ -53,10 +54,11 @@ class KVTable:
         parsed_schema = ""
         for ls in fields:
             field = ls['name']
-            field_type = ls['type']
-            if field_type == 'long':
-                field_type == 'bignit'
-            parsed_schema += field + ' ' +field_type + ',\n'
+            if field not in PARTITION_BY_FIELDS:
+                field_type = ls['type']
+                if field_type == 'long':
+                    field_type = 'bignit'
+                parsed_schema += field + ' ' +field_type + ',\n'
         parsed_schema = parsed_schema[:-2]
         self.logger.debug('schema_fields_and_types {}'.format(parsed_schema))
         return parsed_schema
