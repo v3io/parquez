@@ -21,7 +21,7 @@ class Presto:
     def generate_unified_view(self):
         attributes = self.convert_schema()
         str = "CREATE VIEW "+self.view_name+" as ( SELECT "+attributes
-        str += " FROM "+self.kvtable.container_name+"."+self.kvtable.name
+        str += " FROM v3io."+self.kvtable.container_name+"."+self.kvtable.name
         str += " UNION ALL SELECT "+attributes
         str += " FROM "+self.second_table_schema+"."+self.second_table
         str += ")"

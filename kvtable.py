@@ -57,8 +57,8 @@ class KVTable:
             if field not in PARTITION_BY_FIELDS:
                 field_type = ls['type']
                 if field_type == 'long':
-                    field_type = 'bignit'
-                parsed_schema += field + ' ' +field_type + ',\n'
+                    field_type = 'bigint'
+                parsed_schema += field + ' ' + field_type + ',\n'
         parsed_schema = parsed_schema[:-2]
         self.logger.debug('schema_fields_and_types {}'.format(parsed_schema))
         return parsed_schema
