@@ -12,15 +12,7 @@ class InputParser(object):
 
     def __init__(self, logger):
         self.logger = logger
-        #self.dic = {}
         self.parser = self.create_parser()
-        # self.view_name = self.args.view_name
-        # self.schema_path = self.args.schema_path
-        # self.partition_by = self.args.partition_by
-        # self.partition_interval = self.args.partition_interval
-        # self.key_value_window = self.args.real_time_window
-        # self.historical_retention = self.args.historical_retention
-        # self.kv_table_name = self.args.real_time_table_name
 
     def create_parser(self):
         try:
@@ -57,10 +49,11 @@ class InputParser(object):
                                      , help='kv table name'
                                      , metavar='real_time_table_name'
                                      , required=True)
-            parser.add_argument('--schema-path'
-                                     , help='schema path'
-                                     , metavar="schema_path"
-                                     , required=True)
+            parser.add_argument('--config'
+                                      , help='config path'
+                                      , metavar="config_path"
+                                      , required=False
+                                      )
 
             return parser
         except Exception as e:

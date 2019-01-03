@@ -9,17 +9,17 @@ PASSWORD = 'datal@ke!'
 SCHEMA = '.%23schema'
 
 
-def _get_request_url(container_name, table_name):
+def get_request_url(container_name, table_name):
     return 'http://{}:{}/{}/{}/{}'.format(V3IO_API_ENDPOINT_HOST,V3IO_API_ENDPOINT_PORT,container_name,table_name,SCHEMA)
 
 
-def _get_request_headers():
+def get_request_headers():
     return {
         'Content-Type': 'application/json',
     }
 
 
-def _send_request(logger, url, headers):
+def send_request(logger, url, headers):
     try:
         auth = requests.auth.HTTPBasicAuth(USERNAME, PASSWORD)
         response = requests.get(url, headers=headers, auth=auth, timeout=1)
@@ -32,31 +32,48 @@ def _send_request(logger, url, headers):
         logger.error('ERROR: {0}'.format(str(e)))
 
 
-class KVTable():
+class KVTable:
 
-    def __init__(self, container_name, name, logger=Logger()):
+    def __init__(self, container_name= 'default', name='table', logger=Logger()):
         self.container_name = container_name
         self.name = name
         self.logger = logger
+        self.schema = self.import_table_schema()
 
-    def get_table_schema(self):
-        url = _get_request_url(self.container_name, self.name)
-        headers = _get_request_headers()
-        schema = _send_request(self.logger, url, headers)
-        parsed_schema = self.parse_schema(schema)
-        self.logger.debug(parsed_schema)
-        return parsed_schema
+    def import_table_schema(self):
+        url = get_request_url(self.container_name, self.name)
+        headers = get_request_headers()
+        schema = send_request(self.logger, url, headers)
+        self.logger.info('KV table schema {}'.format(schema))
+        return schema
 
-    def parse_schema(self, schema):
-        js = json.loads(schema)
+    def get_schema_fields_and_types(self):
+        js = json.loads(self.schema)
         fields = js['fields']
         parsed_schema = ""
         for ls in fields:
-            name = ls['name']
-            parsed_schema += name + ',\n'
-            self.logger.debug(name)
+            field = ls['name']
+            type = ls['type']
+            parsed_schema += field + ' ' +type + ',\n'
         parsed_schema = parsed_schema[:-2]
+        self.logger.debug('schema_fields_and_types {}'.format(parsed_schema))
         return parsed_schema
+
+    def get_schema_fields(self):
+        js = json.loads(self.schema)
+        fields = js['fields']
+        parsed_schema = ""
+        for ls in fields:
+            field = ls['name']
+            parsed_schema += field + ',\n'
+        parsed_schema = parsed_schema[:-2]
+        self.logger.debug('schema_fields {}'.format(parsed_schema))
+        return parsed_schema
+
+    def get_parquet_table_name(self):
+        parquet_name = self.name + '_parquet'
+        self.logger.debug('parquet table name {}'.format(parquet_name))
+        return parquet_name
 
 
 

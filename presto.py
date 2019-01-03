@@ -1,7 +1,7 @@
 import os
 import re
-from kvtable import KVTable
 from config.appconf import AppConf
+from kvtable import KVTable
 
 STORED_AS_PARQUET_STR = " STORED AS PARQUET;"
 PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
@@ -9,23 +9,19 @@ PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
 
 class Presto:
 
-    def __init__(self, logger, view_name, partition_str, schema_path, first_table_schema, first_table, second_table_schema, second_table, conf):
+    def __init__(self, logger, view_name, partition_str, conf=AppConf, kvtable=KVTable()):
         self.logger = logger
         self.view_name = view_name
         self.partition_str = partition_str
-        self.first_table_schema = first_table_schema
-        self.first_table = first_table
-        self.second_table_schema = second_table_schema
-        self.second_table = second_table
-        self.schema = schema_path
-        self.converted_schema = "converted_"+schema_path
+        self.second_table_schema = conf.hive_schema
+        self.second_table = kvtable.get_parquet_table_name()
         self.conf = conf
-        self.convert_schema()
+        self.kvtable = kvtable
 
     def generate_unified_view(self):
-        attributes = self.read_schema(self.converted_schema)
+        attributes = self.convert_schema()
         str = "CREATE VIEW "+self.view_name+" as ( SELECT "+attributes
-        str += " FROM "+self.first_table_schema+"."+self.first_table
+        str += " FROM "+self.kvtable.container_name+"."+self.kvtable.name
         str += " UNION ALL SELECT "+attributes
         str += " FROM "+self.second_table_schema+"."+self.second_table
         str += ")"
@@ -43,17 +39,10 @@ class Presto:
             partition_by = ",year,month,day,hour"
         return partition_by
 
-    def read_schema(self,path):
-        file = open(path, "r")
-        schema_str = file.read()
-        return schema_str
-
     def convert_schema(self):
-        with open("converted_schema.txt","w") as wp:
-            kv = KVTable(self.conf.v3io_container,self.first_table,self.logger)
-            str = kv.get_table_schema()
-            str += self.generate_partition_by()
-            wp.write(str)
+        schema_fields = self.kvtable.get_schema_fields()
+        schema_fields += ',' + self.generate_partition_by()
+        return schema_fields
 
     def stored_by_parquet(self):
         str = " STORED AS PARQUET;"

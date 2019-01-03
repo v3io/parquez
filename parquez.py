@@ -1,29 +1,40 @@
 from inputparser import InputParser
 from logger import Logger
-from parquettablegenerator import ParquetTableGenerator
+from parquettable import ParquetTable
 from presto import Presto
 from crontab import Crontab
 from config.appconf import AppConf
+from kvtable import KVTable
+
+
+CONFIG_PATH = 'config/parquez.ini'
 
 
 def main():
     logger = Logger()
     logger.info("Starting to Parquezzzzzzzz")
 
-    conf = AppConf(logger)
-    conf.log_conf()
-
     logger.info("Parsing data")
     parser = InputParser(logger)
     args = parser.parse_args()
 
+    if args.config is not None:
+        config_path = args.config
+    else:
+        config_path = CONFIG_PATH
+
+    conf = AppConf(logger, config_path)
+    conf.log_conf()
+
+    logger.info("validating kv table")
+    kvtable = KVTable(conf.v3io_container, args.real_time_table_name, logger)
+
     logger.info("generating parquet table")
-    parquet = ParquetTableGenerator(logger, args.real_time_table_name, args.schema_path, args.partition_by, conf)
+    parquet = ParquetTable(logger, args.partition_by, conf, kvtable)
     parquet.generate_script()
 
     logger.info("generating presto view")
-    prest = Presto(logger, args.view_name, args.partition_by, args.schema_path, conf.presto_v3io_prefix(), args.real_time_table_name,
-                   conf.presto_hive_prefix(), parquet.parquet_table_name, conf)
+    prest = Presto(logger, args.view_name, args.partition_by, conf,kvtable)
     prest.execute_command()
 
     logger.info("generating cronJob")

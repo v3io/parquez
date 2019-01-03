@@ -15,8 +15,7 @@ def test_generate():
                           ,'--partition-interval', '1h'
                           ,'--real-time-window', '3h'
                           ,'--historical-retention', '21h'
-                          ,'--real-time-table-name', 'booking_service_kv',
-                       '--schema-path' ,'schema.txt'])
+                          ,'--real-time-table-name', 'booking_service_kv'])
     print args
 
 

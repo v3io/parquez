@@ -1,10 +1,13 @@
-from logger import Logger
-from parquettablegenerator import ParquetTableGenerator
-from config.appconf import AppConf
-from presto import Presto
-
 # test_config.py
 
+def test_parquez():
+    import subprocess
+    import sys
+    errno = subprocess.call([sys.executable, '../parquez.py', '--view-name', 'parquezView','--partition-by', '1h'
+                                ,'--partition-interval', '1h'
+                          ,'--real-time-window', '3h'
+                          ,'--historical-retention', '21h'
+                          ,'--real-time-table-name', 'booking_service_kv' ,'--config', '../config/parquez.ini'])
 
 
 
