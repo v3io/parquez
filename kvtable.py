@@ -69,7 +69,8 @@ class KVTable:
         parsed_schema = ""
         for ls in fields:
             field = ls['name']
-            parsed_schema += field + ',\n'
+            if field not in PARTITION_BY_FIELDS:
+                parsed_schema += field + ' ,\n'
         parsed_schema = parsed_schema[:-2]
         self.logger.debug('schema_fields {}'.format(parsed_schema))
         return parsed_schema
