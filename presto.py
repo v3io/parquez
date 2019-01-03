@@ -23,7 +23,7 @@ class Presto:
         str = "CREATE VIEW "+self.view_name+" as ( SELECT "+attributes
         str += " FROM v3io."+self.kvtable.container_name+"."+self.kvtable.name
         str += " UNION ALL SELECT "+attributes
-        str += " FROM "+self.second_table_schema+"."+self.second_table
+        str += " FROM hive."+self.second_table_schema+"."+self.second_table
         str += ")"
         return str
 
