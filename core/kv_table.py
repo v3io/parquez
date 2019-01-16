@@ -2,10 +2,10 @@ from logger import Logger
 import requests
 import json
 
-V3IO_API_ENDPOINT_HOST = '192.168.206.1'
+V3IO_API_ENDPOINT_HOST = 'localhost'
 V3IO_API_ENDPOINT_PORT = '8081'
-USERNAME = 'iguazio'
-PASSWORD = 'datal@ke!'
+USERNAME = '<user_name>'
+PASSWORD = '<password>'
 SCHEMA = '.%23schema'
 PARTITION_BY_FIELDS = ['year', 'month', 'day', 'hour']
 

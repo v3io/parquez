@@ -1,5 +1,5 @@
 import re
-from kvtable import KVTable
+from kv_table import KVTable
 
 STORED_AS_PARQUET_STR = " STORED AS PARQUET;"
 PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"

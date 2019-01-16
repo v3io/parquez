@@ -50,8 +50,8 @@ class Crontab:
         arg2 = "'"+self.window_parser(self.key_value_window)+"'"
         dirname, filename = os.path.split(os.path.abspath(__file__))
 
-        command = "\"" + self.partition_interval_parser()+dirname+"/./parquetinizer.sh " + self.kv_table_name + " " +\
+        command = "\"" + self.partition_interval_parser()+dirname+"/./sh/parquetinizer.sh " + self.kv_table_name + " " +\
                   arg2 + " " + args3 + " " + args4 + " " + args5+" " + args6+"\""
         self.logger.debug(command)
-        os.system(dirname+"/./parquetCronJob.sh " + command)
+        os.system(dirname+"/./sh/parquetCronJob.sh " + command)
 

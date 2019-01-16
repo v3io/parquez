@@ -1,13 +1,13 @@
 from core.input_parser import InputParser
 from core.logger import Logger
-from core.parquettable import ParquetTable
+from core.parquet_table import ParquetTable
 from core.presto import Presto
-from core.crontab import Crontab
+from core.cron_tab import Crontab
 from config.appconf import AppConf
-from core.kvtable import KVTable
+from core.kv_table import KVTable
 
 
-CONFIG_PATH = '../config/parquez.ini'
+CONFIG_PATH = 'config/parquez.ini'
 
 
 def main():
