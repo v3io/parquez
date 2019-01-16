@@ -1,5 +1,5 @@
-from core.logger import Logger
-from core.inputparser import InputParser
+from logger import Logger
+from inputparser import InputParser
 import pytest
 
 

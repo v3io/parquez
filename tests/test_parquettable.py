@@ -1,7 +1,7 @@
-from core.logger import Logger
-from core.parquettable import ParquetTable
+from logger import Logger
+from parquettable import ParquetTable
 from config.appconf import AppConf
-from core.kvtable import KVTable
+from kvtable import KVTable
 
 # test_config.py
 

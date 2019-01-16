@@ -1,4 +1,4 @@
-from core.logger import Logger
+from logger import Logger
 from config.appconf import AppConf
 
 

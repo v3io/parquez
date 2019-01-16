@@ -1,13 +1,13 @@
-from core.logger import Logger
-from core.parquettable import ParquetTable
+from logger import Logger
+from parquettable import ParquetTable
 from config.appconf import AppConf
-from core.presto import Presto
-from core.crontab import Crontab
+from presto import Presto
+from crontab import Crontab
 
 # test_config.py
 
 
-def test_presto():
+def test_crontab():
     logger = Logger()
     conf = AppConf(logger, config_path='../config/parquez.ini')
     parquet = ParquetTable(logger, 'kv_table_name', 'schema.txt', '1h', conf)
