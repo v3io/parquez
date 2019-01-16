@@ -216,7 +216,7 @@ pushd /home/iguazio
 
 
 #/opt/hive/bin/hive -e "alter table $hive_schema.$parquet_table_name add partition (year=$year, month=$month, day=$day, hour=$hour) location '$target';"
-~/parquez/hive_parttion.sh add $hive_schema $parquet_table_name $year $month $day $hour $target $partition_by
+~/parquez/sh/hive_parttion.sh add $hive_schema $parquet_table_name $year $month $day $hour $target $partition_by
 
 
 kvDeleteCommand="hdfs dfs -rm -R $source"
@@ -232,7 +232,7 @@ echo ${parquetDeleteCommand}
 eval ${parquetDeleteCommand}
 
 
-~/parquez/hive_parttion.sh drop $hive_schema $parquet_table_name $year $month $day $hour $target $partition_by
+~/parquez/sh/hive_parttion.sh drop $hive_schema $parquet_table_name $year $month $day $hour $target $partition_by
 
 #/opt/hive/bin/hive -e "alter table $hive_schema.$parquet_table_name drop partition (year=$old_year, month=$old_month, day=$old_day, hour=$old_hour);"
 

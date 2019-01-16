@@ -1,6 +1,5 @@
 import os
 import configparser
-from logger import Logger
 
 
 class AppConf:

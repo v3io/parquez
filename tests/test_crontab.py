@@ -1,8 +1,8 @@
-from logger import Logger
-from parquettable import ParquetTable
+from core.logger import Logger
+from core.parquettable import ParquetTable
 from config.appconf import AppConf
-from presto import Presto
-from crontab import Crontab
+from core.presto import Presto
+from core.crontab import Crontab
 
 # test_config.py
 
