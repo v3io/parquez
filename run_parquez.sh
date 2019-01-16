@@ -1,5 +1,7 @@
 #!/usr/bin/bash
 
+SOURCE_PATH='~/parquez'
+
 if ! [ -d venv  ] ; then
         mkdir venv
         virtualenv venv
@@ -9,5 +11,5 @@ else
         source venv/bin/activate
 fi
 
-python parquez.py ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8} ${9} ${10} ${11} ${12} ${13} ${14}
+python -m ${SOURCE_PATH}/parquez.py ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8} ${9} ${10} ${11} ${12} ${13} ${14}
 

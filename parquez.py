@@ -1,4 +1,4 @@
-from core.inputparser import InputParser
+from core.input_parser import InputParser
 from core.logger import Logger
 from core.parquettable import ParquetTable
 from core.presto import Presto
