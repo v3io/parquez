@@ -212,8 +212,18 @@ echo "query: $clause"
 ##################################################################################################
 
 pushd /home/iguazio
+
 /opt/spark2/bin/spark-submit --master yarn  --driver-memory 8g --class io.iguaz.v3io.spark2.tools.KVToParquet /home/iguazio/igz/bigdata/libs/v3io-spark2-tools_2.11.jar $source $target
 
+popd
+
+pushd ~/parquez/sh/
+
+
+alter_kv_view.sh $kv_table_name $kv_window
+
+
+popd
 
 #/opt/hive/bin/hive -e "alter table $hive_schema.$parquet_table_name add partition (year=$year, month=$month, day=$day, hour=$hour) location '$target';"
 ~/parquez/sh/hive_parttion.sh add $hive_schema $parquet_table_name $year $month $day $hour $target $partition_by
@@ -237,7 +247,6 @@ eval ${parquetDeleteCommand}
 #/opt/hive/bin/hive -e "alter table $hive_schema.$parquet_table_name drop partition (year=$old_year, month=$old_month, day=$old_day, hour=$old_hour);"
 
 
-popd
 
 
 

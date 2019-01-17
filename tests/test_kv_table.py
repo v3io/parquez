@@ -1,6 +1,6 @@
-from logger import Logger
+from core.logger import Logger
 from config.appconf import AppConf
-from kvtable import KVTable
+from core.kv_table import KVTable
 
 
 # test_config.py

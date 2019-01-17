@@ -2,26 +2,27 @@ import os
 import re
 from config.appconf import AppConf
 from kv_table import KVTable
+from kv_view import KVView
 
 STORED_AS_PARQUET_STR = " STORED AS PARQUET;"
 PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
 
 
-class Presto:
-
-    def __init__(self, logger, view_name, partition_str, conf=AppConf, kvtable=KVTable()):
+class Presto(object):
+    def __init__(self, logger, view_name, partition_str, conf=AppConf, kv_table=KVTable(), kv_view=KVView()):
         self.logger = logger
         self.view_name = view_name
         self.partition_str = partition_str
         self.second_table_schema = conf.hive_schema
-        self.second_table = kvtable.get_parquet_table_name()
+        self.second_table = kv_table.get_parquet_table_name()
         self.conf = conf
-        self.kvtable = kvtable
+        self.kv_table = kv_table
+        self.kv_view = kv_view
 
     def generate_unified_view(self):
         attributes = self.convert_schema()
         str = "CREATE VIEW "+self.view_name+" as ( SELECT "+attributes
-        str += " FROM v3io."+self.kvtable.container_name+"."+self.kvtable.name
+        str += " FROM hive." + self.conf.hive_schema + "." + self.kv_view.name
         str += " UNION ALL SELECT "+attributes
         str += " FROM hive."+self.second_table_schema+"."+self.second_table
         str += ")"
@@ -40,7 +41,7 @@ class Presto:
         return partition_by
 
     def convert_schema(self):
-        schema_fields = self.kvtable.get_schema_fields()
+        schema_fields = self.kv_table.get_schema_fields()
         schema_fields += self.generate_partition_by()
         return schema_fields
 

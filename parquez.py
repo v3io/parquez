@@ -5,7 +5,7 @@ from core.presto import Presto
 from core.cron_tab import Crontab
 from config.appconf import AppConf
 from core.kv_table import KVTable
-
+from core.kv_view import KVView
 
 CONFIG_PATH = 'config/parquez.ini'
 
@@ -27,11 +27,15 @@ def main():
     conf.log_conf()
 
     logger.info("validating kv table")
-    kvtable = KVTable(conf.v3io_container, args.real_time_table_name, logger)
+    kvtable = KVTable(conf, args.real_time_table_name, logger)
 
     logger.info("generating parquet table")
     parquet = ParquetTable(logger, args.partition_by, conf, kvtable)
     parquet.generate_script()
+
+    logger.info("generating view over kv")
+    kv_view = KVView(logger, args.partition_by, conf, kvtable)
+    kv_view.generate_crete_view_script()
 
     logger.info("generating presto view")
     prest = Presto(logger, args.view_name, args.partition_by, conf,kvtable)

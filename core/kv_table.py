@@ -1,17 +1,15 @@
 from logger import Logger
+from config.appconf import AppConf
 import requests
 import json
 
-V3IO_API_ENDPOINT_HOST = 'localhost'
-V3IO_API_ENDPOINT_PORT = '8081'
-USERNAME = '<user_name>'
-PASSWORD = '<password>'
 SCHEMA = '.%23schema'
 PARTITION_BY_FIELDS = ['year', 'month', 'day', 'hour']
 
 
-def get_request_url(container_name, table_name):
-    return 'http://{}:{}/{}/{}/{}'.format(V3IO_API_ENDPOINT_HOST,V3IO_API_ENDPOINT_PORT,container_name,table_name,SCHEMA)
+def get_request_url(container_name, table_name, v3io_api_endpoint_host, v3io_api_endpoint_port):
+    return 'http://{}:{}/{}/{}/{}'.format(v3io_api_endpoint_host, v3io_api_endpoint_port, container_name, table_name
+                                          , SCHEMA)
 
 
 def get_request_headers():
@@ -20,9 +18,9 @@ def get_request_headers():
     }
 
 
-def send_request(logger, url, headers):
+def send_request(logger, url, headers, username, password):
     try:
-        auth = requests.auth.HTTPBasicAuth(USERNAME, PASSWORD)
+        auth = requests.auth.HTTPBasicAuth(username, password)
         response = requests.get(url, headers=headers, auth=auth, timeout=1)
 
         logger.debug(response.status_code)
@@ -33,19 +31,20 @@ def send_request(logger, url, headers):
         logger.error('ERROR: {0}'.format(str(e)))
 
 
-class KVTable:
-
-    def __init__(self, container_name= 'default', name='table', logger=Logger()):
-        self.container_name = container_name
+class KVTable(object):
+    def __init__(self, conf, name='table', logger=Logger()):
         self.name = name
         self.logger = logger
-        self.schema = self.import_table_schema()
+        self.schema = "init_schema"
+        self.conf = conf
 
     def import_table_schema(self):
-        url = get_request_url(self.container_name, self.name)
+        url = get_request_url(self.conf.v3io_container, self.name, self.conf.v3io_api_endpoint_host,
+                              self.conf.v3io_api_endpoint_port)
         headers = get_request_headers()
-        schema = send_request(self.logger, url, headers)
+        schema = send_request(self.logger, url, headers, self.conf.username, self.conf.password)
         self.logger.info('KV table schema {}'.format(schema))
+        self.schema = schema
         return schema
 
     def get_schema_fields_and_types(self):
