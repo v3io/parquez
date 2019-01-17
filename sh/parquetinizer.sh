@@ -217,10 +217,10 @@ pushd /home/iguazio
 
 popd
 
-pushd ~/parquez/sh/
+pushd ~/parquez
 
 
-alter_kv_view.sh $kv_table_name $kv_window
+sh/alter_kv_view.sh $kv_table_name $kv_window
 
 
 popd
