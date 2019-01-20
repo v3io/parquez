@@ -20,9 +20,9 @@ class KVView(object):
         val = int(re.match(PARTITION_INTERVAL_RE, self.real_time_window).group(1))
         self.logger.debug("generate time window".format(part))
         if part == 'd':
-            window_time = now - timedelta(days=val)
+            window_time = now - timedelta(days=val-1)
         if part == 'h':
-            window_time = now - timedelta(hours=val)
+            window_time = now - timedelta(hours=val-1)
         self.logger.info("window Time " + str(window_time))
         return window_time
 
@@ -36,11 +36,11 @@ class KVView(object):
         if part == 'm':
             condition += "year="+str(window_time.year)+" AND month="+str(window_time.month)
         if part == 'd':
-            condition += "year=" + str(window_time.year) + " AND month=" + str(window_time.month)+" AND day=" \
+            condition += "year=" + str(window_time.year) + " AND month=" + str(window_time.month)+" AND day>=" \
                          + str(window_time.day)
         if part == 'h':
-            condition += "year=" + str(window_time.year) + " AND month=" + str(window_time.month) + " AND day=" + \
-                        str(window_time.day) + " AND hour="+str(window_time.hour)
+            condition += "year=" + str(window_time.year) + " AND month=" + str(window_time.month) + " AND day>=" + \
+                        str(window_time.day) + " AND hour>="+str(window_time.hour)
         clause = " WHERE "+condition
         return clause
 
