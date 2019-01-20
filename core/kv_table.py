@@ -1,5 +1,4 @@
 from logger import Logger
-from config.appconf import AppConf
 import requests
 import json
 

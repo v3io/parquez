@@ -6,7 +6,9 @@ PARTITION_BY_RE = r"([0-9]+)([a-zA-Z]+)"
 
 class Crontab:
 
-    def __init__(self, logger, conf, kv_table_name, partition_interval, key_value_window, historical_retention, partition_by):
+    def __init__(self, logger, conf, kv_table_name, partition_interval, key_value_window, historical_retention
+                 , partition_by):
+
         self.logger = logger
         self.conf =conf
         self.kv_table_name = kv_table_name

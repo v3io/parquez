@@ -1,15 +1,12 @@
 import os
 import re
-from config.appconf import AppConf
-from kv_table import KVTable
-from kv_view import KVView
 
 STORED_AS_PARQUET_STR = " STORED AS PARQUET;"
 PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
 
 
 class Presto(object):
-    def __init__(self, logger, view_name, partition_str, conf=AppConf, kv_table=KVTable(), kv_view=KVView()):
+    def __init__(self, logger, view_name, partition_str, conf, kv_table, kv_view):
         self.logger = logger
         self.view_name = view_name
         self.partition_str = partition_str
