@@ -3,7 +3,7 @@ from core.logger import Logger
 from core.parquet_table import ParquetTable
 from core.presto import Presto
 from core.cron_tab import Crontab
-from config.appconf import AppConf
+from config.app_conf import AppConf
 from core.kv_table import KVTable
 from core.kv_view import KVView
 

@@ -1,6 +1,6 @@
 import sys
 from logger import Logger
-from config.appconf import AppConf
+from config.app_conf import AppConf
 from kv_table import KVTable
 from kv_view import KVView
 
@@ -22,10 +22,11 @@ def main():
     conf.log_conf()
 
     logger.info("validating kv table")
-    kvtable = KVTable(conf, args[1], logger)
+    kv_table = KVTable(conf, args[1], logger)
+    kv_table.import_table_schema()
 
     logger.info("generating view over kv")
-    kv_view = KVView(logger, args[2], conf, kvtable)
+    kv_view = KVView(logger, args[2], conf, kv_table)
     kv_view.generate_crete_view_script()
 
 

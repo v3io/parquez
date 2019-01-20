@@ -1,6 +1,6 @@
 from core.logger import Logger
 from core.parquet_table import ParquetTable
-from config.appconf import AppConf
+from config.app_conf import AppConf
 from core.presto import Presto
 from core.kv_table import KVTable
 

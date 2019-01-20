@@ -1,6 +1,6 @@
 from logger import Logger
 from parquettable import ParquetTable
-from config.appconf import AppConf
+from config.app_conf import AppConf
 from presto import Presto
 from crontab import Crontab
 

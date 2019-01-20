@@ -15,6 +15,7 @@ class AppConf(object):
         self.hive_schema = config['hive']['hive_schema']
         self.v3io_connector = config['presto']['v3io_connector']
         self.hive_connector = config['presto']['hive_connector']
+        self.access_key = config['presto']['access_key']
         self.v3io_api_endpoint_host = config['nginx']['v3io_api_endpoint_host']
         self.v3io_api_endpoint_port = config['nginx']['v3io_api_endpoint_port']
         self.username = config['nginx']['username']

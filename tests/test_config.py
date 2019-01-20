@@ -1,5 +1,5 @@
 from core.logger import Logger
-from config.appconf import AppConf
+from config.app_conf import AppConf
 
 
 # test_config.py

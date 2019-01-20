@@ -18,7 +18,7 @@ class Presto(object):
 
     def generate_unified_view(self):
         attributes = self.convert_schema()
-        str = "CREATE VIEW "+self.view_name+" as ( SELECT "+attributes
+        str = "CREATE VIEW "+"hive." + self.conf.hive_schema+self.view_name+" as ( SELECT "+attributes
         str += " FROM hive." + self.conf.hive_schema + "." + self.kv_view.name
         str += " UNION ALL SELECT "+attributes
         str += " FROM hive."+self.second_table_schema+"."+self.second_table
@@ -49,6 +49,6 @@ class Presto(object):
     def execute_command(self):
         script = self.generate_unified_view()
         self.logger.debug(script)
-        os.system("/opt/presto/bin/presto-cli.sh --server http://localhost:8889 --catalog hive --schema default --execute \"" + script + "\"")
+        os.system("/opt/presto/bin/presto-cli.sh --server http://localhost:8889 de--catalog hive --schema default --execute \"" + script + "\"")
 
 

@@ -23,6 +23,7 @@ class KVView(object):
             window_time = now - timedelta(days=val)
         if part == 'h':
             window_time = now - timedelta(hours=val)
+        self.logger.info("window Time " + str(window_time))
         return window_time
 
     def generate_where_clause(self):

@@ -1,5 +1,5 @@
 from core.logger import Logger
-from config.appconf import AppConf
+from config.app_conf import AppConf
 from core.kv_table import KVTable
 from core.kv_view import KVView
 
