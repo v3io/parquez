@@ -27,18 +27,19 @@ def main():
     conf.log_conf()
 
     logger.info("validating kv table")
-    kvtable = KVTable(conf, args.real_time_table_name, logger)
+    kv_table = KVTable(conf, args.real_time_table_name, logger)
+    kv_table.import_table_schema()
 
     logger.info("generating parquet table")
-    parquet = ParquetTable(logger, args.partition_by, conf, kvtable)
+    parquet = ParquetTable(logger, args.partition_by, conf, kv_table)
     parquet.generate_script()
 
     logger.info("generating view over kv")
-    kv_view = KVView(logger, args.partition_by, conf, kvtable)
+    kv_view = KVView(logger, args.partition_by, conf, kv_table)
     kv_view.generate_crete_view_script()
 
     logger.info("generating presto view")
-    prest = Presto(logger, args.view_name, args.partition_by, conf,kvtable)
+    prest = Presto(logger, args.view_name, args.partition_by, conf,kv_table)
     prest.execute_command()
 
     logger.info("generating cronJob")
