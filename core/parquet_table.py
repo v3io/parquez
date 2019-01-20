@@ -1,5 +1,4 @@
 import re
-from kv_table import KVTable
 
 STORED_AS_PARQUET_STR = " STORED AS PARQUET;"
 PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
@@ -8,13 +7,13 @@ PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
 
 
 class ParquetTable(object):
-    def __init__(self, logger, partition_by, conf, kvtable = KVTable()):
+    def __init__(self, logger, partition_by, conf, kv_table):
         self.logger = logger
-        self.kv_table = kvtable
+        self.kv_table = kv_table
         self.partition_str = partition_by
         self.partition_by = " PARTITIONED BY ("
         self.partition = []
-        self.parquet_table_name = kvtable.name+"_parquet"
+        self.parquet_table_name = kv_table.name + "_parquet"
         self.conf = conf
 
     def generate_create_table_script(self):
