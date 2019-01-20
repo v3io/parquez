@@ -1,6 +1,7 @@
 import os
 import re
 
+SHELL_PATH = '~/parquez/sh/'
 PARTITION_BY_RE = r"([0-9]+)([a-zA-Z]+)"
 
 
@@ -50,10 +51,9 @@ class Crontab:
         args4 = "'"+re.match(PARTITION_BY_RE, self.partition_by).group(2)+"'"
         args3 = "'"+self.window_parser(self.historical_retention)+"'"
         arg2 = "'"+self.window_parser(self.key_value_window)+"'"
-        dirname, filename = os.path.split(os.path.abspath(__file__))
 
-        command = "\"" + self.partition_interval_parser()+dirname+"/./sh/parquetinizer.sh " + self.kv_table_name + " " +\
+        command = "\"" + self.partition_interval_parser() + SHELL_PATH + "parquetinizer.sh " + self.kv_table_name + " " +\
                   arg2 + " " + args3 + " " + args4 + " " + args5+" " + args6+"\""
         self.logger.debug(command)
-        os.system(dirname+"/./sh/parquetCronJob.sh " + command)
+        os.system(SHELL_PATH + "parquetCronJob.sh " + command)
 
