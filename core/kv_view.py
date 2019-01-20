@@ -46,8 +46,9 @@ class KVView(object):
 
     def create_view_prefix(self):
         hive_prefix = "hive." + self.conf.hive_schema + "."
+        v3io_prefix = "v3io." + self.conf.v3io_container + "."
         prefix = "CREATE OR REPLACE VIEW " + hive_prefix + self.kv_table.name + \
-                 "_view AS SELECT * FROM " + hive_prefix + self.kv_table.name
+                 "_view AS SELECT * FROM " + v3io_prefix + self.kv_table.name
         return prefix
 
     def create_view(self):

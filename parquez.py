@@ -39,7 +39,7 @@ def main():
     kv_view.generate_crete_view_script()
 
     logger.info("generating presto view")
-    prest = Presto(logger, args.view_name, args.partition_by, conf,kv_table)
+    prest = Presto(logger, args.view_name, args.partition_by, conf, kv_table, kv_view)
     prest.execute_command()
 
     logger.info("generating cronJob")
