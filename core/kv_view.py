@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 import re
 
-KV_VIEW_FILE_NAME = "create_kv_view.txt"
 PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
 
 # TODO: Add verification that hive table created (handle Trying to send on a closed client exception
@@ -51,12 +50,12 @@ class KVView(object):
                  "_view AS SELECT * FROM " + v3io_prefix + self.kv_table.name
         return prefix
 
-    def create_view(self):
+    def create_view(self, command):
         import os
-        hive_path = self.conf.hive_home
-        command = hive_path + " -f " + KV_VIEW_FILE_NAME
-        self.logger.info("Create Hive table command : " + command)
-        os.system(command)
+        command = command
+        self.logger.info("Create view command : " + command)
+        os.system(
+            "/opt/presto/bin/presto-cli.sh --server http://localhost:8889 --execute \"" + command + "\"")
 
     def generate_crete_view_script(self):
         try:
@@ -65,10 +64,7 @@ class KVView(object):
             clause = self.generate_where_clause()
             script = prefix + clause
             self.logger.debug("create kv view script {}".format(script))
-            f = open(KV_VIEW_FILE_NAME, "w")
-            f.write(script)
-            f.close()
-            self.create_view()
+            self.create_view(script)
         except Exception as e:
             self.logger.error(e)
             raise
