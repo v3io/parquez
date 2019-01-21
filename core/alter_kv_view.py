@@ -21,11 +21,11 @@ def main():
     conf = AppConf(logger, config_path)
     conf.log_conf()
 
-    logger.info("validating kv table")
+    logger.info("validating kv table "+args[1])
     kv_table = KVTable(conf, args[1], logger)
     kv_table.import_table_schema()
 
-    logger.info("generating view over kv")
+    logger.info("generating view over kv"+args[2])
     kv_view = KVView(logger, args[2], conf, kv_table)
     kv_view.generate_crete_view_script()
 
