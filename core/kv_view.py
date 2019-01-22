@@ -54,9 +54,10 @@ class KVView(object):
     def create_view(self, command):
         import os
         command = command
-        self.logger.info("Create view command : " + command)
-        os.system(
-            "/opt/presto/bin/presto-cli.sh --server http://localhost:8889 --execute \"" + command + "\"")
+        self.logger.debug("Create view command : " + command)
+        exec_command = "/opt/presto/bin/presto-cli.sh --server http://localhost:8889 --catalog hive --schema default --execute \"" + command + "\""
+        self.logger.info("Executing Create view command : " + exec_command)
+        os.system(exec_command)
 
     def generate_crete_view_script(self):
         try:
