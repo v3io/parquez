@@ -4,8 +4,6 @@ exec &> >(logger -t /home/iguazio/parquez/parquetinizer.sh -s)
 
 parquez_dir='/home/iguazio/parquez'
 
-core_dir=$parquez_dir+'/core'
-
 echo parquez_dir:$parquez_dir
 
 kv_table_name=$1
@@ -223,7 +221,7 @@ pushd /home/iguazio
 
 popd
 
-pushd $core_dir
+pushd $parquez_dir
 
 ${parquez_dir}/sh/alter_kv_view.sh $kv_table_name $kv_window
 
