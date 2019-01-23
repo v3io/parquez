@@ -6,6 +6,14 @@ from kv_view import KVView
 CONFIG_PATH = 'config/test_config.ini'
 
 
+def parse_kv_window_arg(val,logger):
+    val = val.replace('hours', 'h')
+    val = val.replace('days', 'd')
+    val = val.replace(" ", "")
+    logger.debug("parsed kv window val " + val)
+    return val
+
+
 def main():
     logger = Logger()
     logger.info("altering view")
@@ -17,10 +25,9 @@ def main():
 
     logger.info("validating kv table "+args[1])
     kv_table = KVTable(conf, args[1], logger)
-    #kv_table.import_table_schema()
 
     logger.info("generating view over kv"+args[2])
-    kv_view = KVView(logger, args[2], conf, kv_table)
+    kv_view = KVView(logger, parse_kv_window_arg(args[2]), conf, kv_table)
     kv_view.generate_crete_view_script()
 
 
