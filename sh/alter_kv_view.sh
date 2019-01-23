@@ -12,7 +12,7 @@ else
 fi
 
 
-echo alter_kv_view $1 $2
+echo alter_kv_view "${1}" "${2}"
 
-python core/alter_kv_view.py $1 $2
+python core/alter_kv_view.py "${1}" "${2}"
 
