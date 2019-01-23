@@ -10,9 +10,9 @@ kv_table_name=$1
 
 echo kv_table_name:$kv_table_name
 
-kv_window=$2
+kv_window="${2}"
 
-echo kv_window:$kv_window
+echo kv_window:${kv_window}
 
 historical_window=$3
 
@@ -223,7 +223,7 @@ popd
 
 pushd $parquez_dir
 
-${parquez_dir}/sh/alter_kv_view.sh $kv_table_name $kv_window
+${parquez_dir}/sh/alter_kv_view.sh "${kv_table_name}" "${kv_window}"
 
 #/opt/hive/bin/hive -e "alter table $hive_schema.$parquet_table_name add partition (year=$year, month=$month, day=$day, hour=$hour) location '$target';"
 ${parquez_dir}/sh/hive_partition.sh add $hive_schema $parquet_table_name $year $month $day $hour $target $partition_by
