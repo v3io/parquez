@@ -27,7 +27,8 @@ def main():
     kv_table = KVTable(conf, args[1], logger)
 
     logger.info("generating view over kv"+args[2])
-    kv_view = KVView(logger, parse_kv_window_arg(args[2]), conf, kv_table)
+    parsed_window = parse_kv_window_arg(args[2], logger)
+    kv_view = KVView(logger, parsed_window, conf, kv_table)
     kv_view.generate_crete_view_script()
 
 
