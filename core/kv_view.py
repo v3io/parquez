@@ -15,7 +15,7 @@ class KVView(object):
         self.conf = conf
 
     def parse_real_time_window(self):
-        now = datetime.now()
+        now = datetime.utcnow()
         part = re.match(PARTITION_INTERVAL_RE, self.real_time_window).group(2)
         val = int(re.match(PARTITION_INTERVAL_RE, self.real_time_window).group(1))
         self.logger.debug("generate time window".format(part))
