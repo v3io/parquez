@@ -1,6 +1,11 @@
 import os
 import re
 
+PRESTO_COMMAND = "/opt/presto/bin/presto-cli.sh --server http://localhost:8889 --catalog v3io " \
+                 "--password --truststore-path /opt/presto/ssl/presto.jks " \
+                 "--truststore-password sslpassphrase " \
+                 "--user iguazio" \
+                 "--execute \" "
 STORED_AS_PARQUET_STR = " STORED AS PARQUET;"
 PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
 
@@ -16,14 +21,15 @@ class Presto(object):
         self.kv_table = kv_table
         self.kv_view = kv_view
 
+    @property
     def generate_unified_view(self):
         attributes = self.convert_schema()
-        str = "CREATE VIEW "+"hive." + self.conf.hive_schema+"."+self.view_name+" as ( SELECT "+attributes
-        str += " FROM hive." + self.conf.hive_schema + "." + self.kv_view.name
-        str += " UNION ALL SELECT "+attributes
-        str += " FROM hive."+self.second_table_schema+"."+self.second_table
-        str += ")"
-        return str
+        view = "CREATE VIEW " + "hive." + self.conf.hive_schema + "." + self.view_name + " as ( SELECT " + attributes
+        view += " FROM hive." + self.conf.hive_schema + "." + self.kv_view.name
+        view += " UNION ALL SELECT "+attributes
+        view += " FROM hive."+self.second_table_schema+"."+self.second_table
+        view += ")"
+        return view
 
     def generate_partition_by(self):
         part = re.match(PARTITION_INTERVAL_RE, self.partition_str).group(2)
@@ -42,13 +48,21 @@ class Presto(object):
         schema_fields += self.generate_partition_by()
         return schema_fields
 
-    def stored_by_parquet(self):
-        str = " STORED AS PARQUET;"
-        return str
-
     def execute_command(self):
-        script = self.generate_unified_view()
+        script = self.generate_unified_view
         self.logger.debug(script)
-        os.system("/opt/presto/bin/presto-cli.sh --server http://localhost:8889 --catalog hive --schema default --execute \"" + script + "\"")
+        prefix = self.get_presto_password()
+        full_command = prefix + PRESTO_COMMAND + script + "\""
+        self.logger.debug("Presto full command {}".format(full_command))
+        os.system(full_command)
+
+    def get_presto_password(self):
+        presto_command_prefix = ''
+        if self.conf.v3io_access_key != '<access_key>' or self.v3io_access_key is not None:
+            presto_command_prefix = 'PRESTO_PASSWORD=' + self.v3io_access_key + ' '
+            self.logger.debug("Presto command prefix {}".format())
+        return presto_command_prefix
+
+
 
 

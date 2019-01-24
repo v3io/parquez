@@ -35,7 +35,7 @@ def main():
 if __name__ == '__main__' and __package__ is None:
     if __package__ is None:
         from os import path
-        sys.path.append( path.dirname(path.dirname( path.abspath(__file__) ) ) )
+        sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
         from config.app_conf import AppConf
     else:
         from ..config.app_conf import AppConf

@@ -1,6 +1,11 @@
 from datetime import datetime, timedelta
 import re
 
+PRESTO_COMMAND = "/opt/presto/bin/presto-cli.sh --server http://localhost:8889 --catalog v3io " \
+                 "--password --truststore-path /opt/presto/ssl/presto.jks " \
+                 "--truststore-password sslpassphrase " \
+                 "--user iguazio" \
+                 "--execute \" "
 PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
 
 # TODO: Add verification that hive table created (handle Trying to send on a closed client exception
@@ -52,12 +57,12 @@ class KVView(object):
         return prefix
 
     def create_view(self, command):
-        import os
-        command = command
         self.logger.debug("Create view command : " + command)
-        exec_command = "/opt/presto/bin/presto-cli.sh --server http://localhost:8889 --catalog hive --schema default --execute \"" + command + "\""
-        self.logger.info("Executing Create view command : " + exec_command)
-        os.system(exec_command)
+        presto_prefix = self.get_presto_password()
+        presto = presto_prefix + PRESTO_COMMAND + command + "\""
+        self.logger.info("Executing Create view command : " + presto)
+        import os
+        os.system(presto)
 
     def generate_crete_view_script(self):
         try:
@@ -70,6 +75,13 @@ class KVView(object):
         except Exception as e:
             self.logger.error(e)
             raise
+
+    def get_presto_password(self):
+        presto_command_prefix = ''
+        if self.conf.v3io_access_key != '<access_key>' or self.v3io_access_key is not None:
+            presto_command_prefix = 'PRESTO_PASSWORD=' + self.v3io_access_key + ' '
+            self.logger.debug("Presto command prefix {}".format())
+        return presto_command_prefix
 
 
 
