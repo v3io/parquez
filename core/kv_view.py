@@ -78,8 +78,8 @@ class KVView(object):
 
     def get_presto_password(self):
         presto_command_prefix = ''
-        if self.conf.v3io_access_key != '<access_key>' or self.v3io_access_key is not None:
-            presto_command_prefix = 'PRESTO_PASSWORD=' + self.v3io_access_key + ' '
+        if self.conf.v3io_access_key != '<access_key>' or self.conf.v3io_access_key is not None:
+            presto_command_prefix = 'PRESTO_PASSWORD=' + self.conf.v3io_access_key + ' '
             self.logger.debug("Presto command prefix {}".format())
         return presto_command_prefix
 
