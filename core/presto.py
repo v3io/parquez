@@ -1,11 +1,10 @@
 import os
 import re
 
-PRESTO_COMMAND = "/opt/presto/bin/presto-cli.sh --server http://localhost:8889 --catalog v3io " \
+PRESTO_COMMAND = "/opt/presto/bin/presto-cli --server http://localhost:8889 --catalog v3io " \
                  "--password --truststore-path /opt/presto/ssl/presto.jks " \
                  "--truststore-password sslpassphrase " \
                  "--user iguazio" \
-                 "--password " \
                  "--execute \" "
 STORED_AS_PARQUET_STR = " STORED AS PARQUET;"
 PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
@@ -27,8 +26,8 @@ class Presto(object):
         attributes = self.convert_schema()
         view = "CREATE VIEW " + "hive." + self.conf.hive_schema + "." + self.view_name + " as ( SELECT " + attributes
         view += " FROM hive." + self.conf.hive_schema + "." + self.kv_view.name
-        view += " UNION ALL SELECT "+attributes
-        view += " FROM hive."+self.second_table_schema+"."+self.second_table
+        view += " UNION ALL SELECT " + attributes
+        view += " FROM hive." + self.second_table_schema + "." + self.second_table
         view += ")"
         return view
 
@@ -63,7 +62,3 @@ class Presto(object):
             presto_command_prefix = 'PRESTO_PASSWORD=' + self.conf.v3io_access_key + ' '
             self.logger.debug("Presto command prefix {}".format(presto_command_prefix))
         return presto_command_prefix
-
-
-
-
