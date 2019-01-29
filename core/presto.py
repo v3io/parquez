@@ -24,7 +24,7 @@ class Presto(object):
     @property
     def generate_unified_view(self):
         attributes = self.convert_schema()
-        view = "CREATE VIEW " + "hive." + self.conf.hive_schema + "." + self.view_name + " as ( SELECT " + attributes
+        view = "CREATE OR REPLACE VIEW " + "hive." + self.conf.hive_schema + "." + self.view_name + " as ( SELECT " + attributes
         view += " FROM hive." + self.conf.hive_schema + "." + self.kv_view.name
         view += " UNION ALL SELECT " + attributes
         view += " FROM hive." + self.second_table_schema + "." + self.second_table
