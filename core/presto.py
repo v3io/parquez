@@ -4,7 +4,7 @@ import re
 PRESTO_COMMAND = "/opt/presto/bin/presto-cli --server=https://localhost:8889 --catalog v3io " \
                  "--password --truststore-path /opt/presto/ssl/presto.jks " \
                  "--truststore-password sslpassphrase " \
-                 "--user iguazio" \
+                 "--user iguazio " \
                  "--execute \" "
 STORED_AS_PARQUET_STR = " STORED AS PARQUET;"
 PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
