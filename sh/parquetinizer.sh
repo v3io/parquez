@@ -226,10 +226,7 @@ pushd $parquez_dir
 ${parquez_dir}/sh/alter_kv_view.sh "${kv_table_name}" "${kv_window}"
 
 #/opt/hive/bin/hive -e "alter table $hive_schema.$parquet_table_name add partition (year=$year, month=$month, day=$day, hour=$hour) location '$target';"
-${parquez_dir}/sh/hive_partition.sh add $hive_schema $parquet_table_name $year $month $day $hour ${parquetToDelete} $partition_by
-
-
-
+${parquez_dir}/sh/hive_partition.sh add $hive_schema $parquet_table_name $year $month $day $hour ${target} $partition_by
 
 kvDeleteCommand="hdfs dfs -rm -R $source"
 
