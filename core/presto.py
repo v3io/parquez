@@ -1,11 +1,11 @@
 import os
 import re
 
-PRESTO_COMMAND = "/opt/presto/bin/presto-cli --server=https://localhost:8889 --catalog v3io " \
+PRESTO_COMMAND_PREFIX = "/opt/presto/bin/presto-cli --server=https://localhost:8889 --catalog v3io " \
                  "--password --truststore-path /opt/presto/ssl/presto.jks " \
                  "--truststore-password sslpassphrase " \
                  "--user iguazio " \
-                 "--execute \" "
+
 STORED_AS_PARQUET_STR = " STORED AS PARQUET;"
 PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
 
@@ -49,10 +49,10 @@ class Presto(object):
         return schema_fields
 
     def execute_command(self):
-        script = self.generate_unified_view
+        script = self.generate_unified_view()
         self.logger.debug(script)
         prefix = self.get_presto_password()
-        full_command = prefix + PRESTO_COMMAND + script + "\""
+        full_command = prefix + self.generate_presto_command_with_user() + script + "\""
         self.logger.debug("Presto full command {}".format(full_command))
         os.system(full_command)
 
@@ -62,3 +62,8 @@ class Presto(object):
             presto_command_prefix = 'PRESTO_PASSWORD=' + self.conf.v3io_access_key + ' '
             self.logger.debug("Presto command prefix {}".format(presto_command_prefix))
         return presto_command_prefix
+
+    def generate_presto_command_with_user(self):
+        command = PRESTO_COMMAND_PREFIX + "--user " + self.conf.username + "--execute \" "
+        self.logger.debug("Presto command prefix with user {}".format(command))
+        return command
