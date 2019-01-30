@@ -219,6 +219,13 @@ pushd /home/iguazio
 
 /opt/spark2/bin/spark-submit --master yarn  --driver-memory 8g --class io.iguaz.v3io.spark2.tools.KVToParquet /home/iguazio/igz/bigdata/libs/v3io-spark2-tools_2.11.jar $source $target
 
+if [ $? -eq 0 ]; then
+    echo KV to parquet finished with success
+else
+    echo KV to parquet finished with failed
+    exit 1
+fi
+
 popd
 
 pushd $parquez_dir
@@ -226,10 +233,7 @@ pushd $parquez_dir
 ${parquez_dir}/sh/alter_kv_view.sh "${kv_table_name}" "${kv_window}"
 
 #/opt/hive/bin/hive -e "alter table $hive_schema.$parquet_table_name add partition (year=$year, month=$month, day=$day, hour=$hour) location '$target';"
-${parquez_dir}/sh/hive_partition.sh add $hive_schema $parquet_table_name $year $month $day $hour ${parquetToDelete} $partition_by
-
-
-
+${parquez_dir}/sh/hive_partition.sh add $hive_schema $parquet_table_name $year $month $day $hour ${target} $partition_by
 
 kvDeleteCommand="hdfs dfs -rm -R $source"
 
