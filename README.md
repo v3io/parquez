@@ -1,3 +1,23 @@
+# Parquez
+
+### Prerequisites
+1. parquez scripts
+2. partitioned kv table 
+
+### Building / deploying the functions
+
+Clone this repository and `cd` into it:
+```sh
+mkdir parquez && \
+    git clone https://github.com/iguazio/parquez.git && \
+    cd parquez
+```
+
+Run the parquez
+```
+./run_parquez.sh --view-name parquezView --partition-by 1h --partition-interval 1h --real-time-window 3h \
+--historical-retention 21h --real-time-table-name booking_service_kv --config config/parquez.ini
+```
 
 A mechanism for storing fresh/hot data in the NoSQL database
 and historical data on Parquet while providing a single access for users (via a view) for easier access to real time and historical data
