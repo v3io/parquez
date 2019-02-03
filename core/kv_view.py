@@ -85,6 +85,6 @@ class KVView(object):
         return presto_command_prefix
 
     def generate_presto_command_with_user(self):
-        command = PRESTO_COMMAND_PREFIX + "--user " + self.conf.username + "--execute \" "
+        command = PRESTO_COMMAND_PREFIX + "--user " + self.conf.username + " --execute \" "
         self.logger.debug("Presto command prefix with user {}".format(command))
         return command
