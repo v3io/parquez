@@ -3,7 +3,7 @@ from logger import Logger
 from kv_table import KVTable
 from kv_view import KVView
 
-CONFIG_PATH = 'config/config.ini'
+CONFIG_PATH = 'config/parquez.ini'
 
 
 def parse_kv_window_arg(val,logger):
