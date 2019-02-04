@@ -5,13 +5,14 @@ and historical data on Parquet while providing a single access for users (via a 
 
 Users will be able to create a view for the “parquez” table using a script Rest call .
 script parameters
-View name
-Partition by [h / m / d / y] - only time based partition is supported in this phase
-Partition creation interval – 1 - 24h , 1-31d, 1-12m, 1-Ny.
-KeyValue window – h, d,m, y 
-Historical window – h, d,m, y 
-Table name (the KV table for the view, need to specify the full path)
-config file path 
+View name  <br />
+Partition by [h / m / d / y] - only time based partition is supported in this phase  <br />
+Partition creation interval – 1 - 24h , 1-31d, 1-12m, 1-Ny.  <br />
+KeyValue window – h, d,m, y  <br />
+Historical window – h, d,m, y  <br />
+Table name (the KV table for the view, need to specify the full path)  <br />
+config file path   <br />
+
 The view will be created in Presto based on Hive & V3IO KV 
 Once the user creates the view an automated job is created by the interval given:
 Job creates the view
