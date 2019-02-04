@@ -3,8 +3,8 @@
 A mechanism for storing fresh/hot data in the NoSQL database
 and historical data on Parquet while providing a single access for users (via a view) for easier access to real time and historical data
 
-Users will be able to create a view for the “parquez” table using a script Rest call .
-script parameters
+Users will be able to create a view for the “parquez” table using a script Rest call . <br />
+script parameters <br />
 View name  <br />
 Partition by [h / m / d / y] - only time based partition is supported in this phase  <br />
 Partition creation interval – 1 - 24h , 1-31d, 1-12m, 1-Ny.  <br />
