@@ -21,7 +21,6 @@ class Presto(object):
         self.kv_table = kv_table
         self.kv_view = kv_view
 
-    @property
     def generate_unified_view(self):
         attributes = self.convert_schema()
         view = "CREATE OR REPLACE VIEW " + "hive." + self.conf.hive_schema + "." + self.view_name + " as ( SELECT " + attributes
