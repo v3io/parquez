@@ -1,7 +1,13 @@
 from datetime import datetime, timedelta
 import re
 
+PRESTO_COMMAND_PREFIX = "/opt/presto/bin/presto-cli --server=https://localhost:8889 --catalog v3io " \
+                 "--password --truststore-path /opt/presto/ssl/presto.jks " \
+                 "--truststore-password sslpassphrase " \
+                 "--user iguazio " \
+
 PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
+
 
 # TODO: Add verification that hive table created (handle Trying to send on a closed client exception
 
@@ -20,9 +26,9 @@ class KVView(object):
         val = int(re.match(PARTITION_INTERVAL_RE, self.real_time_window).group(1))
         self.logger.debug("generate time window".format(part))
         if part == 'd':
-            window_time = now - timedelta(days=val-1)
+            window_time = now - timedelta(days=val - 1)
         if part == 'h':
-            window_time = now - timedelta(hours=val-1)
+            window_time = now - timedelta(hours=val - 1)
         self.logger.info("window Time " + str(window_time))
         return window_time
 
@@ -52,12 +58,12 @@ class KVView(object):
         return prefix
 
     def create_view(self, command):
-        import os
-        command = command
         self.logger.debug("Create view command : " + command)
-        exec_command = "/opt/presto/bin/presto-cli.sh --server http://localhost:8889 --catalog hive --schema default --execute \"" + command + "\""
-        self.logger.info("Executing Create view command : " + exec_command)
-        os.system(exec_command)
+        presto_prefix = self.get_presto_password()
+        presto = presto_prefix + self.generate_presto_command_with_user() + command + "\""
+        self.logger.info("Executing Create view command : " + presto)
+        import os
+        os.system(presto)
 
     def generate_crete_view_script(self):
         try:
@@ -71,8 +77,14 @@ class KVView(object):
             self.logger.error(e)
             raise
 
+    def get_presto_password(self):
+        presto_command_prefix = ''
+        if self.conf.v3io_access_key != '<access_key>' or self.conf.v3io_access_key is not None:
+            presto_command_prefix = 'PRESTO_PASSWORD=' + self.conf.v3io_access_key + ' '
+            self.logger.debug("Presto command prefix {}".format(presto_command_prefix))
+        return presto_command_prefix
 
-
-
-
-
+    def generate_presto_command_with_user(self):
+        command = PRESTO_COMMAND_PREFIX + "--user " + self.conf.username + " --execute \" "
+        self.logger.debug("Presto command prefix with user {}".format(command))
+        return command

@@ -11,6 +11,7 @@ class AppConf(object):
         self.logger.debug(os.getcwd())
         self.v3io_container = config['v3io']['v3io_container']
         self.v3io_path = config['v3io']['v3io_path']
+        self.v3io_access_key = config['v3io']['access_key']
         self.hive_home = config['hive']['hive_home']
         self.hive_schema = config['hive']['hive_schema']
         self.v3io_connector = config['presto']['v3io_connector']

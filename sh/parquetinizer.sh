@@ -253,7 +253,3 @@ ${parquez_dir}/sh/hive_partition.sh drop $hive_schema $parquet_table_name $old_y
 #/opt/hive/bin/hive -e "alter table $hive_schema.$parquet_table_name drop partition (year=$old_year, month=$old_month, day=$old_day, hour=$old_hour);"
 
 popd
-
-
-
-
