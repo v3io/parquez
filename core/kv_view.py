@@ -32,14 +32,14 @@ class KVView(object):
         self.logger.debug("generate_partition_by {0}".format(part))
         condition = ''
         if part == 'y':
-            condition += "year="+str(window_time.year)
+            condition += "year>="+str(window_time.year)
         if part == 'm':
-            condition += "year="+str(window_time.year)+" AND month="+str(window_time.month)
+            condition += "year>="+str(window_time.year)+" AND month>="+str(window_time.month)
         if part == 'd':
-            condition += "year=" + str(window_time.year) + " AND month=" + str(window_time.month)+" AND day>=" \
+            condition += "year>=" + str(window_time.year) + " AND month>=" + str(window_time.month)+" AND day>=" \
                          + str(window_time.day)
         if part == 'h':
-            condition += "year=" + str(window_time.year) + " AND month=" + str(window_time.month) + " AND day>=" + \
+            condition += "year>=" + str(window_time.year) + " AND month>=" + str(window_time.month) + " AND day>=" + \
                         str(window_time.day) + " AND hour>="+str(window_time.hour)
         clause = " WHERE "+condition
         return clause
