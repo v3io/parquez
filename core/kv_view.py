@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import re
 
-PRESTO_COMMAND_PREFIX = "/opt/presto/bin/presto-cli.sh --server=https://localhost:8889 --catalog v3io " \
+PRESTO_COMMAND_PREFIX = "/opt/presto/bin/presto-cli --server=https://localhost:8889 --catalog v3io " \
                  "--password --truststore-path /opt/presto/ssl/presto.jks " \
                  "--truststore-password sslpassphrase "
 
