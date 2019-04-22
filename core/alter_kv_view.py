@@ -1,7 +1,7 @@
 import sys
-from logger import Logger
-from kv_table import KVTable
-from kv_view import KVView
+from core.logger import Logger
+from core.kv_table import KVTable
+from core.kv_view import KVView
 
 CONFIG_PATH = 'config/parquez.ini'
 
