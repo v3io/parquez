@@ -1,6 +1,6 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
-SOURCE_PATH='/home/iguazio/parquez'
+SOURCE_PATH=${HOME}/'parquez'
 
 if ! [ -d venv  ] ; then
         mkdir venv
