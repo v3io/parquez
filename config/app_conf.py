@@ -7,7 +7,7 @@ class AppConf(object):
     def __init__(self, logger=Logger(), config_path='config/parquez.ini'):
         self.logger = logger
         config = configparser.ConfigParser()
-        config.read(config_path.decode("utf-8"))
+        config.read(config_path)
         self.logger.debug(os.getcwd())
         self.v3io_container = config['v3io']['v3io_container']
         self.v3io_path = config['v3io']['v3io_path']
