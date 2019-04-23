@@ -62,7 +62,8 @@ class KVView(object):
     def create_view(self, command):
         self.logger.debug("Create view command : " + command)
         presto_prefix = self.get_presto_password()
-        presto = presto_prefix + self.generate_presto_command_with_user() + command + "\""
+        #presto = presto_prefix + self.generate_presto_command_with_user() + command + "\""
+        presto = PRESTO_COMMAND_PREFIX + "--execute " + command + "\""
         self.logger.info("Executing Create view command : " + presto)
         import os
         os.system(presto)
