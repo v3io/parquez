@@ -1,4 +1,4 @@
-#!/usr/bin/bash -x
+#!/usr/bin/env bash
 
 exec &> >(logger -t /home/iguazio/parquez/parquetinizer.sh -s)
 
