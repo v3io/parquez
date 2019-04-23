@@ -27,7 +27,7 @@ echo 'target: '${target}
 partition_by=$9
 echo 'partition by:'${partition_by}
 
-HIVE_PATH='hive'
+HIVE_PATH='/hive/bin/hive -hiveconf hive.metastore.uris=thrift://hive:9083 '
 echo 'HIVE PATH:'${HIVE_PATH}
 
 if [[ ${partition_by} == 'y' ]]

@@ -1,5 +1,5 @@
 #!/usr/bin/bash -x
 
-hive -f tableName.txt
+/hive/bin/hive -hiveconf hive.metastore.uris=thrift://hive:9083 -f tableName.txt
 
 
