@@ -2,7 +2,7 @@
 
 exec &> >(logger -t /home/iguazio/parquez/parquetinizer.sh -s)
 
-parquez_dir='/home/iguazio/parquez'
+parquez_dir='~/parquez'
 
 echo parquez_dir:$parquez_dir
 

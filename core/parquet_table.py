@@ -43,7 +43,8 @@ class ParquetTable(object):
 
     def create_table(self):
         import os
-        hive_path = self.conf.hive_home
+        #hive_path = self.conf.hive_home
+        hive_path = "hive "
         command = hive_path + " -f create_table.txt"
         self.logger.info("Create Hive table command : " + command)
         os.system(command)

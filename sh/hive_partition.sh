@@ -27,7 +27,7 @@ echo 'target: '${target}
 partition_by=$9
 echo 'partition by:'${partition_by}
 
-HIVE_PATH='/opt/hive/bin/hive'
+HIVE_PATH='hive'
 echo 'HIVE PATH:'${HIVE_PATH}
 
 if [[ ${partition_by} == 'y' ]]
