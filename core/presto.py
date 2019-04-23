@@ -53,7 +53,7 @@ class Presto(object):
         self.logger.debug(script)
         prefix = self.get_presto_password()
         #full_command = prefix + self.generate_presto_command_with_user() + script + "\""
-        full_command = prefix +" --execute " + script + "\""
+        full_command = PRESTO_COMMAND_PREFIX + "--execute " + script + "\""
         self.logger.debug("Presto full command {}".format(full_command))
         os.system(full_command)
 
