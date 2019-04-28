@@ -1,5 +1,7 @@
 import re
+from app_conf import AppConf
 
+HIVE_PREFIX = 'kubectl -n default-tenant exec -it $(kubectl -n default-tenant get pods --no-headers -o custom-columns=":metadata.name" | grep shell)  -- /bin/bash -c "/hive/bin/hive -hiveconf hive.metastore.uris=thrift://hive:9083 '
 STORED_AS_PARQUET_STR = " STORED AS PARQUET;"
 PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
 
@@ -7,7 +9,7 @@ PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
 
 
 class ParquetTable(object):
-    def __init__(self, logger, partition_by, conf, kv_table):
+    def __init__(self, logger, partition_by, conf: AppConf, kv_table):
         self.logger = logger
         self.kv_table = kv_table
         self.partition_str = partition_by
@@ -44,9 +46,12 @@ class ParquetTable(object):
     def create_table(self):
         import os
         hive_path = self.conf.hive_home
-        command = hive_path + " -f create_table.txt"
+        command = HIVE_PREFIX + " -f 'v3io://parquez/create_table.txt'"
         self.logger.info("Create Hive table command : " + command)
         os.system(command)
+
+    def copy_to_v3io(self):
+        'curl https: //'+self.conf.v3io_api_endpoint_host+'/parquez/ -H \'x-v3io-session-key: 5e519bc9-0c96-47f9-b2f3-a7f999bda8a6\' --insecure --upload-file create_table.txt'
 
     def generate_script(self):
         try:
@@ -59,6 +64,7 @@ class ParquetTable(object):
             f = open("create_table.txt", "w")
             f.write(parquet_command)
             f.close()
+            self.copy_to_v3io()
             self.create_table()
         except Exception as e:
             self.logger.error(e)
