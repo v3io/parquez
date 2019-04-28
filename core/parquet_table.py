@@ -1,5 +1,5 @@
 import re
-from app_conf import AppConf
+
 
 HIVE_PREFIX = 'kubectl -n default-tenant exec -it $(kubectl -n default-tenant get pods --no-headers -o custom-columns=":metadata.name" | grep shell)  -- /bin/bash -c "/hive/bin/hive -hiveconf hive.metastore.uris=thrift://hive:9083 '
 STORED_AS_PARQUET_STR = " STORED AS PARQUET;"
@@ -10,7 +10,7 @@ PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
 
 
 class ParquetTable(object):
-    def __init__(self, logger, partition_by, conf: AppConf, kv_table):
+    def __init__(self, logger, partition_by, conf, kv_table):
         self.logger = logger
         self.kv_table = kv_table
         self.partition_str = partition_by
