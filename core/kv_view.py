@@ -15,11 +15,12 @@ class KVView(object):
         self.name = self.kv_table.name + "_view"
         self.real_time_window = real_time_window
         self.conf = conf
+        self.uri = conf.presto_uri
         self.cursor = None
 
     def connect(self):
-        req_kw = {'auth': (self.user_name, self.access_key), 'verify': False}
-        self.cursor = presto.connect(self.uri, port=443, username=self.user_name,
+        req_kw = {'auth': (self.conf.username, self.conf.v3io_access_key), 'verify': False}
+        self.cursor = presto.connect(self.uri, port=443, username=self.conf.username,
                                      protocol='https', requests_kwargs=req_kw).cursor()
         self.logger.info("connected to presto")
 
@@ -70,6 +71,7 @@ class KVView(object):
         self.logger.debug("Create view command : " + command)
         self.connect()
         self.execute_command(command)
+        self.disconnect()
 
     def generate_crete_view_script(self):
         try:
