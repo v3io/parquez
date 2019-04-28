@@ -20,7 +20,7 @@ class PrestoClient(object):
         self.kv_view_name = kv_view.name
         self.hive_schema = conf.hive_schema
         self.parquet_table_name = parquet_table.parquet_table_name
-        self.cursor: presto.Cursor = None
+        self.cursor = None
 
     def connect(self):
         req_kw = {'auth': (self.user_name, self.access_key), 'verify': False}
