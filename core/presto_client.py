@@ -1,6 +1,6 @@
 import re
 #from core.logger import Logger
-from core.kv_view import KVView
+#from core.kv_view import KVView
 #from core.parquet_table import ParquetTable
 #from config.app_conf import AppConf
 from pyhive import presto  # or import hive
@@ -11,7 +11,7 @@ PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
 
 class PrestoClient(object):
 
-    def __init__(self, logger, conf, parquet_table, kv_view: KVView, view_name="unified_view"):
+    def __init__(self, logger, conf, parquet_table, kv_view, view_name="unified_view"):
         self.logger = logger
         self.uri = conf.presto_uri
         self.user_name = conf.username
