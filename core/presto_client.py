@@ -57,7 +57,10 @@ class PrestoClient(object):
         schema_fields += self.generate_partition_by()
         return schema_fields
 
-    def execute_command(self):
+    def execute_command(self, command):
+        self.cursor.execute(command)
+
+    def generate_unified_view(self):
         script = self.generate_unified_view()
-        self.cursor.execute(script)
+        self.execute(script)
         self.logger.debug(script)

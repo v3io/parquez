@@ -6,6 +6,7 @@ from core.cron_tab import Crontab
 from config.app_conf import AppConf
 from core.kv_table import KVTable
 from core.kv_view import KVView
+from core.presto_client import PrestoClient
 
 CONFIG_PATH = 'config/parquez.ini'
 
@@ -38,9 +39,14 @@ def main():
     kv_view = KVView(logger, args.partition_by, conf, kv_table)
     kv_view.generate_crete_view_script()
 
+    #logger.info("generating presto view")
+    #prest = Presto(logger, args.view_name, args.partition_by, conf, kv_table, kv_view)
+    #prest.execute_command()
+
     logger.info("generating presto view")
-    prest = Presto(logger, args.view_name, args.partition_by, conf, kv_table, kv_view)
-    prest.execute_command()
+    prest = PrestoClient(logger, args.view_name, args.partition_by, conf, kv_table, kv_view)
+    prest.generate_unified_view()
+
 
     logger.info("generating cronJob")
     cr = Crontab(logger, conf, args.real_time_table_name, args.partition_interval, args.real_time_window,

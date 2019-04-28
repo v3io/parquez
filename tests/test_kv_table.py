@@ -96,6 +96,16 @@ minute long"""
   city_id,
   minute,year,month,day,hour"""
 
+def test_kv_table():
+    logger = Logger()
+    logger.info("Starting to Parquezzzzzzzz")
+
+    conf = AppConf(logger, "test.ini")
+    conf.log_conf()
+
+    logger.info("validating kv table")
+    kv_table = KVTable(conf, "booking_service_kv", logger)
+    kv_table.import_table_schema()
 
 
 
