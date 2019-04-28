@@ -5,6 +5,7 @@ HIVE_PREFIX = 'kubectl -n default-tenant exec -it $(kubectl -n default-tenant ge
 STORED_AS_PARQUET_STR = " STORED AS PARQUET;"
 PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
 
+
 # TODO: Add verification that hive table created (handle Trying to send on a closed client exception
 
 
@@ -20,7 +21,7 @@ class ParquetTable(object):
 
     def generate_create_table_script(self):
         self.logger.debug("generate_create_table_script")
-        parquet_script = "CREATE EXTERNAL TABLE "+self.conf.hive_schema+'.'+self.parquet_table_name+" ("
+        parquet_script = "CREATE EXTERNAL TABLE " + self.conf.hive_schema + '.' + self.parquet_table_name + " ("
         return parquet_script
 
     def generate_partition_by(self):
@@ -51,7 +52,7 @@ class ParquetTable(object):
         os.system(command)
 
     def copy_to_v3io(self):
-        'curl https: //'+self.conf.v3io_api_endpoint_host+'/parquez/ -H \'x-v3io-session-key: 5e519bc9-0c96-47f9-b2f3-a7f999bda8a6\' --insecure --upload-file create_table.txt'
+        'curl https: //' + self.conf.v3io_api_endpoint_host + '/parquez/ -H \'x-v3io-session-key: ' + self.conf.v3io_access_key + '\' --insecure --upload-file create_table.txt'
 
     def generate_script(self):
         try:
@@ -69,9 +70,3 @@ class ParquetTable(object):
         except Exception as e:
             self.logger.error(e)
             raise
-
-
-
-
-
-
