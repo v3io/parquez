@@ -1,7 +1,7 @@
 import re
 
 
-HIVE_PREFIX = 'kubectl -n default-tenant exec -it $(kubectl -n default-tenant get pods --no-headers -o custom-columns=":metadata.name" | grep shell)  -- /bin/bash -c "/hive/bin/hive -hiveconf hive.metastore.uris=thrift://hive:9083" '
+HIVE_PREFIX = 'kubectl -n default-tenant exec $(kubectl -n default-tenant get pods --no-headers -o custom-columns=":metadata.name" | grep shell)  -- /bin/bash -c "/hive/bin/hive -hiveconf hive.metastore.uris=thrift://hive:9083" '
 STORED_AS_PARQUET_STR = " STORED AS PARQUET;"
 PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
 
@@ -47,7 +47,7 @@ class ParquetTable(object):
     def create_table(self):
         import os
         hive_path = self.conf.hive_home
-        command = HIVE_PREFIX + " -f 'v3io://parquez/create_table.txt' \""
+        command = HIVE_PREFIX + " -f 'v3io://parquez/create_table.txt'"
         self.logger.info("Create Hive table command : " + command)
         os.system(command)
 
