@@ -11,7 +11,7 @@ PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
 
 class PrestoClient(object):
 
-    def __init__(self, logger, conf, parquet_table, kv_view, view_name="unified_view"):
+    def __init__(self, logger, conf, parquet_table, kv_view,kv_table, view_name="unified_view"):
         self.logger = logger
         self.uri = conf.presto_uri
         self.user_name = conf.username
@@ -20,6 +20,7 @@ class PrestoClient(object):
         self.kv_view_name = kv_view.name
         self.hive_schema = conf.hive_schema
         self.parquet_table_name = parquet_table.parquet_table_name
+        self.kv_table = kv_table
         self.cursor = None
 
     def connect(self):
