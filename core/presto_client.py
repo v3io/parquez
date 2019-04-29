@@ -31,7 +31,7 @@ class PrestoClient(object):
     def disconnect(self):
         self.cursor.close()
 
-    def generate_unified_view(self):
+    def create_unified_view_script(self):
         attributes = self.convert_schema()
         view = "CREATE OR REPLACE VIEW " + "hive." + self.conf.hive_schema + "." + self.view_name + " as ( SELECT " + attributes
         view += " FROM hive." + self.hive_schema + "." + self.kv_view_name
@@ -61,6 +61,6 @@ class PrestoClient(object):
         self.cursor.execute(command)
 
     def generate_unified_view(self):
-        script = self.generate_unified_view()
+        script = self.create_unified_view_script()
         self.execute(script)
         self.logger.debug(script)
