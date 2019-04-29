@@ -7,7 +7,7 @@ from config.app_conf import AppConf
 from core.kv_table import KVTable
 from core.kv_view import KVView
 from core.presto_client import PrestoClient
-from config.setup import Setup
+from config.utils import Utils
 
 CONFIG_PATH = 'config/parquez.ini'
 
@@ -29,8 +29,8 @@ def main():
     conf.log_conf()
 
     logger.info("initializing setup")
-    setup = Setup(logger, conf)
-    setup.copy_to_v3io()
+    setup = Utils(logger, conf)
+    setup.copy_to_v3io("v3io-spark2-tools_2.11.jar")
 
     logger.info("validating kv table")
     kv_table = KVTable(conf, args.real_time_table_name, logger)
