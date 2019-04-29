@@ -64,5 +64,7 @@ class PrestoClient(object):
 
     def generate_unified_view(self):
         script = self.create_unified_view_script()
+        self.connect()
         self.execute_command(script)
         self.logger.debug(script)
+        self.disconnect()
