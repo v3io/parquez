@@ -44,7 +44,7 @@ def main():
     #prest.execute_command()
 
     logger.info("generating presto view")
-    prest = PrestoClient(logger, args.view_name, args.partition_by, conf, kv_table, kv_view)
+    prest = PrestoClient(logger, conf, parquet, kv_view)
     prest.generate_unified_view()
 
 
