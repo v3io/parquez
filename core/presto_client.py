@@ -11,8 +11,9 @@ PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
 
 class PrestoClient(object):
 
-    def __init__(self, logger, conf, parquet_table, kv_view,kv_table, view_name="unified_view"):
+    def __init__(self, logger, conf,partition_str,  parquet_table, kv_view,kv_table, view_name="unified_view"):
         self.logger = logger
+        self.partition_str = partition_str
         self.uri = conf.presto_uri
         self.user_name = conf.username
         self.access_key = conf.v3io_access_key
