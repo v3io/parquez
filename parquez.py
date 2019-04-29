@@ -37,7 +37,7 @@ def main():
     kv_table.import_table_schema()
 
     logger.info("generating parquet table")
-    parquet = ParquetTable(logger, args.partition_by, conf, kv_table)
+    parquet = ParquetTable(logger,setup, args.partition_by, conf, kv_table)
     parquet.generate_script()
 
     logger.info("generating view over kv")
