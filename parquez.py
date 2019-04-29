@@ -7,6 +7,7 @@ from config.app_conf import AppConf
 from core.kv_table import KVTable
 from core.kv_view import KVView
 from core.presto_client import PrestoClient
+from config.setup import Setup
 
 CONFIG_PATH = 'config/parquez.ini'
 
@@ -26,6 +27,10 @@ def main():
 
     conf = AppConf(logger, config_path)
     conf.log_conf()
+
+    logger.info("initializing setup")
+    setup = Setup(logger, conf)
+    setup.copy_to_v3io()
 
     logger.info("validating kv table")
     kv_table = KVTable(conf, args.real_time_table_name, logger)

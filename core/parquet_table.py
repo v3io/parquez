@@ -1,4 +1,5 @@
 import re
+import os
 
 
 HIVE_PREFIX = 'kubectl -n default-tenant exec $(kubectl -n default-tenant get pods --no-headers -o custom-columns=":metadata.name" | grep shell)  -- /bin/bash -c "/hive/bin/hive -hiveconf hive.metastore.uris=thrift://hive:9083 '
@@ -52,7 +53,8 @@ class ParquetTable(object):
         os.system(command)
 
     def copy_to_v3io(self):
-        'curl https: //' + self.conf.v3io_api_endpoint_host + '/parquez/ -H \'x-v3io-session-key: ' + self.conf.v3io_access_key + '\' --insecure --upload-file create_table.txt"'
+        command ='curl https: //' + self.conf.v3io_api_endpoint_host + '/parquez/ -H \'x-v3io-session-key: ' + self.conf.v3io_access_key + '\' --insecure --upload-file create_table.txt"'
+        os.system(command)
 
     def generate_script(self):
         try:
