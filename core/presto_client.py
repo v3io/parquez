@@ -35,7 +35,7 @@ class PrestoClient(object):
 
     def create_unified_view_script(self):
         attributes = self.convert_schema()
-        view = "CREATE OR REPLACE VIEW " + "hive." + self.conf.hive_schema + "." + self.view_name + " as ( SELECT " + attributes
+        view = "CREATE OR REPLACE VIEW " + "hive." + self.hive_schema + "." + self.view_name + " as ( SELECT " + attributes
         view += " FROM hive." + self.hive_schema + "." + self.kv_view_name
         view += " UNION ALL SELECT " + attributes
         view += " FROM hive." + self.hive_schema + "." + self.parquet_table_name
