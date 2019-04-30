@@ -27,7 +27,8 @@ echo 'target: '${target}
 partition_by=$9
 echo 'partition by:'${partition_by}
 
-HIVE_PATH='/opt/hive/bin/hive'
+HIVE_PATH='kubectl -n default-tenant exec $(kubectl -n default-tenant get pods --no-headers -o custom-columns=":metadata.name" | grep shell)  -- /bin/bash -c "/hive/bin/hive -hiveconf hive.metastore.uris=thrift://hive:9083 '
+
 echo 'HIVE PATH:'${HIVE_PATH}
 
 if [[ ${partition_by} == 'y' ]]
