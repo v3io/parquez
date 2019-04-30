@@ -220,8 +220,11 @@ pushd /home/iguazio
 spark_command='"/spark/bin/spark-submit --driver-memory 8g --class io.iguaz.v3io.spark2.tools.KVToParquet /v3io/parquez/v3io-spark2-tools_2.11.jar '${source}' '${target}'"'
 echo ${spark_command}
 
-kubectl -n default-tenant exec -it $(kubectl -n default-tenant get pods --no-headers -o custom-columns=":metadata.name" | grep shell)  -- /bin/bash -c ${spark_command}
+exec_spark_command ="kubectl -n default-tenant exec -it $(kubectl -n default-tenant get pods --no-headers -o custom-columns=":metadata.name" | grep shell)  -- /bin/bash -c ${spark_command}"
 
+echo ${exec_spark_command}
+
+exec ${exec_spark_command}
 if [ $? -eq 0 ]; then
     echo KV to parquet finished with success
 else
