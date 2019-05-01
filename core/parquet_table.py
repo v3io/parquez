@@ -10,7 +10,7 @@ PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
 
 
 class ParquetTable(object):
-    def __init__(self, logger, setup, partition_by, conf, kv_table):
+    def __init__(self, logger, conf, utils, partition_by, kv_table):
         self.logger = logger
         self.kv_table = kv_table
         self.partition_str = partition_by
@@ -18,7 +18,7 @@ class ParquetTable(object):
         self.partition = []
         self.parquet_table_name = kv_table.name + "_parquet"
         self.conf = conf
-        self.setup = setup
+        self.utils = utils
 
     def generate_create_table_script(self):
         self.logger.debug("generate_create_table_script")
@@ -52,9 +52,7 @@ class ParquetTable(object):
         os.system(command)
 
     def copy_to_v3io(self):
-        self.setup.copy_to_v3io("create_table.txt")
-        #command ='curl https: //' + self.conf.v3io_api_endpoint_host + '/parquez/ -H \'x-v3io-session-key: ' + self.conf.v3io_access_key + '\' --insecure --upload-file create_table.txt"'
-        #os.system(command)
+        self.utils.copy_to_v3io("create_table.txt")
 
     def generate_script(self):
         try:

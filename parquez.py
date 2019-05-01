@@ -29,15 +29,15 @@ def main():
 
     # should be deleted from 2.3 versions
     logger.info("initializing setup")
-    setup = Utils(logger, conf)
-    setup.copy_to_v3io("v3io-spark2-tools_2.11.jar")
+    utils = Utils(logger, conf)
+    utils.copy_to_v3io("v3io-spark2-tools_2.11.jar")
 
     logger.info("validating kv table")
     kv_table = KVTable(logger, conf, args.real_time_table_name)
     kv_table.import_table_schema()
 
     logger.info("generating parquet table")
-    parquet = ParquetTable(logger,setup, args.partition_by, conf, kv_table)
+    parquet = ParquetTable(logger,conf, utils, args.partition_by, kv_table)
     parquet.generate_script()
 
     logger.info("generating view over kv")
