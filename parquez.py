@@ -6,7 +6,7 @@ from config.app_conf import AppConf
 from core.kv_table import KVTable
 from core.kv_view import KVView
 from core.presto_client import PrestoClient
-from utils import Utils
+from utils.utils import Utils
 
 CONFIG_PATH = 'config/parquez.ini'
 
@@ -15,9 +15,9 @@ def main():
     logger = Logger()
     logger.info("Starting to Parquezzzzzzzz")
 
-    logger.info("Parsing data")
     parser = InputParser(logger)
     args = parser.parse_args()
+    logger.info("input parsed")
 
     if args.config is not None:
         config_path = args.config
@@ -25,14 +25,15 @@ def main():
         config_path = CONFIG_PATH
 
     conf = AppConf(logger, config_path)
-    conf.log_conf()
+    logger.info("loading configuration")
 
+    # should be deleted from 2.3 versions
     logger.info("initializing setup")
     setup = Utils(logger, conf)
     setup.copy_to_v3io("v3io-spark2-tools_2.11.jar")
 
     logger.info("validating kv table")
-    kv_table = KVTable(conf, args.real_time_table_name, logger)
+    kv_table = KVTable(logger, conf, args.real_time_table_name)
     kv_table.import_table_schema()
 
     logger.info("generating parquet table")
