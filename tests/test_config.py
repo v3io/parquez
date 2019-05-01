@@ -1,11 +1,11 @@
-from core.logger import Logger
+from utils.logger import Logger
 from config.app_conf import AppConf
 
 
 # test_config.py
 
 
-def test_generate():
+def test_app_conf():
     logger = Logger()
     cf = AppConf(logger,config_path='../config/parquez.ini')
     assert cf.v3io_container == "parquez"

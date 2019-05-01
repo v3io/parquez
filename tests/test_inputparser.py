@@ -1,4 +1,4 @@
-from core.logger import Logger
+from utils.logger import Logger
 from core.input_parser import InputParser
 import pytest
 

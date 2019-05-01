@@ -1,6 +1,6 @@
-from core.logger import Logger
+from utils.logger import Logger
 from config.app_conf import AppConf
-from config.utils import Utils
+from utils import Utils
 
 
 # test_config.py

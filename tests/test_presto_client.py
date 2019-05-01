@@ -1,4 +1,4 @@
-from core.logger import Logger
+from utils.logger import Logger
 from core.parquet_table import ParquetTable
 from config.app_conf import AppConf
 from core.presto_client import PrestoClient

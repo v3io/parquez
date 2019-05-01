@@ -1,8 +1,8 @@
-from core.logger import Logger
+from utils.logger import Logger
 from config.app_conf import AppConf
 from core.kv_table import KVTable
 from core.kv_view import KVView
-from core.parquet_table import ParquetTable
+
 
 # test_kv_view.py
 

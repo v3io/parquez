@@ -1,5 +1,5 @@
 import sys
-from logger import Logger
+from utils.logger import Logger
 from kv_table import KVTable
 from kv_view import KVView
 

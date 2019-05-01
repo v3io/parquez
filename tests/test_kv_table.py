@@ -1,4 +1,4 @@
-from core.logger import Logger
+from utils.logger import Logger
 from config.app_conf import AppConf
 from core.kv_table import KVTable
 

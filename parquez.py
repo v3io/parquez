@@ -1,13 +1,12 @@
 from core.input_parser import InputParser
-from core.logger import Logger
+from utils.logger import Logger
 from core.parquet_table import ParquetTable
-from core.presto import Presto
 from core.cron_tab import Crontab
 from config.app_conf import AppConf
 from core.kv_table import KVTable
 from core.kv_view import KVView
 from core.presto_client import PrestoClient
-from config.utils import Utils
+from utils import Utils
 
 CONFIG_PATH = 'config/parquez.ini'
 
