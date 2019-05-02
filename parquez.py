@@ -44,10 +44,6 @@ def main():
     kv_view = KVView(logger, args.partition_by, conf, kv_table)
     kv_view.generate_crete_view_script()
 
-    #logger.info("generating presto view")
-    #prest = Presto(logger, args.view_name, args.partition_by, conf, kv_table, kv_view)
-    #prest.execute_command()
-
     logger.info("generating presto view")
     prest = PrestoClient(logger, conf, args.partition_by, parquet, kv_view, kv_table)
     prest.generate_unified_view()
