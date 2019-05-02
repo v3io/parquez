@@ -71,6 +71,7 @@ class KVView(object):
         self.logger.debug("Create view command : " + command)
         self.connect()
         self.execute_command(command)
+        self.cursor.fetchone()
         self.disconnect()
 
     def generate_crete_view_script(self):
