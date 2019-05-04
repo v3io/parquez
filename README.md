@@ -21,24 +21,24 @@ historical-retention [h, d,m, y] : The retention of all parquez data  <br />
 config : config file path   <br />
 
 ### config file parametres
-[v3io]
-v3io_container = bigdata
-access_key = <access_key>
+[v3io] <br />
+v3io_container = bigdata <br />
+access_key = <access_key> <br />
 
-[hive]
-hive_schema = default
+[hive] <br />
+hive_schema = default <br />
 
-[presto]
-uri = <localhost>
-v3io_connector = v3io
-hive_connector = hive
+[presto] <br />
+uri = <localhost> <br />
+v3io_connector = v3io <br />
+hive_connector = hive <br />
 
 
-[nginx]
-v3io_api_endpoint_host = <localhost>
-v3io_api_endpoint_port = 8081
-username = <user_name>
-password = <password>
+[nginx] <br />
+v3io_api_endpoint_host = <localhost> <br />
+v3io_api_endpoint_port = 8081 <br />
+username = <user_name> <br />
+password = <password> <br />
 
 
 ### Prerequisites
