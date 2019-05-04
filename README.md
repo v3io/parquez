@@ -37,7 +37,7 @@ hive_connector = hive <br />
 [nginx] <br />
 v3io_api_endpoint_host = <localhost> <br />
 v3io_api_endpoint_port = 8081 <br />
-username = <user_name> <br />
+username = <username> <br />
 password = <password> <br />
 
 
