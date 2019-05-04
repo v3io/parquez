@@ -29,16 +29,16 @@ access_key = <access_key> <br />
 hive_schema = default <br />
 
 [presto] <br />
-uri = <localhost> <br />
+uri = <uri> <br />
 v3io_connector = v3io <br />
 hive_connector = hive <br />
 
 
 [nginx] <br />
-v3io_api_endpoint_host = <localhost> <br />
+v3io_api_endpoint_host = <v3io_api_endpoint_host> <br />
 v3io_api_endpoint_port = 8081 <br />
-username = <username> <br />
-password = <password> <br />
+username = <user_name> <br />
+password = <pass> <br />
 
 
 ### Prerequisites
