@@ -1,7 +1,7 @@
 import sys
-from utils.logger import Logger
 from kv_table import KVTable
 from kv_view import KVView
+
 
 CONFIG_PATH = 'config/parquez.ini'
 
@@ -35,9 +35,9 @@ def main():
 if __name__ == '__main__' and __package__ is None:
     if __package__ is None:
         from os import path
-
         sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
         from config.app_conf import AppConf
+        from utils.logger import Logger
     else:
         from ..config.app_conf import AppConf
     main()
