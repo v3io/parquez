@@ -237,7 +237,7 @@ pushd $parquez_dir
 
 alter_view_command="${parquez_dir}/sh/alter_kv_view.sh ${kv_table_name} '${kv_window}'"
 
-ehco ${alter_view_command}
+echo ${alter_view_command}
 
 eval ${alter_view_command}
 
