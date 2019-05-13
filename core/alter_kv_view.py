@@ -21,7 +21,6 @@ def main():
     args = sys.argv
 
     conf = AppConf(logger, CONFIG_PATH)
-    conf.log_conf()
 
     logger.info("validating kv table " + args[1])
     kv_table = KVTable(conf, args[1], logger)
