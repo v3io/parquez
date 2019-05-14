@@ -242,7 +242,6 @@ echo ${alter_view_command}
 
 eval ${alter_view_command}
 
-#/opt/hive/bin/hive -e "alter table $hive_schema.$parquet_table_name add partition (year=$year, month=$month, day=$day, hour=$hour) location '$target';"
 ${parquez_dir}/sh/hive_partition.sh add $hive_schema $parquet_table_name $year $month $day $hour ${target} $partition_by
 
 kvDeleteCommand="hdfs dfs -rm -R ${source}"
@@ -254,8 +253,6 @@ parquetDeleteCommand="hdfs dfs -rm -R ${parquetToDelete}"
 kubectl -n default-tenant exec -it $shell_container -- /bin/bash -c "$parquetDeleteCommand"
 
 ${parquez_dir}/sh/hive_partition.sh drop $hive_schema $parquet_table_name $old_year $old_month $old_day $old_hour $target $partition_by
-
-#/opt/hive/bin/hive -e "alter table $hive_schema.$parquet_table_name drop partition (year=$old_year, month=$old_month, day=$old_day, hour=$old_hour);"
 
 popd
 
