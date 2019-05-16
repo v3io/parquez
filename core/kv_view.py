@@ -12,7 +12,7 @@ class KVView(object):
     def __init__(self, logger, real_time_window, conf, kv_table):
         self.logger = logger
         self.kv_table = kv_table
-        self.name = self.kv_table.name + "_view"
+        self.name = kv_table.name + "_view"
         self.real_time_window = real_time_window
         self.conf = conf
         self.uri = conf.presto_uri

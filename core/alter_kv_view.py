@@ -23,7 +23,7 @@ def main():
     conf = AppConf(logger, CONFIG_PATH)
 
     logger.info("validating kv table " + args[1])
-    kv_table = KVTable(conf, args[1], logger)
+    kv_table = KVTable(logger, conf, args[1])
 
     logger.info("generating view over kv" + args[2])
     parsed_window = parse_kv_window_arg(args[2], logger)
