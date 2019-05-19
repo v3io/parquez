@@ -1,13 +1,16 @@
 import re
 
+
+HIVE_PREFIX = 'kubectl -n default-tenant exec $(kubectl -n default-tenant get pods --no-headers -o custom-columns=":metadata.name" | grep shell)  -- /bin/bash -c "/hive/bin/hive -hiveconf hive.metastore.uris=thrift://hive:9083 '
 STORED_AS_PARQUET_STR = " STORED AS PARQUET;"
 PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
+
 
 # TODO: Add verification that hive table created (handle Trying to send on a closed client exception
 
 
 class ParquetTable(object):
-    def __init__(self, logger, partition_by, conf, kv_table):
+    def __init__(self, logger, conf, utils, partition_by, kv_table):
         self.logger = logger
         self.kv_table = kv_table
         self.partition_str = partition_by
@@ -15,10 +18,11 @@ class ParquetTable(object):
         self.partition = []
         self.parquet_table_name = kv_table.name + "_parquet"
         self.conf = conf
+        self.utils = utils
 
     def generate_create_table_script(self):
         self.logger.debug("generate_create_table_script")
-        parquet_script = "CREATE EXTERNAL TABLE "+self.conf.hive_schema+'.'+self.parquet_table_name+" ("
+        parquet_script = "CREATE EXTERNAL TABLE " + self.conf.hive_schema + '.' + self.parquet_table_name + " ("
         return parquet_script
 
     def generate_partition_by(self):
@@ -43,10 +47,12 @@ class ParquetTable(object):
 
     def create_table(self):
         import os
-        hive_path = self.conf.hive_home
-        command = hive_path + " -f create_table.txt"
+        command = HIVE_PREFIX + " -f 'v3io://parquez/create_table.txt' \""
         self.logger.info("Create Hive table command : " + command)
         os.system(command)
+
+    def copy_to_v3io(self):
+        self.utils.copy_to_v3io("create_table.txt")
 
     def generate_script(self):
         try:
@@ -59,13 +65,8 @@ class ParquetTable(object):
             f = open("create_table.txt", "w")
             f.write(parquet_command)
             f.close()
+            self.copy_to_v3io()
             self.create_table()
         except Exception as e:
             self.logger.error(e)
             raise
-
-
-
-
-
-

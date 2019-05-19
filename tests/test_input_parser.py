@@ -1,5 +1,5 @@
-from logger import Logger
-from inputparser import InputParser
+from utils.logger import Logger
+from core.input_parser import InputParser
 import pytest
 
 
@@ -16,7 +16,7 @@ def test_generate():
                           ,'--real-time-window', '3h'
                           ,'--historical-retention', '21h'
                           ,'--real-time-table-name', 'booking_service_kv'])
-    print args
+    print(args)
 
 
 def test_no_args():

@@ -1,7 +1,7 @@
 import sys
-from logger import Logger
 from kv_table import KVTable
 from kv_view import KVView
+
 
 CONFIG_PATH = 'config/parquez.ini'
 
@@ -21,10 +21,9 @@ def main():
     args = sys.argv
 
     conf = AppConf(logger, CONFIG_PATH)
-    conf.log_conf()
 
     logger.info("validating kv table " + args[1])
-    kv_table = KVTable(conf, args[1], logger)
+    kv_table = KVTable(logger, conf, args[1])
 
     logger.info("generating view over kv" + args[2])
     parsed_window = parse_kv_window_arg(args[2], logger)
@@ -35,9 +34,9 @@ def main():
 if __name__ == '__main__' and __package__ is None:
     if __package__ is None:
         from os import path
-
         sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
         from config.app_conf import AppConf
+        from utils.logger import Logger
     else:
         from ..config.app_conf import AppConf
     main()

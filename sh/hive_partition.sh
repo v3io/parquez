@@ -27,7 +27,8 @@ echo 'target: '${target}
 partition_by=$9
 echo 'partition by:'${partition_by}
 
-HIVE_PATH='/opt/hive/bin/hive'
+HIVE_PATH='kubectl -n default-tenant exec $(kubectl -n default-tenant get pods --no-headers -o custom-columns=":metadata.name" | grep shell)  -- /bin/bash -c "/hive/bin/hive -hiveconf hive.metastore.uris=thrift://hive:9083 '
+
 echo 'HIVE PATH:'${HIVE_PATH}
 
 if [[ ${partition_by} == 'y' ]]
@@ -54,17 +55,12 @@ echo 'Partition to delete '${partition_to_delete}
 
 if [[ ${alter_command} == 'add' ]]
 then
-        exec_command=${HIVE_PATH}" -e \"alter table $hive_schema.$parquet_table_name add partition (${partition_to_delete}) location '${target}';\""
+        exec_command=${HIVE_PATH}" -e 'alter table ${hive_schema}.${parquet_table_name} add partition (${partition_to_delete}) location \\\"${target}\\\";'\""
 fi
 
 if [[ ${alter_command} == 'drop' ]]
 then
-        exec_command=${HIVE_PATH}" -e \"alter table $hive_schema.$parquet_table_name drop partition (${partition_to_delete}) ;\""
-fi
-
-if [[ ${alter_command} == 'drop' ]]
-then
-        exec_command=${HIVE_PATH}" -e \"alter table $hive_schema.$parquet_table_name drop partition (${partition_to_delete}) ;\""
+        exec_command=${HIVE_PATH}" -e 'alter table $hive_schema.$parquet_table_name drop partition (${partition_to_delete}) ;'\""
 fi
 
 echo 'execution command: ' ${exec_command}

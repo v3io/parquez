@@ -1,4 +1,3 @@
-from logger import Logger
 import requests
 import json
 
@@ -30,7 +29,7 @@ def send_request(logger, url, headers, username, password):
 
 
 class KVTable(object):
-    def __init__(self, conf, name='table', logger=Logger()):
+    def __init__(self, logger, conf, name='table'):
         self.name = name
         self.logger = logger
         self.schema = "init_schema"

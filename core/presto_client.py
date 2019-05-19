@@ -1,47 +1,71 @@
-import requests
-from pyhive import presto
+import re
+#from core.logger import Logger
+#from core.kv_view import KVView
+#from core.parquet_table import ParquetTable
+#from config.app_conf import AppConf
+from pyhive import presto  # or import hive
 
-NODE_IP = '192.168.220.23'
-USER_NAME = 'admin'
-PASSWORD = '24tango'
-LOG_LEVEL = 'info'
-NODE_PORT = '8001'
-
-
-def generate_url():
-    url = "http://" + NODE_IP + ":" + NODE_PORT
-    return url
+STORED_AS_PARQUET_STR = " STORED AS PARQUET;"
+PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
 
 
-def create_cookie():
-    url = generate_url() + "/api/sessions"
-    headers = {"Content-Type": "application/json"}
-    payload = {
-        "data": {
-            "attributes": {
-                "username": USER_NAME,
-                "password": PASSWORD
-            },
-            "type": "session"
-        }
-    }
-    response = requests.post(url, json=payload, headers=headers)
-    print(response.headers)
-    print(response.text)
-    for c in response.cookies:
-        print(c.name, c.value)
-    return c.value
+class PrestoClient(object):
 
+    def __init__(self, logger, conf, partition_str,  parquet_table, kv_view, kv_table, view_name="unified_view"):
+        self.logger = logger
+        self.partition_str = partition_str
+        self.uri = conf.presto_uri
+        self.user_name = conf.username
+        self.access_key = conf.v3io_access_key
+        self.view_name = view_name
+        self.kv_view_name = kv_view.name
+        self.hive_schema = conf.hive_schema
+        self.parquet_table_name = parquet_table.parquet_table_name
+        self.kv_table = kv_table
+        self.cursor = None
 
-req_kw = {'auth': ("iguazio", create_cookie()), 'verify': False}
-conn = presto.connect("presto-api-presto.default-tenant.app.dev133.lab.iguazeng.com", port=8080, username='iguazio', protocol='https', requests_kwargs=req_kw)
+    def connect(self):
+        req_kw = {'auth': (self.user_name, self.access_key), 'verify': False}
+        self.cursor = presto.connect(self.uri, port=443, username=self.user_name,
+                                     protocol='https', requests_kwargs=req_kw).cursor()
+        self.logger.info("connected to presto")
 
-query = """
-select
-  * from v3io.parquez.booking_service_kv limit 10"""
+    def disconnect(self):
+        self.cursor.close()
 
-col = ['id', 'name']
-cursor = conn.cursor()
-cursor.execute(query)
-print(cursor.fetchall())
-cursor.close()
+    def create_unified_view_script(self):
+        attributes = self.convert_schema()
+        view = "CREATE OR REPLACE VIEW " + "hive." + self.hive_schema + "." + self.view_name + " as ( SELECT " + attributes
+        view += " FROM hive." + self.hive_schema + "." + self.kv_view_name
+        view += " UNION ALL SELECT " + attributes
+        view += " FROM hive." + self.hive_schema + "." + self.parquet_table_name
+        view += ")"
+        return view
+
+    def generate_partition_by(self):
+        part = re.match(PARTITION_INTERVAL_RE, self.partition_str).group(2)
+        if part == 'y':
+            partition_by = ",year"
+        if part == 'm':
+            partition_by = ",year,month"
+        if part == 'd':
+            partition_by = ",year,month,day"
+        if part == 'h':
+            partition_by = ",year,month,day,hour"
+        return partition_by
+
+    def convert_schema(self):
+        schema_fields = self.kv_table.get_schema_fields()
+        schema_fields += self.generate_partition_by()
+        return schema_fields
+
+    def execute_command(self, command):
+        self.cursor.execute(command)
+
+    def generate_unified_view(self):
+        script = self.create_unified_view_script()
+        self.connect()
+        self.execute_command(script)
+        self.cursor.fetchone()
+        self.logger.debug(script)
+        self.disconnect()

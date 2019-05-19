@@ -41,7 +41,8 @@ export HADOOP_HOME=/opt/hadoop
 export JAVA_HOME=/opt/iguazio/java
 export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
 export SPARK_HOME=/opt/spark2
-export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$HADOOP_HOME/share/hadoop/hdfs/lib:${SPARK_HOME}/bin:${SPARK_HOME}/sbin:$JAVA_HOME/bin
+export KUBECTL_PATH=/usr/local/bin/
+export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$HADOOP_HOME/share/hadoop/hdfs/lib:${SPARK_HOME}/bin:${SPARK_HOME}/sbin:$JAVA_HOME/bin:${KUBECTL_PATH}
 
 now=`date -u`
 
@@ -217,7 +218,12 @@ echo "query: $clause"
 
 pushd /home/iguazio
 
-/opt/spark2/bin/spark-submit --master yarn  --driver-memory 8g --class io.iguaz.v3io.spark2.tools.KVToParquet /home/iguazio/igz/bigdata/libs/v3io-spark2-tools_2.11.jar $source $target
+shell_container=`kubectl -n default-tenant get pods --no-headers -o custom-columns=":metadata.name" | grep shell`
+echo $shell_container
+
+spark_command="/spark/bin/spark-submit --driver-memory 8g --class io.iguaz.v3io.spark2.tools.KVToParquet /v3io/parquez/v3io-spark2-tools_2.11.jar ${source} ${target}"
+
+kubectl -n default-tenant exec -it $shell_container -- /bin/bash -c "$spark_command"
 
 if [ $? -eq 0 ]; then
     echo KV to parquet finished with success
@@ -232,29 +238,21 @@ pushd $parquez_dir
 
 alter_view_command="${parquez_dir}/sh/alter_kv_view.sh ${kv_table_name} '${kv_window}'"
 
-ehco ${alter_view_command}
+echo ${alter_view_command}
 
 eval ${alter_view_command}
 
-#/opt/hive/bin/hive -e "alter table $hive_schema.$parquet_table_name add partition (year=$year, month=$month, day=$day, hour=$hour) location '$target';"
 ${parquez_dir}/sh/hive_partition.sh add $hive_schema $parquet_table_name $year $month $day $hour ${target} $partition_by
 
-kvDeleteCommand="hdfs dfs -rm -R $source"
+kvDeleteCommand="hdfs dfs -rm -R ${source}"
 
-echo ${kvDeleteCommand}
+kubectl -n default-tenant exec -it $shell_container -- /bin/bash -c "$kvDeleteCommand"
 
-eval ${kvDeleteCommand}
+parquetDeleteCommand="hdfs dfs -rm -R ${parquetToDelete}"
 
-parquetDeleteCommand="hdfs dfs -rm -R $parquetToDelete"
-
-echo ${parquetDeleteCommand}
-
-eval ${parquetDeleteCommand}
-
+kubectl -n default-tenant exec -it $shell_container -- /bin/bash -c "$parquetDeleteCommand"
 
 ${parquez_dir}/sh/hive_partition.sh drop $hive_schema $parquet_table_name $old_year $old_month $old_day $old_hour $target $partition_by
-
-#/opt/hive/bin/hive -e "alter table $hive_schema.$parquet_table_name drop partition (year=$old_year, month=$old_month, day=$old_day, hour=$old_hour);"
 
 popd
 
