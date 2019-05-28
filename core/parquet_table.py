@@ -16,9 +16,11 @@ class ParquetTable(object):
         self.partition_str = partition_by
         self.partition_by = " PARTITIONED BY ("
         self.partition = []
-        self.parquet_table_name = kv_table.name + "_parquet"
+
         self.conf = conf
         self.utils = utils
+        self.compression = conf.compression
+        self.parquet_table_name = kv_table.name + "_"+self.compression
 
     def generate_create_table_script(self):
         self.logger.debug("generate_create_table_script")
@@ -60,7 +62,7 @@ class ParquetTable(object):
             parquet_command = self.generate_create_table_script()
             parquet_command += self.read_schema()
             parquet_command += self.generate_partition_by()
-            parquet_command += " STORED AS PARQUET;"
+            parquet_command += " STORED AS "+self.compression+";"
             self.logger.debug("create table script {}".format(parquet_command))
             f = open("create_table.txt", "w")
             f.write(parquet_command)
