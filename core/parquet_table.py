@@ -16,11 +16,11 @@ class ParquetTable(object):
         self.partition_str = partition_by
         self.partition_by = " PARTITIONED BY ("
         self.partition = []
-
+        self.parquet_table_name = kv_table.name + "_" + conf.compression
         self.conf = conf
         self.utils = utils
         self.compression = conf.compression
-        self.parquet_table_name = kv_table.name + "_"+self.compression
+
 
     def generate_create_table_script(self):
         self.logger.debug("generate_create_table_script")
