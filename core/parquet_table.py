@@ -47,7 +47,7 @@ class ParquetTable(object):
 
     def create_table(self):
         import os
-        command = HIVE_PREFIX + " -f 'v3io://parquez/create_table.txt' \""
+        command = HIVE_PREFIX + " -f 'v3io://"+self.conf.v3io_container+"/create_table.txt' \""
         self.logger.info("Create Hive table command : " + command)
         os.system(command)
 
