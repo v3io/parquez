@@ -51,9 +51,10 @@ class Crontab:
         args4 = "'"+re.match(PARTITION_BY_RE, self.partition_by).group(2)+"'"
         args3 = "'"+self.window_parser(self.historical_retention)+"'"
         arg2 = "'"+self.window_parser(self.key_value_window)+"'"
+        arg7 = "'"+self.conf.compression+"'"
 
         command = "\"" + self.partition_interval_parser() + SHELL_PATH + "parquetinizer.sh " + self.kv_table_name + " " +\
-                  arg2 + " " + args3 + " " + args4 + " " + args5+" " + args6+" "+self.conf.compression+"\""
+                  arg2 + " " + args3 + " " + args4 + " " + args5+" " + args6+" "+arg7+"\""
         self.logger.debug(command)
         os.system(SHELL_PATH + "parquetCronJob.sh " + command)
 
