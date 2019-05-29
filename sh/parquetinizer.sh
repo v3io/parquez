@@ -34,7 +34,7 @@ compression_type=$7
 
 echo compression_type:$compression_type
 
-parquet_table_name="${kv_table_name}_parquet"
+parquet_table_name="${kv_table_name}_${compression_type}"
 
 running_user=`whoami`
 echo "user is: $running_user"
