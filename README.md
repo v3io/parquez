@@ -29,7 +29,7 @@ access_key = <access_key> <br />
 hive_schema = default <br />
 
 [presto] <br />
-uri = <uri> <br />
+uri = <pesto_uri> <br />
 v3io_connector = v3io <br />
 hive_connector = hive <br />
 
@@ -40,6 +40,8 @@ v3io_api_endpoint_port = 8081 <br />
 username = <user_name> <br />
 password = <pass> <br />
 
+[compression] <br />
+type = Parquet  <br />
 
 ### Prerequisites
 1. parquez scripts
