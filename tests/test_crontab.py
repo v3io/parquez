@@ -1,8 +1,8 @@
 from utils.logger import Logger
-from parquettable import ParquetTable
+from core.parquet_table import ParquetTable
 from config.app_conf import AppConf
-from presto import Presto
-from crontab import Crontab
+from core.cron_tab import Crontab
+from core.presto_client import PrestoClient
 
 # test_config.py
 
@@ -13,7 +13,7 @@ def test_crontab():
     parquet = ParquetTable(logger, 'kv_table_name', 'schema.txt', '1h', conf)
 
     parquet.generate_script()
-    prest = Presto(logger, 'view_name', '1h', 'schema.txt', conf.presto_v3io_prefix(),'kv_table_name',
+    prest = PrestoClient(logger, 'view_name', '1h', 'schema.txt', conf.presto_v3io_prefix(),'kv_table_name',
                    conf.presto_hive_prefix(), parquet.parquet_table_name, conf)
     prest.execute_command()
     cr = Crontab(logger, conf, 'kv_table_name','1h', '3h',

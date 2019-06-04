@@ -19,6 +19,7 @@ class AppConf(object):
         self.v3io_api_endpoint_port = config['nginx']['v3io_api_endpoint_port']
         self.username = config['nginx']['username']
         self.password = config['nginx']['password']
+        self.compression = config['compression']['type']
 
     def presto_v3io_prefix(self):
         return self.v3io_connector+"."+self.v3io_container

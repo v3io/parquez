@@ -30,8 +30,11 @@ hive_schema=$6
 
 echo hive_schema:$hive_schema
 
+compression_type=$7
 
-parquet_table_name="${kv_table_name}_parquet"
+echo compression_type:$compression_type
+
+parquet_table_name="${kv_table_name}_${compression_type}"
 
 running_user=`whoami`
 echo "user is: $running_user"
@@ -221,7 +224,7 @@ pushd /home/iguazio
 shell_container=`kubectl -n default-tenant get pods --no-headers -o custom-columns=":metadata.name" | grep shell`
 echo $shell_container
 
-spark_command="/spark/bin/spark-submit --driver-memory 8g --class io.iguaz.v3io.spark2.tools.KVToParquet /v3io/${v3io_container}/v3io-spark2-tools_2.11.jar ${source} ${target}"
+spark_command="/spark/bin/spark-submit --driver-memory 8g --class io.iguaz.v3io.spark2.tools.KVTo${compression_type} /v3io/${v3io_container}/v3io-spark2-tools_2.11.jar ${source} ${target}"
 
 kubectl -n default-tenant exec -it $shell_container -- /bin/bash -c "$spark_command"
 

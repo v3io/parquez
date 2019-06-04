@@ -72,7 +72,7 @@ class KVTable(object):
         return parsed_schema
 
     def get_parquet_table_name(self):
-        parquet_name = self.name + '_parquet'
+        parquet_name = self.name + '_'+self.conf.compression
         self.logger.debug('parquet table name {}'.format(parquet_name))
         return parquet_name
 
