@@ -7,12 +7,14 @@ from core.kv_table import KVTable
 from core.kv_view import KVView
 from core.presto_client import PrestoClient
 from utils.utils import Utils
+import logging
 
 CONFIG_PATH = 'config/parquez.ini'
+LEVEL = logging.INFO
 
 
 def main():
-    logger = Logger()
+    logger = Logger(LEVEL)
     logger.info("Starting to Parquezzzzzzzz")
 
     parser = InputParser(logger)
@@ -47,7 +49,6 @@ def main():
     logger.info("generating presto view")
     prest = PrestoClient(logger, conf, args.partition_by, parquet, kv_view, kv_table)
     prest.generate_unified_view()
-
 
     logger.info("generating cronJob")
     cr = Crontab(logger, conf, args.real_time_table_name, args.partition_interval, args.real_time_window,
