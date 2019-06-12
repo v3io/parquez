@@ -42,6 +42,7 @@ password = <pass> <br />
 
 [compression] <br />
 type = Parquet  <br />
+coalesce = 6 <br />
 
 ### Prerequisites
 1. parquez scripts
