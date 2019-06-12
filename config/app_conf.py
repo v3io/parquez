@@ -1,4 +1,4 @@
-import os
+#import os
 import configparser
 from utils.logger import Logger
 
@@ -8,7 +8,7 @@ class AppConf(object):
         self.logger = logger
         config = configparser.ConfigParser()
         config.read(config_path)
-        self.logger.debug(os.getcwd())
+        #self.logger.debug(os.getcwd())
         self.v3io_container = config['v3io']['v3io_container']
         self.v3io_access_key = config['v3io']['access_key']
         self.hive_schema = config['hive']['hive_schema']
@@ -20,6 +20,7 @@ class AppConf(object):
         self.username = config['nginx']['username']
         self.password = config['nginx']['password']
         self.compression = config['compression']['type']
+        self.coalesce = config['compression']['coalesce']
 
     def presto_v3io_prefix(self):
         return self.v3io_connector+"."+self.v3io_container

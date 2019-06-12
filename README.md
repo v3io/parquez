@@ -42,6 +42,7 @@ password = <pass> <br />
 
 [compression] <br />
 type = Parquet  <br />
+coalesce = 6 <br />
 
 ### Prerequisites
 1. parquez scripts
@@ -59,7 +60,7 @@ mkdir parquez && \
 Run the parquez
 ```
 ./run_parquez.sh --view-name parquezView --partition-by 1h --partition-interval 1h --real-time-window 3h \
---historical-retention 21h --real-time-table-name booking_service_kv --config config/parquez.ini
+--historical-retention 21h --real-time-table-name table_name --config config/parquez.ini
 ```
 
 

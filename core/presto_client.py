@@ -1,8 +1,4 @@
 import re
-#from core.logger import Logger
-#from core.kv_view import KVView
-#from core.parquet_table import ParquetTable
-#from config.app_conf import AppConf
 from pyhive import presto  # or import hive
 
 STORED_AS_PARQUET_STR = " STORED AS PARQUET;"
