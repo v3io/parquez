@@ -39,7 +39,8 @@ class PrestoClient(object):
         return view
 
     def generate_partition_by(self):
-        part = re.match(PARTITION_INTERVAL_RE, self.partition_str).group(2)
+        #part = re.match(PARTITION_INTERVAL_RE, self.partition_str).group(2)
+        part = self.partition_str
         if part == 'y':
             partition_by = ",year"
         if part == 'm':
