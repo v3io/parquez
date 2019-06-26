@@ -49,7 +49,7 @@ class Crontab:
     def create_cron_job(self):
         args2 = "'" + window_parser(self.key_value_window) + "'"
         args3 = "'" + window_parser(self.historical_retention) + "'"
-        args4 = "'" + re.match(PARTITION_BY_RE, self.partition_by).group(2) + "'"
+        args4 = "'" + self.partition_by + "'"
         args5 = "'" + self.conf.v3io_container + "'"
         args6 = "'"+self.conf.hive_schema+"'"
         args7 = "'"+self.conf.compression+"'"
