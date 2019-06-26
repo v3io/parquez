@@ -17,6 +17,6 @@ def test_kv_view():
     # utils = Utils(logger, conf)
     # parquet = ParquetTable(logger, conf, utils, '1h', kv_table)
     # parquet.generate_script()
-    kv_view = KVView(logger, '3h', conf, kv_table)
+    kv_view = KVView(logger, '5m', conf, kv_table)
     kv_view.generate_crete_view_script()
 

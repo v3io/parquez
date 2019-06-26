@@ -28,7 +28,8 @@ class ParquetTable(object):
         return parquet_script
 
     def generate_partition_by(self):
-        part = re.match(PARTITION_INTERVAL_RE, self.partition_str).group(2)
+        #part = re.match(PARTITION_INTERVAL_RE, self.partition_str).group(2)
+        part = self.partition_str
         self.logger.debug("generate_partition_by {0}".format(part))
         if part == 'y':
             self.partition_by += "year int"

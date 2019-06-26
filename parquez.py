@@ -43,7 +43,7 @@ def main():
     parquet.generate_script()
 
     logger.info("generating view over kv")
-    kv_view = KVView(logger, args.partition_by, conf, kv_table)
+    kv_view = KVView(logger, args.real_time_window, conf, kv_table)
     kv_view.generate_crete_view_script()
 
     logger.info("generating presto view")

@@ -9,7 +9,7 @@ def test_utils():
     logger.info("logging......")
     conf = AppConf(logger, "test.ini")
     utils = Utils(logger, conf)
-    utils.copy_to_v3io("test.ini")
+    utils.copy_to_v3io("../v3io-spark2-tools_2.11.jar")
 
 
 
