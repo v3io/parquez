@@ -59,7 +59,7 @@ mkdir parquez && \
 
 Run the parquez
 ```
-./run_parquez.sh --view-name parquezView --partition-by 1h --partition-interval 1h --real-time-window 3h \
+./run_parquez.sh --view-name parquezView --partition-by h --partition-interval 1h --real-time-window 3h \
 --historical-retention 21h --real-time-table-name table_name --config config/parquez.ini
 ```
 
