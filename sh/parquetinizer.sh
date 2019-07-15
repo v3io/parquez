@@ -101,33 +101,37 @@ echo "hour is: $old_hour"
 
 
 
-source="v3io://$v3io_container/$kv_table_name/year=$year/month=$month/day=$day/hour=$hour"
-
-echo "source is: $source"
+#source="v3io://$v3io_container/$kv_table_name/year=$year/month=$month/day=$day/hour=$hour"
 
 if [ $partition_by == 'y' ]
 then
+    source="v3io://$v3io_container/$kv_table_name/year=$year"
 	target="v3io://$v3io_container/$parquet_table_name/year=$year"
 	parquetToDelete="v3io://$v3io_container/$parquet_table_name/year=$old_year"
 fi
 
 if [ $partition_by == 'm' ]
 then
+    source="v3io://$v3io_container/$kv_table_name/year=$year/month=$month"
 	target="v3io://$v3io_container/$parquet_table_name/year=$year/month=$month"
 	parquetToDelete="v3io://$v3io_container/$parquet_table_name/year=$old_year/month=$old_month"
 fi
 
 if [ $partition_by == 'd' ]
 then
+    source="v3io://$v3io_container/$kv_table_name/year=$year/month=$month/day=$day"
 	target="v3io://$v3io_container/$parquet_table_name/year=$year/month=$month/day=$day"
 	parquetToDelete="v3io://$v3io_container/$parquet_table_name/year=$old_year/month=$old_month/day=$old_day"
 fi
 
 if [ $partition_by == 'h' ]
 then
+    source="v3io://$v3io_container/$kv_table_name/year=$year/month=$month/day=$day/hour=$hour"
 	target="v3io://$v3io_container/$parquet_table_name/year=$year/month=$month/day=$day/hour=$hour"
 	parquetToDelete="v3io://$v3io_container/$parquet_table_name/year=$old_year/month=$old_month/day=$old_day/hour=$old_hour"
 fi
+
+echo "source is: $source"
 
 echo "target is: $target"
 
