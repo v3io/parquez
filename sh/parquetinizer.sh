@@ -2,11 +2,13 @@
 
 exec &> >(logger -t /home/iguazio/parquez/parquetinizer.sh -s)
 
+utc_time=$(date +%Y-%m-%d-%H-%M)
+
 log_dir="$(pwd)""/logs/"
 
 mkdir -p ${log_dir}
 
-log_file=${log_dir}"parquetinizer.log"
+log_file=${log_dir}"parquetinizer.log."${utc_time}
 
 parquez_dir='/home/iguazio/parquez'
 
