@@ -4,7 +4,7 @@ exec &> >(logger -t /home/iguazio/parquez/parquetinizer.sh -s)
 
 log_dir="$(pwd)"+"/logs/"
 
-log_file=log_dir+parquetinizer.log
+log_file=${log_dir}"parquetinizer.log"
 
 parquez_dir='/home/iguazio/parquez'
 
