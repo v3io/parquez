@@ -39,11 +39,11 @@ class Crontab:
         if m.group(2) == 'h':
             result = "0 " + "*/" + m.group(1) + " * * * "
         if m.group(2) == 'd':
-            result = "0 * " + "*/" + m.group(1) + " * * "
+            result = "0 0 " + "*/" + m.group(1) + " * * "
         if m.group(2) == 'M':
-            result = "0 * *" + "*/" + m.group(1) + " * "
+            result = "0 0 0" + "*/" + m.group(1) + " * "
         if m.group(2) == 'DW':
-            result = "0 * * * " + "*/" + m.group(1)
+            result = "0 0 0 0 " + "*/" + m.group(1)
         return result
 
     def create_cron_job(self):
