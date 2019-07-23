@@ -2,15 +2,17 @@ import os
 import logging
 from colorlog import ColoredFormatter
 
+LOG_FILE_NAME = "parquez.log"
+
 
 class Logger:
     def __init__(self, level=logging.INFO):
         self.level = level
-        self.log_filename = __name__+".log"
+        self.log_filename = LOG_FILE_NAME
         self.logger = self.init_logger()
 
     def init_logger(self):
-        logging.basicConfig(filename=self.log_filename, level= self.level,
+        logging.basicConfig(filename=self.log_filename, level=self.level,
                             format='%(asctime)s %(threadName)s	 %(module)s %(message)s',
                             datefmt='%m/%d/%Y %I:%M:%S %p')
 
@@ -21,10 +23,10 @@ class Logger:
         sh = logging.StreamHandler()
         sh.setLevel(self.level)
         sh.setFormatter(color_formatter)
-        hdlr = logging.FileHandler(self.log_filename, mode='w')
-        hdlr.setLevel(self.level)
-        hdlr.setFormatter(formatter)
-        logger.addHandler(hdlr)
+        handler = logging.FileHandler(self.log_filename, mode='w')
+        handler.setLevel(self.level)
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
         logger.addHandler(sh)
         logger.info("Logger Initialized")
         logger.info('Log file location: {}'.format(os.path.abspath(self.log_filename)))

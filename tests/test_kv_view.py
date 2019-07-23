@@ -5,7 +5,7 @@ from utils.utils import Utils
 from core.kv_table import KVTable
 from core.kv_view import KVView
 
-KVTABLE_NAME = "booking_service_kv"
+KVTABLE_NAME = "faker"
 # test_kv_view.py
 
 
@@ -17,6 +17,6 @@ def test_kv_view():
     # utils = Utils(logger, conf)
     # parquet = ParquetTable(logger, conf, utils, '1h', kv_table)
     # parquet.generate_script()
-    kv_view = KVView(logger, '3h', conf, kv_table)
+    kv_view = KVView(logger, '1d', conf, kv_table)
     kv_view.generate_crete_view_script()
 

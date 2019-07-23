@@ -2,54 +2,62 @@
 
 exec &> >(logger -t /home/iguazio/parquez/parquetinizer.sh -s)
 
+utc_time=$(date +%Y-%m-%d-%H-%M)
+
+log_dir="$(pwd)""/logs/"
+
+mkdir -p ${log_dir}
+
+log_file=${log_dir}"parquetinizer.log."${utc_time}
+
 parquez_dir='/home/iguazio/parquez'
 
-echo parquez_dir:$parquez_dir
+echo parquez_dir:$parquez_dir 2>&1 | tee -a $log_file
 
 kv_table_name=$1
 
-echo kv_table_name:$kv_table_name
+echo kv_table_name:$kv_table_name 2>&1 | tee -a $log_file
 
 kv_window="${2}"
 
-echo kv_window:${kv_window}
+echo kv_window:${kv_window} 2>&1 | tee -a $log_file
 
 historical_window=$3
 
-echo historical_window:$historical_window
+echo historical_window:$historical_window 2>&1 | tee -a $log_file
 
 partition_by=$4
 
-echo partition_by:$partition_by
+echo partition_by:$partition_by 2>&1 | tee -a $log_file
 
 v3io_container=$5
 
-echo v3io_container:$v3io_container
+echo v3io_container:$v3io_container 2>&1 | tee -a $log_file
 
 hive_schema=$6
 
-echo hive_schema:$hive_schema
+echo hive_schema:$hive_schema 2>&1 | tee -a $log_file
 
 compression_type=$7
 
-echo compression_type:$compression_type
+echo compression_type:$compression_type 2>&1 | tee -a $log_file
 
 parquet_table_name="${kv_table_name}_${compression_type}"
 
-echo coalesce:$coalesce
+echo coalesce:$coalesce 2>&1 | tee -a $log_file
 
 coalesce=$8
 
 running_user=`whoami`
-echo "user is: $running_user"
+echo "user is: $running_user" 2>&1 | tee -a $log_file
 
 
-export HADOOP_HOME=/opt/hadoop
-export JAVA_HOME=/opt/iguazio/java
-export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
-export SPARK_HOME=/opt/spark2
-export KUBECTL_PATH=/usr/local/bin/
-export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$HADOOP_HOME/share/hadoop/hdfs/lib:${SPARK_HOME}/bin:${SPARK_HOME}/sbin:$JAVA_HOME/bin:${KUBECTL_PATH}
+#export HADOOP_HOME=/opt/hadoop
+#export JAVA_HOME=/opt/iguazio/java
+#export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
+#export SPARK_HOME=/opt/spark2
+#export KUBECTL_PATH=/usr/local/bin/
+#export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$HADOOP_HOME/share/hadoop/hdfs/lib:${SPARK_HOME}/bin:${SPARK_HOME}/sbin:$JAVA_HOME/bin:${KUBECTL_PATH}
 
 now=`date -u`
 
@@ -101,47 +109,52 @@ echo "hour is: $old_hour"
 
 
 
-source="v3io://$v3io_container/$kv_table_name/year=$year/month=$month/day=$day/hour=$hour"
-
-echo "source is: $source"
+#source="v3io://$v3io_container/$kv_table_name/year=$year/month=$month/day=$day/hour=$hour"
 
 if [ $partition_by == 'y' ]
 then
+    source="v3io://$v3io_container/$kv_table_name/year=$year"
 	target="v3io://$v3io_container/$parquet_table_name/year=$year"
 	parquetToDelete="v3io://$v3io_container/$parquet_table_name/year=$old_year"
 fi
 
 if [ $partition_by == 'm' ]
 then
+    source="v3io://$v3io_container/$kv_table_name/year=$year/month=$month"
 	target="v3io://$v3io_container/$parquet_table_name/year=$year/month=$month"
 	parquetToDelete="v3io://$v3io_container/$parquet_table_name/year=$old_year/month=$old_month"
 fi
 
 if [ $partition_by == 'd' ]
 then
+    source="v3io://$v3io_container/$kv_table_name/year=$year/month=$month/day=$day"
 	target="v3io://$v3io_container/$parquet_table_name/year=$year/month=$month/day=$day"
 	parquetToDelete="v3io://$v3io_container/$parquet_table_name/year=$old_year/month=$old_month/day=$old_day"
 fi
 
 if [ $partition_by == 'h' ]
 then
+    source="v3io://$v3io_container/$kv_table_name/year=$year/month=$month/day=$day/hour=$hour"
 	target="v3io://$v3io_container/$parquet_table_name/year=$year/month=$month/day=$day/hour=$hour"
 	parquetToDelete="v3io://$v3io_container/$parquet_table_name/year=$old_year/month=$old_month/day=$old_day/hour=$old_hour"
 fi
 
-echo "target is: $target"
+echo "source is: $source" 2>&1 | tee -a $log_file
 
-echo "parquetToDelete is: $parquetToDelete"
+echo "target is: $target" 2>&1 | tee -a $log_file
 
-while [ 1 ]
+echo "parquetToDelete is: $parquetToDelete" 2>&1 | tee -a $log_file
+
+while [[ 1 ]]
 	do
 		ps -f | grep parquez-assembly ; ret=$?
 		if  [[ $ret ]]
 		then
-			echo "No parquez-assembly process is running. Continue..."
+			echo "No parquez-assembly process is running. Continue..." 2>&1 | tee -a $log_file
 			break
 		fi
-		echo "another parquez-assembly is already running ... sleep for 10 secs before retrying"		sleep 10
+		echo "another parquez-assembly is already running ... sleep for 10 secs before retrying" 2>&1 | tee -a $log_file
+		sleep 10
 
 	done
 #sleep 10
@@ -220,22 +233,22 @@ then
         clause="$base_or_clause AND ( ( $or_left ) OR ( $or_right ) )"
 fi
 
-echo "query: $clause"
+echo "query: $clause" 2>&1 | tee -a $log_file
 ##################################################################################################
 
 pushd /home/iguazio
 
 shell_container=`kubectl -n default-tenant get pods --no-headers -o custom-columns=":metadata.name" | grep shell`
-echo $shell_container
+echo $shell_container 2>&1 | tee -a $log_file
 
 spark_command="/spark/bin/spark-submit --driver-memory 8g --class io.iguaz.v3io.spark2.tools.KVTo${compression_type} /v3io/${v3io_container}/v3io-spark2-tools_2.11.jar ${source} ${target} ${coalesce}"
 
-kubectl -n default-tenant exec -it $shell_container -- /bin/bash -c "$spark_command"
+kubectl -n default-tenant exec -it $shell_container -- /bin/bash -c "$spark_command" 2>&1 | tee -a $log_file
 
 if [ $? -eq 0 ]; then
-    echo KV to parquet finished with success
+    echo KV to parquet finished with success 2>&1 | tee -a $log_file
 else
-    echo KV to parquet finished with failed
+    echo KV to parquet finished with failed 2>&1 | tee -a $log_file
     exit 1
 fi
 
@@ -245,21 +258,21 @@ pushd $parquez_dir
 
 alter_view_command="${parquez_dir}/sh/alter_kv_view.sh ${kv_table_name} '${kv_window}'"
 
-echo ${alter_view_command}
+echo ${alter_view_command} 2>&1 | tee -a $log_file
 
-eval ${alter_view_command}
+eval ${alter_view_command} 2>&1 | tee -a $log_file
 
 ${parquez_dir}/sh/hive_partition.sh add $hive_schema $parquet_table_name $year $month $day $hour ${target} $partition_by
 
 kvDeleteCommand="hdfs dfs -rm -R ${source}"
 
-kubectl -n default-tenant exec -it $shell_container -- /bin/bash -c "$kvDeleteCommand"
+kubectl -n default-tenant exec -it $shell_container -- /bin/bash -c "$kvDeleteCommand"  2>&1 | tee -a $log_file
 
 parquetDeleteCommand="hdfs dfs -rm -R ${parquetToDelete}"
 
-kubectl -n default-tenant exec -it $shell_container -- /bin/bash -c "$parquetDeleteCommand"
+kubectl -n default-tenant exec -it $shell_container -- /bin/bash -c "$parquetDeleteCommand" 2>&1 | tee -a $log_file
 
-${parquez_dir}/sh/hive_partition.sh drop $hive_schema $parquet_table_name $old_year $old_month $old_day $old_hour $target $partition_by
+${parquez_dir}/sh/hive_partition.sh drop $hive_schema $parquet_table_name $old_year $old_month $old_day $old_hour $target $partition_by  2>&1 | tee -a $log_file
 
 popd
 

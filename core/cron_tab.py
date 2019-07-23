@@ -39,17 +39,20 @@ class Crontab:
         if m.group(2) == 'h':
             result = "0 " + "*/" + m.group(1) + " * * * "
         if m.group(2) == 'd':
-            result = "0 * " + "*/" + m.group(1) + " * * "
+            if m.group(1) == 1:
+                result = "0 0 " + "* * * "
+            else:
+                result = "0 0 " + "*/" + m.group(1) + " * * "
         if m.group(2) == 'M':
-            result = "0 * *" + "*/" + m.group(1) + " * "
+            result = "0 0 0" + "*/" + m.group(1) + " * "
         if m.group(2) == 'DW':
-            result = "0 * * * " + "*/" + m.group(1)
+            result = "0 0 0 0 " + "*/" + m.group(1)
         return result
 
     def create_cron_job(self):
         args2 = "'" + window_parser(self.key_value_window) + "'"
         args3 = "'" + window_parser(self.historical_retention) + "'"
-        args4 = "'" + re.match(PARTITION_BY_RE, self.partition_by).group(2) + "'"
+        args4 = "'" + self.partition_by + "'"
         args5 = "'" + self.conf.v3io_container + "'"
         args6 = "'"+self.conf.hive_schema+"'"
         args7 = "'"+self.conf.compression+"'"

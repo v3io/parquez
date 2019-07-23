@@ -15,7 +15,7 @@ def test_parquet_table_generator():
     kv_table = KVTable(logger, conf, KVTABLE_NAME)
     kv_table.import_table_schema()
     utils = Utils(logger, conf)
-    parquet = ParquetTable(logger, conf, utils, '1h', kv_table)
+    parquet = ParquetTable(logger, conf, utils, 'h', kv_table)
     parquet.generate_script()
 
 
