@@ -13,11 +13,11 @@ Job is based on crontab
 Users will be able to create a view for the “parquez” table using a script Rest call . <br />
 ### script parameters 
 view-name : The unified view name (parquet and kv)  <br />
-partition-by [h / m / d / y] : only time based partition is supported in this phase  <br />
-partition-interval : Partition creation interval – 1 - 24h , 1-31d, 1-12m, 1-Ny.  <br />
+partition-by [h / d / m / y] : only time based partition is supported in this phase  <br />
+partition-interval [1-24h / 1-31d / 1-12m / 1-Ny] : Partition creation interval .  <br />
 real-time-table-name : The KV table for the view, need to specify the full path)  <br />
-real-time-window window [h, d,m, y] : The time window for storing data in key value (hot data) <br />
-historical-retention [h, d,m, y] : The retention of all parquez data  <br />
+real-time-window window [h / d / m / y] : The time window for storing data in key value (hot data) <br />
+historical-retention [h / d / m / y] : The retention of all parquez data  <br />
 config : config file path   <br />
 
 ### config file parametres
