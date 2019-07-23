@@ -39,7 +39,10 @@ class Crontab:
         if m.group(2) == 'h':
             result = "0 " + "*/" + m.group(1) + " * * * "
         if m.group(2) == 'd':
-            result = "0 0 " + "*/" + m.group(1) + " * * "
+            if m.group(1) == 1:
+                result = "0 0 " + "* * * "
+            else:
+                result = "0 0 " + "*/" + m.group(1) + " * * "
         if m.group(2) == 'M':
             result = "0 0 0" + "*/" + m.group(1) + " * "
         if m.group(2) == 'DW':
