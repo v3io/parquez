@@ -56,8 +56,8 @@ echo "user is: $running_user" 2>&1 | tee -a $log_file
 #export JAVA_HOME=/opt/iguazio/java
 #export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
 #export SPARK_HOME=/opt/spark2
-#export KUBECTL_PATH=/usr/local/bin/
-#export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$HADOOP_HOME/share/hadoop/hdfs/lib:${SPARK_HOME}/bin:${SPARK_HOME}/sbin:$JAVA_HOME/bin:${KUBECTL_PATH}
+export KUBECTL_PATH=/usr/local/bin/
+export PATH=$PATH:${KUBECTL_PATH}
 
 now=`date -u`
 
