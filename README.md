@@ -1,7 +1,7 @@
 # Parquez
 
 A mechanism for storing fresh/hot data in the NoSQL database
-and historical data on Parquet while providing a single access for users (via a view) for easier access to real time and historical data
+and historical data on Parquet/orc while providing a single access for users (via a view) for easier access to real time and historical data
 
 The view will be created in Presto based on Hive & V3IO KV 
 Once the user creates the view an automated job is created by the interval given:
