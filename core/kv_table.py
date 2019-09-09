@@ -19,7 +19,7 @@ def get_request_headers():
 def send_request(logger, url, headers, username, password):
     try:
         auth = requests.auth.HTTPBasicAuth(username, password)
-        response = requests.get(url, headers=headers, auth=auth, timeout=10)
+        response = requests.get(url, headers=headers, auth=auth, timeout=10, verify=False)
         logger.debug(response.status_code)
         logger.debug(response.content)
         return response.content
