@@ -34,8 +34,8 @@ class Crontab:
 
     def partition_interval_parser(self):
         m = re.match(PARTITION_BY_RE, self.partition_interval)
-        if m.group(2) == 'm':
-            result = "*/" + m.group(1) + " * * * * "
+        #if m.group(2) == 'm':
+            #result = "*/" + m.group(1) + " * * * * "
         if m.group(2) == 'h':
             result = "0 " + "*/" + m.group(1) + " * * * "
         if m.group(2) == 'd':
@@ -45,8 +45,8 @@ class Crontab:
                 result = "0 0 " + "*/" + m.group(1) + " * * "
         if m.group(2) == 'M':
             result = "0 0 * " + "*/" + m.group(1) + " * "
-        if m.group(2) == 'DW':
-            result = "0 0 0 0 " + "*/" + m.group(1)
+        #if m.group(2) == 'y':
+            #result = "0 0 0 0 " + "*/" + m.group(1)
         return result
 
     def create_cron_job(self):
