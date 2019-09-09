@@ -40,7 +40,7 @@ class KVView(object):
             window_time = now - timedelta(days=val - 1)
         if part == 'h':
             window_time = now - timedelta(hours=val - 1)
-        if part == 'm':
+        if part == 'M':
             window_time = now - relativedelta(months=val - 1)
         self.logger.info("window Time " + str(window_time))
         return window_time
@@ -52,7 +52,7 @@ class KVView(object):
         condition = ''
         if part == 'y':
             condition += "year>="+str(window_time.year)
-        if part == 'm':
+        if part == 'M':
             condition += "year>="+str(window_time.year)+" AND month>="+str(window_time.month)
         if part == 'd':
             condition += "year>=" + str(window_time.year) + " AND month>=" + str(window_time.month)+" AND day>=" \

@@ -33,7 +33,7 @@ class ParquetTable(object):
         self.logger.debug("generate_partition_by {0}".format(part))
         if part == 'y':
             self.partition_by += "year bigint"
-        if part == 'm':
+        if part == 'M':
             self.partition_by += "year bigint,month bigint"
         if part == 'd':
             self.partition_by += "year bigint,month bigint,day bigint"

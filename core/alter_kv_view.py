@@ -9,6 +9,7 @@ CONFIG_PATH = 'config/parquez.ini'
 def parse_kv_window_arg(val, logger):
     val = val.replace('hours', 'h')
     val = val.replace('days', 'd')
+    val = val.replace('months', 'M')
     val = val.replace(" ", "")
     logger.debug("parsed kv window val " + val)
     return val
