@@ -118,7 +118,7 @@ then
 	parquetToDelete="v3io://$v3io_container/$parquet_table_name/year=$old_year"
 fi
 
-if [ $partition_by == 'm' ]
+if [ $partition_by == 'M' ]
 then
     source="v3io://$v3io_container/$kv_table_name/year=$year/month=$month"
 	target="v3io://$v3io_container/$parquet_table_name/year=$year/month=$month"
