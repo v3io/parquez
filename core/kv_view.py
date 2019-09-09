@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 import re
 from pyhive import presto
+from dateutil.relativedelta import relativedelta
 
 PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
 
@@ -40,7 +41,7 @@ class KVView(object):
         if part == 'h':
             window_time = now - timedelta(hours=val - 1)
         if part == 'm':
-            window_time = now - timedelta(months=val - 1)
+            window_time = now - relativedelta(months=val - 1)
         self.logger.info("window Time " + str(window_time))
         return window_time
 
