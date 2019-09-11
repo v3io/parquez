@@ -57,9 +57,10 @@ class Crontab:
         args6 = "'"+self.conf.hive_schema+"'"
         args7 = "'"+self.conf.compression+"'"
         args8 = "'" + self.conf.coalesce+"'"
+        args9 = "'" + self.conf.environment + "'"
 
         command = "\"" + self.partition_interval_parser() + SHELL_PATH + "parquetinizer.sh " + self.kv_table_name + " " +\
-                  args2 + " " + args3 + " " + args4 + " " + args5+" " + args6+" "+args7+" "+args8+"\""
+                  args2 + " " + args3 + " " + args4 + " " + args5+" " + args6+" "+args7+" "+args8+" "+args9+"\""
         self.logger.debug(command)
         os.system(SHELL_PATH + "parquetCronJob.sh " + command)
 
