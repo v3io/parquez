@@ -99,7 +99,7 @@ class KVView(object):
             self.logger.error(e)
             raise
 
-    def where_clause_filter(self, start_date: datetime, end_date: datetime, partition_by):
+    def where_clause_filter(self, start_date, end_date, partition_by):
         start_date_year = start_date.year
         start_date_month = start_date.month
         end_date_year = end_date.year
@@ -120,7 +120,7 @@ class KVView(object):
                 clause_suffix += " or "
                 clause_suffix += ''.join(["(year >=", str(end_date_year), " and month>=", str(end_date_month)])
             else:
-                "year>=" + str(end_date_year) + " AND month>=" + str(end_date_month)
+                clause_suffix += "year>=" + str(end_date_year) + " AND month>=" + str(end_date_month)
 
         if partition_by == 'd':
             if start_date.year != end_date_year:
