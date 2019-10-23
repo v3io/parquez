@@ -1,7 +1,7 @@
 # Parquez
 
 A mechanism for storing fresh/hot data in the NoSQL database
-and historical data on Parquet while providing a single access for users (via a view) for easier access to real time and historical data
+and historical data on Parquet/orc while providing a single access for users (via a view) for easier access to real time and historical data
 
 The view will be created in Presto based on Hive & V3IO KV 
 Once the user creates the view an automated job is created by the interval given:
@@ -13,11 +13,11 @@ Job is based on crontab
 Users will be able to create a view for the “parquez” table using a script Rest call . <br />
 ### script parameters 
 view-name : The unified view name (parquet and kv)  <br />
-partition-by [h / d / m / y] : only time based partition is supported in this phase  <br />
-partition-interval [1-24h / 1-31d / 1-12m / 1-Ny] : Partition creation interval .  <br />
+partition-by [h / d / M / y] : only time based partition is supported in this phase  <br />
+partition-interval [1-24h / 1-31d / 1-12M / 1-Ny] : Partition creation interval .  <br />
 real-time-table-name : The KV table for the view, need to specify the full path)  <br />
-real-time-window window [h / d / m / y] : The time window for storing data in key value (hot data) <br />
-historical-retention [h / d / m / y] : The retention of all parquez data  <br />
+real-time-window window [h / d / M / y] : The time window for storing data in key value (hot data) <br />
+historical-retention [h / d / M / y] : The retention of all parquez data  <br />
 config : config file path   <br />
 
 ### config file parametres
@@ -36,7 +36,7 @@ hive_connector = hive <br />
 
 [nginx] <br />
 v3io_api_endpoint_host = <v3io_api_endpoint_host> <br />
-v3io_api_endpoint_port = 8081 <br />
+v3io_api_endpoint_port = 443 <br />
 username = <user_name> <br />
 password = <pass> <br />
 

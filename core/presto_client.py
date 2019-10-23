@@ -43,7 +43,7 @@ class PrestoClient(object):
         part = self.partition_str
         if part == 'y':
             partition_by = ",year"
-        if part == 'm':
+        if part == 'M':
             partition_by = ",year,month"
         if part == 'd':
             partition_by = ",year,month,day"

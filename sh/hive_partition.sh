@@ -36,7 +36,7 @@ then
         partition_to_delete="year=$year"
 fi
 
-if [[ ${partition_by} == 'm' ]]
+if [[ ${partition_by} == 'M' ]]
 then
         partition_to_delete="year=$year, month=$month"
 fi

@@ -44,9 +44,13 @@ echo compression_type:$compression_type 2>&1 | tee -a $log_file
 
 parquet_table_name="${kv_table_name}_${compression_type}"
 
-echo coalesce:$coalesce 2>&1 | tee -a $log_file
-
 coalesce=$8
+
+echo coalesce:${coalesce} 2>&1 | tee -a ${log_file}
+
+environment=$9
+
+echo environment:${environment} 2>&1 | tee -a ${log_file}
 
 running_user=`whoami`
 echo "user is: $running_user" 2>&1 | tee -a $log_file
@@ -118,7 +122,7 @@ then
 	parquetToDelete="v3io://$v3io_container/$parquet_table_name/year=$old_year"
 fi
 
-if [ $partition_by == 'm' ]
+if [ $partition_by == 'M' ]
 then
     source="v3io://$v3io_container/$kv_table_name/year=$year/month=$month"
 	target="v3io://$v3io_container/$parquet_table_name/year=$year/month=$month"
@@ -238,12 +242,15 @@ echo "query: $clause" 2>&1 | tee -a $log_file
 
 pushd /home/iguazio
 
-shell_container=`kubectl -n default-tenant get pods --no-headers -o custom-columns=":metadata.name" | grep shell`
-echo $shell_container 2>&1 | tee -a $log_file
+if [ ${environment} == 'k8s' ]
+then
+    shell_container=`kubectl -n default-tenant get pods --no-headers -o custom-columns=":metadata.name" | grep shell`
+    echo $shell_container 2>&1 | tee -a $log_file
 
-spark_command="/spark/bin/spark-submit --driver-memory 8g --class io.iguaz.v3io.spark2.tools.KVTo${compression_type} /v3io/${v3io_container}/v3io-spark2-tools_2.11.jar ${source} ${target} ${coalesce}"
+    spark_command="/spark/bin/spark-submit --driver-memory 8g --class io.iguaz.v3io.spark2.tools.KVTo${compression_type} /v3io/${v3io_container}/v3io-spark2-tools_2.11.jar ${source} ${target} ${coalesce}"
 
-kubectl -n default-tenant exec -it $shell_container -- /bin/bash -c "$spark_command" 2>&1 | tee -a $log_file
+    kubectl -n default-tenant exec -it $shell_container -- /bin/bash -c "$spark_command" 2>&1 | tee -a $log_file
+fi
 
 if [ $? -eq 0 ]; then
     echo KV to parquet finished with success 2>&1 | tee -a $log_file
