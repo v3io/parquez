@@ -19,7 +19,7 @@ class AppConf(object):
         self.password = config['nginx']['password']
         self.compression = config['compression']['type']
         self.coalesce = config['compression']['coalesce']
-        #self.environment = config['environment']['type']
+        self.environment = config['environment']['type']
 
     def presto_v3io_prefix(self):
         return self.v3io_connector+"."+self.v3io_container
