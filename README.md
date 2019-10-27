@@ -44,6 +44,10 @@ password = <pass> <br />
 type = Parquet  <br />
 coalesce = 6 <br />
 
+\#set environment to k8s/vanilla <br />
+[environment] <br />
+type = k8s <br />
+
 ### Prerequisites
 1. parquez scripts
 2. partitioned kv table 
