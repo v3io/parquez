@@ -44,7 +44,7 @@ class Crontab:
             else:
                 result = "0 0 " + "*/" + m.group(1) + " * * "
         if m.group(2) == 'M':
-            result = "0 0 " + m.group(1) + "*" + m.group(1) + " * "
+            result = "0 0 1 " + "*/" + m.group(1) + " * "
         #if m.group(2) == 'y':
             #result = "0 0 0 0 " + "*/" + m.group(1)
         return result
