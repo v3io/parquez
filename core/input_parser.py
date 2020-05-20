@@ -63,8 +63,8 @@ class InputParser(object):
             print(e)
             self.logger.error(e)
 
-    def parse_args(self):
-        args = self.parser.parse_args()
+    def parse_args(self,args = None):
+        args = self.parser.parse_args(args)
         self.logger.info(args)
         return args
 

@@ -14,16 +14,25 @@ CONFIG_PATH = 'config/parquez.ini'
 #LEVEL = logging.INFO
 
 
-def main(context,view_name="view_name",partition_by='h',partition_interval='1h',real_time_window='1d',historical_retention='1w',config_path=CONFIG_PATH):
+def main(context
+         ,view_name="view_name"
+         ,partition_by='h'
+         ,partition_interval='1h'
+         ,real_time_window='1d'
+         ,historical_retention='7d'
+         ,real_time_table_name="rt"
+         ,config_path=CONFIG_PATH):
     #logger = Logger(LEVEL)
     context.logger.info("Starting to Parquezzzzzzzz")
 
     parser = InputParser(context.logger)
-    args = parser.parse_args(["--view_name", view_name
+    args = parser.parse_args(["--view-name", view_name
                                  ,"--partition-by", partition_by
                                  ,"--partition-interval", partition_interval
                                  , "--real-time-window",real_time_window
-                                 , "--historical-retention", historical_retention, "--config-path", config_path
+                                 , "--historical-retention", historical_retention
+                                 , "--real-time-table-name", real_time_table_name 
+                                 ,"--config", config_path
                               ])
     context.logger.info("input parsed")
 
