@@ -1,14 +1,11 @@
 #import os
 import configparser
-from utils.logger import Logger
-
 
 class AppConf(object):
-    def __init__(self, logger=Logger(), config_path='config/parquez.ini'):
+    def __init__(self, logger, config_path='config/parquez.ini'):
         self.logger = logger
         config = configparser.ConfigParser()
-        config.read(config_path)
-        #self.logger.debug(os.getcwd())
+        config.read(config_path)        
         self.v3io_container = config['v3io']['v3io_container']
         self.v3io_access_key = config['v3io']['access_key']
         self.hive_schema = config['hive']['hive_schema']
