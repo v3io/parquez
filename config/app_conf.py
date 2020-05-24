@@ -1,9 +1,11 @@
-#import os
+import os
 import configparser
 
 class AppConf(object):
     def __init__(self, logger, config_path='config/parquez.ini'):
         self.logger = logger
+        files = os.listdir(os.curdir)
+        self.logger.info(files)        
         config = configparser.ConfigParser()
         config.read(config_path)        
         self.v3io_container = config['v3io']['v3io_container']

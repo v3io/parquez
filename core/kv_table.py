@@ -6,7 +6,7 @@ PARTITION_BY_FIELDS = ['year', 'month', 'day', 'hour']
 
 
 def get_request_url(container_name, table_name, v3io_api_endpoint_host, v3io_api_endpoint_port):
-    return 'http://{}:{}/{}/{}/{}'.format(v3io_api_endpoint_host, v3io_api_endpoint_port, container_name, table_name
+    return 'https://{}:{}/{}/{}/{}'.format(v3io_api_endpoint_host, v3io_api_endpoint_port, container_name, table_name
                                           , SCHEMA)
 
 
@@ -19,7 +19,7 @@ def get_request_headers():
 def send_request(logger, url, headers, username, password):
     try:
         auth = requests.auth.HTTPBasicAuth(username, password)
-        response = requests.get(url, headers=headers, auth=auth, timeout=10)
+        response = requests.get(url, headers=headers, auth=auth, timeout=10, verify=False)
         logger.debug(response.status_code)
         logger.debug(response.content)
         return response.content
