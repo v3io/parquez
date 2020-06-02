@@ -11,7 +11,8 @@ from utils.utils import Utils
 from core.k8s_client import K8SClient
 #import logging
 
-CONFIG_PATH = 'config/parquez.ini'
+#CONFIG_PATH = 'config/parquez.ini'
+CONFIG_PATH = 'User/parquez/config/parquez.ini'
 #LEVEL = logging.INFO
 
 
