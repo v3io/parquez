@@ -8,6 +8,7 @@ from core.kv_table import KVTable
 from core.kv_view import KVView
 from core.presto_client import PrestoClient
 from utils.utils import Utils
+from core.k8s_client import K8SClient
 #import logging
 
 CONFIG_PATH = 'config/parquez.ini'
@@ -54,7 +55,7 @@ def main(context
     kv_table.import_table_schema()
 
     context.logger.info("generating parquet table")
-    parquet = ParquetTable(context.logger,conf, utils, args.partition_by, kv_table)
+    parquet = ParquetTable(context.logger, conf, utils, args.partition_by, kv_table, K8SClient(context.logger))
     parquet.generate_script()
 
     context.logger.info("generating view over kv")

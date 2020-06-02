@@ -10,7 +10,7 @@ PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
 
 
 class ParquetTable(object):
-    def __init__(self, logger, conf, utils, partition_by, kv_table):
+    def __init__(self, logger, conf, utils, partition_by, kv_table, k8s_client):
         self.logger = logger
         self.kv_table = kv_table
         self.partition_str = partition_by
@@ -20,7 +20,7 @@ class ParquetTable(object):
         self.conf = conf
         self.utils = utils
         self.compression = conf.compression
-
+        self.k8s_client = k8s_client
 
     def generate_create_table_script(self):
         self.logger.debug("generate_create_table_script")
@@ -60,16 +60,19 @@ class ParquetTable(object):
     def generate_script(self):
         try:
             self.logger.debug("generating script")
-            parquet_command = self.generate_create_table_script()
+            parquet_command = "/hive/bin/hive -hiveconf hive.metastore.uris=thrift://hive:9083 -e "
+            parquet_command += self.generate_create_table_script()
             parquet_command += self.read_schema()
             parquet_command += self.generate_partition_by()
             parquet_command += " STORED AS "+self.compression+";"
-            self.logger.debug("create table script {}".format(parquet_command))
-            f = open("create_table.txt", "w")
-            f.write(parquet_command)
-            f.close()
-            self.copy_to_v3io()
-            self.create_table()
+
+            self.k8s_client.exec_shell_cmd(parquet_command)
+            # self.logger.debug("create table script {}".format(parquet_command))
+            # f = open("create_table.txt", "w")
+            # f.write(parquet_command)
+            # f.close()
+            # self.copy_to_v3io()
+            # self.create_table()
         except Exception as e:
             self.logger.error(e)
             raise
