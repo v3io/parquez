@@ -65,7 +65,7 @@ class ParquetTable(object):
             parquet_command += self.read_schema()
             parquet_command += self.generate_partition_by()
             parquet_command += " STORED AS "+self.compression+";"
-
+            self.logger.info(parquet_command)
             self.k8s_client.exec_shell_cmd(parquet_command)
             # self.logger.debug("create table script {}".format(parquet_command))
             # f = open("create_table.txt", "w")
