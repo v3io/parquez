@@ -50,6 +50,3 @@ class K8SClient(object):
         self.logger.info("Response: " + resp)
 
 
-cli = K8SClient(Logger())
-cli.exec_shell_cmd("/hive/bin/hive -hiveconf hive.metastore.uris=thrift://hive:9083 -e 'show tables;'")
-
