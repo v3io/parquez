@@ -1,7 +1,5 @@
-import re
 
-
-HIVE_PREFIX = 'kubectl -n default-tenant exec $(kubectl -n default-tenant get pods --no-headers -o custom-columns=":metadata.name" | grep shell)  -- /bin/bash -c "/hive/bin/hive -hiveconf hive.metastore.uris=thrift://hive:9083 '
+HIVE_PREFIX = "/hive/bin/hive -hiveconf hive.metastore.uris=thrift://hive:9083 -e "
 STORED_AS_PARQUET_STR = " STORED AS PARQUET;"
 PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
 
@@ -28,7 +26,6 @@ class ParquetTable(object):
         return parquet_script
 
     def generate_partition_by(self):
-        #part = re.match(PARTITION_INTERVAL_RE, self.partition_str).group(2)
         part = self.partition_str
         self.logger.debug("generate_partition_by {0}".format(part))
         if part == 'y':
@@ -48,31 +45,16 @@ class ParquetTable(object):
         self.logger.debug("read schema {0}".format(schema_str))
         return schema_str
 
-    def create_table(self):
-        import os
-        command = HIVE_PREFIX + " -f 'v3io://"+self.conf.v3io_container+"/create_table.txt' \""
-        self.logger.info("Create Hive table command : " + command)
-        os.system(command)
-
-    def copy_to_v3io(self):
-        self.utils.copy_to_v3io("create_table.txt")
-
     def generate_script(self):
         try:
             self.logger.debug("generating script")
-            parquet_command = "/hive/bin/hive -hiveconf hive.metastore.uris=thrift://hive:9083 -e "
+            parquet_command = HIVE_PREFIX
             parquet_command += '"'+self.generate_create_table_script()
             parquet_command += self.read_schema()
             parquet_command += self.generate_partition_by()
             parquet_command += " STORED AS "+self.compression+';"'
             self.logger.info(parquet_command)
             self.k8s_client.exec_shell_cmd(parquet_command)
-            # self.logger.debug("create table script {}".format(parquet_command))
-            # f = open("create_table.txt", "w")
-            # f.write(parquet_command)
-            # f.close()
-            # self.copy_to_v3io()
-            # self.create_table()
         except Exception as e:
             self.logger.error(e)
             raise
