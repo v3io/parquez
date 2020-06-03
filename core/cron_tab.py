@@ -1,8 +1,6 @@
 import os
 import re
 
-#SHELL_PATH = '~/parquez/sh/'
-#SHELL_PATH = os.getcwd()+"/"
 PARTITION_BY_RE = r"([0-9]+)([a-zA-Z]+)"
 
 
