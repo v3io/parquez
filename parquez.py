@@ -2,7 +2,7 @@ from mlrun import get_or_create_ctx
 from core.input_parser import InputParser
 #from utils.logger import Logger
 from core.parquet_table import ParquetTable
-from core.cron_tab import Crontab
+from core.cron_tab import CronTab
 from config.app_conf import AppConf
 from core.kv_table import KVTable
 from core.kv_view import KVView
@@ -68,7 +68,7 @@ def main(context
     prest.generate_unified_view()
 
     context.logger.info("generating cronJob")
-    cr = Crontab(context.logger, conf, args.real_time_table_name, args.partition_interval, args.real_time_window,
+    cr = CronTab(context.logger, conf, args.real_time_table_name, args.partition_interval, args.real_time_window,
                  args.historical_retention, args.partition_by)
     cr.create_cron_job()
 

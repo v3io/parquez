@@ -1,4 +1,4 @@
-#!/usr/bin/bash -x
+#!/usr/bin/env sh -x
 
 crontab -l > mycron
 #echo new cron into cron file

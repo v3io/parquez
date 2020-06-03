@@ -1,6 +1,5 @@
 from kubernetes import config, client
 from kubernetes.stream import stream
-from utils.logger import Logger
 
 
 class K8SClient(object):
