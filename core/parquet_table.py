@@ -61,10 +61,10 @@ class ParquetTable(object):
         try:
             self.logger.debug("generating script")
             parquet_command = "/hive/bin/hive -hiveconf hive.metastore.uris=thrift://hive:9083 -e "
-            parquet_command += self.generate_create_table_script()
+            parquet_command += '"'+self.generate_create_table_script()
             parquet_command += self.read_schema()
             parquet_command += self.generate_partition_by()
-            parquet_command += " STORED AS "+self.compression+";"
+            parquet_command += " STORED AS "+self.compression+';"'
             self.logger.info(parquet_command)
             self.k8s_client.exec_shell_cmd(parquet_command)
             # self.logger.debug("create table script {}".format(parquet_command))
