@@ -66,3 +66,11 @@ class PrestoClient(object):
         self.cursor.fetchone()
         self.logger.debug(script)
         self.disconnect()
+
+    def drop_unified_view(self):
+        script = "DROP VIEW " + "hive." + self.hive_schema + "." + self.view_name
+        self.connect()
+        self.execute_command(script)
+        self.cursor.fetchone()
+        self.logger.debug(script)
+        self.disconnect()

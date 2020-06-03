@@ -71,7 +71,7 @@ class KVView(object):
         self.logger.debug("Create view command : " + command)
         self.connect()
         self.execute_command(command)
-        self.cursor.fetchone()
+        self.logger.info(self.cursor.fetchall())
         self.disconnect()
 
     def generate_crete_view_script(self):
@@ -86,7 +86,18 @@ class KVView(object):
             self.logger.error(e)
             raise
 
-
+    def drop_view(self):
+        try:
+            self.logger.info("dropping kv view ")
+            hive_prefix = "hive." + self.conf.hive_schema + "."
+            command = "DROP VIEW IF EXISTS " + hive_prefix + self.kv_table.name + "_view"
+            self.connect()
+            self.execute_command(command)
+            self.logger.info(self.cursor.fetchall())
+            self.disconnect()
+        except Exception as e:
+            self.logger.error(e)
+            raise
 
 
 

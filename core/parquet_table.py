@@ -58,3 +58,14 @@ class ParquetTable(object):
         except Exception as e:
             self.logger.error(e)
             raise
+
+    def drop_table(self):
+        try:
+            self.logger.debug("generating script")
+            parquet_command = HIVE_PREFIX
+            parquet_command += '" DROP TABLE IF EXISTS ' + self.conf.hive_schema + '.' + self.parquet_table_name + ';"'
+            self.logger.info(parquet_command)
+            self.k8s_client.exec_shell_cmd(parquet_command)
+        except Exception as e:
+            self.logger.error(e)
+            raise

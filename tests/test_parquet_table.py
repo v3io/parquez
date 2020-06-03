@@ -18,5 +18,6 @@ def test_parquet_table_generator():
     utils = Utils(logger, conf)
     parquet = ParquetTable(logger, conf, utils, 'h', kv_table,K8SClient(logger))
     parquet.generate_script()
+    parquet.drop_table()
 
 
