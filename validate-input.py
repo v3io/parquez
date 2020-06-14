@@ -35,10 +35,16 @@ def main(context
 
 if __name__ == '__main__':
     context = get_or_create_ctx('validate-input')
-    import sys
-    pb = context.get_param('partition_by')
-    context.logger.info('Number of arguments: {}'.format(len(sys.argv)))
-    context.logger.info('Argument(s) passed: {}'.format(str(sys.argv)))
-    context.logger.info(pb)
+    p_view_name = context.parameters['view_name']
+    p_partition_by = context.parameters['partition_by']
+    p_partition_interval = context.parameters['partition_interval']
+    p_real_time_window = context.parameters['real_time_window']
+    p_historical_retention = context.parameters['historical_retention']
+    p_real_time_table_name = context.parameters['real_time_table_name']
+    p_config_path = context.parameters['config_path']
+    if p_config_path is None:
+        p_config_path= CONFIG_PATH
+    context.logger.info(context.parameters)    
     
-    main(context)
+    main(context,p_view_name,p_partition_by,p_partition_interval,p_real_time_window,p_historical_retention,p_real_time_table_name,p_config_path)
+
