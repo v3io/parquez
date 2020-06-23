@@ -18,15 +18,12 @@ def main(context, partition_by):
     utils = Utils(context.logger, conf)
 
     kv_table = KVTable(context.logger, conf, REAL_TIME_TABLE_NAME)
-    schema = kv_table.import_table_schema()
-
-    context.logger.info("logging schema")
-    context.log_artifact('schema', body=schema, local_path='schema.txt')
 
     context.logger.info("generating parquet table")
     parquet = ParquetTable(context.logger, conf, utils, partition_by, kv_table, K8SClient(context.logger))
     parquet.generate_script()
 
+
 if __name__ == '__main__':
-    context = get_or_create_ctx('get-schema')
+    context = get_or_create_ctx('create-parquet-table')
     main(context,PARTITION_BY)
