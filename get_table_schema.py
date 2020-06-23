@@ -14,7 +14,7 @@ def main(context):
     schema = kv_table.import_table_schema()
 
     context.logger.info("logging schema")
-    context.log_artifact(schema)
+    context.log_artifact('schema', body=schema, local_path='schema.txt')
 
 
 if __name__ == '__main__':
