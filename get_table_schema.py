@@ -2,7 +2,7 @@ from mlrun import get_or_create_ctx
 from core.kv_table import KVTable
 from config.app_conf import AppConf
 
-CONFIG_PATH = 'User/parquez/config/parquez.ini'
+CONFIG_PATH = '/User/parquez/config/parquez.ini'
 REAL_TIME_TABLE_NAME = 'faker'
 
 
