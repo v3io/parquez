@@ -1,3 +1,4 @@
+from core.params import Params
 
 HIVE_PREFIX = "/hive/bin/hive -hiveconf hive.metastore.uris=thrift://hive:9083 -e "
 STORED_AS_PARQUET_STR = " STORED AS PARQUET;"
@@ -8,13 +9,13 @@ PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
 
 
 class ParquetTable(object):
-    def __init__(self, logger, conf, utils, partition_by, kv_table, k8s_client):
+    def __init__(self, logger, conf, utils, params: Params, schema, k8s_client):
         self.logger = logger
-        self.kv_table = kv_table
-        self.partition_str = partition_by
+        self.schema = schema
+        self.partition_str = params.partition_by
         self.partition_by = " PARTITIONED BY ("
         self.partition = []
-        self.parquet_table_name = kv_table.name + "_" + conf.compression
+        self.parquet_table_name = params.real_time_table_name + "_" + conf.compression
         self.conf = conf
         self.utils = utils
         self.compression = conf.compression
@@ -40,7 +41,8 @@ class ParquetTable(object):
         return self.partition_by
 
     def read_schema(self):
-        schema_str = self.kv_table.get_schema_fields_and_types()
+        #schema_str = self.kv_table.get_schema_fields_and_types()
+        schema_str = self.schema
         schema_str += ")"
         self.logger.debug("read schema {0}".format(schema_str))
         return schema_str
