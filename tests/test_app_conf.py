@@ -15,4 +15,4 @@ def test_app_conf():
     assert cf.v3io_api_endpoint_host == "<localhost>"
     assert cf.v3io_api_endpoint_port == "8081"
     assert cf.username == "<user_name>"
-    assert cf.password == "<password>"
+

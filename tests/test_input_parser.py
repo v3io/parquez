@@ -11,7 +11,7 @@ def test_generate():
     ip = InputParser(logger)
     parser = ip.create_parser()
     args = parser.parse_args(['--view-name', 'parquezView'
-                          ,'--partition-by', '1h'
+                          ,'--partition-by', 'h'
                           ,'--partition-interval', '1h'
                           ,'--real-time-window', '3h'
                           ,'--historical-retention', '21h'

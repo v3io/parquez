@@ -1,6 +1,7 @@
 import os
 import configparser
 
+
 class AppConf(object):
     def __init__(self, logger, config_path='config/parquez.ini'):
         self.logger = logger
@@ -17,7 +18,6 @@ class AppConf(object):
         self.v3io_api_endpoint_host = config['nginx']['v3io_api_endpoint_host']
         self.v3io_api_endpoint_port = config['nginx']['v3io_api_endpoint_port']
         self.username = config['nginx']['username']
-        self.password = config['nginx']['password']
         self.compression = config['compression']['type']
         self.coalesce = config['compression']['coalesce']
 

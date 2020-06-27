@@ -38,7 +38,6 @@ hive_connector = hive <br />
 v3io_api_endpoint_host = <v3io_api_endpoint_host> <br />
 v3io_api_endpoint_port = 8081 <br />
 username = <user_name> <br />
-password = <pass> <br />
 
 [compression] <br />
 type = Parquet  <br />

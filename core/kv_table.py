@@ -10,16 +10,16 @@ def get_request_url(container_name, table_name, v3io_api_endpoint_host, v3io_api
                                           , SCHEMA)
 
 
-def get_request_headers():
+def get_request_headers(access_key):
     return {
         'Content-Type': 'application/json',
+        'X-v3io-session-key': access_key
     }
 
 
-def send_request(logger, url, headers, username, password):
+def send_request(logger, url, headers, username):
     try:
-        auth = requests.auth.HTTPBasicAuth(username, password)
-        response = requests.get(url, headers=headers, auth=auth, timeout=10, verify=False)
+        response = requests.get(url, headers=headers, timeout=10, verify=False)
         logger.debug(response.status_code)
         logger.debug(response.content)
         return response.content
@@ -38,8 +38,8 @@ class KVTable(object):
     def import_table_schema(self):
         url = get_request_url(self.conf.v3io_container, self.name, self.conf.v3io_api_endpoint_host,
                               self.conf.v3io_api_endpoint_port)
-        headers = get_request_headers()
-        schema = send_request(self.logger, url, headers, self.conf.username, self.conf.password)
+        headers = get_request_headers(self.conf.v3io_access_key)
+        schema = send_request(self.logger, url, headers, self.conf.username)
         self.logger.info('KV table schema {}'.format(schema))
         self.schema = schema
         return schema
