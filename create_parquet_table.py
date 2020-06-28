@@ -5,8 +5,8 @@ from utils.utils import Utils
 from core.k8s_client import K8SClient
 from core.params import Params
 
-CONFIG_PATH = 'test.ini'
-
+CONFIG_PATH = '/User/parquez/config/parquez.ini'
+REAL_TIME_TABLE_NAME = 'faker'
 
 def get_bytes_from_file(filename):
     with open(filename, "r") as f:
@@ -16,8 +16,10 @@ def get_bytes_from_file(filename):
 
 def main(context):
     context.logger.info("loading configuration")
-    conf = AppConf(context.logger, CONFIG_PATH)
-
+    p_config_path = context.parameters['config_path']
+    if p_config_path:
+        config_path = p_config_path
+    conf = AppConf(context.logger, config_path)
     utils = Utils(context.logger, conf)
     params = Params()
     params.set_params_from_context(context)
