@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 import re
 from pyhive import presto
+from core.params import Params
 
 PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
 
@@ -9,11 +10,11 @@ PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
 
 
 class KVView(object):
-    def __init__(self, logger, real_time_window, conf, kv_table):
+    def __init__(self, logger, params: Params, conf):
         self.logger = logger
-        self.kv_table = kv_table
-        self.name = kv_table.name + "_view"
-        self.real_time_window = real_time_window
+        self.params = params
+        self.name = params.real_time_table_name + "_view"
+        self.real_time_window = params.real_time_window
         self.conf = conf
         self.uri = conf.presto_uri
         self.cursor = None
@@ -63,8 +64,8 @@ class KVView(object):
     def create_view_prefix(self):
         hive_prefix = "hive." + self.conf.hive_schema + "."
         v3io_prefix = "v3io." + self.conf.v3io_container + "."
-        prefix = "CREATE OR REPLACE VIEW " + hive_prefix + self.kv_table.name + \
-                 "_view AS SELECT * FROM " + v3io_prefix + self.kv_table.name
+        prefix = "CREATE OR REPLACE VIEW " + hive_prefix + self.params.real_time_table_name + \
+                 "_view AS SELECT * FROM " + v3io_prefix + self.params.real_time_table_name
         return prefix
 
     def create_view(self, command):
@@ -90,7 +91,7 @@ class KVView(object):
         try:
             self.logger.info("dropping kv view ")
             hive_prefix = "hive." + self.conf.hive_schema + "."
-            command = "DROP VIEW IF EXISTS " + hive_prefix + self.kv_table.name + "_view"
+            command = "DROP VIEW IF EXISTS " + hive_prefix + self.params.real_time_table_name + "_view"
             self.connect()
             self.execute_command(command)
             self.logger.info(self.cursor.fetchall())
