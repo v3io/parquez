@@ -1,5 +1,6 @@
 import re
 from pyhive import presto  # or import hive
+from core.params import Params
 
 STORED_AS_PARQUET_STR = " STORED AS PARQUET;"
 PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
@@ -7,9 +8,9 @@ PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
 
 class PrestoClient(object):
 
-    def __init__(self, logger, conf, partition_str,  parquet_table, kv_view, kv_table, view_name="unified_view"):
+    def __init__(self, logger, conf, params: Params,  parquet_table, kv_view, kv_table, view_name="unified_view"):
         self.logger = logger
-        self.partition_str = partition_str
+        self.partition_str = params.partition_by
         self.uri = conf.presto_uri
         self.user_name = conf.username
         self.access_key = conf.v3io_access_key

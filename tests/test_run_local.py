@@ -31,3 +31,9 @@ def test_run_create_kv_view():
     spec = tag_test(base_spec, 'test_run_create_kv_view')
     result = run_local(spec, command='../create_kv_view.py', workdir='./', artifact_path='./artifacts')
     verify_state(result)
+
+
+def test_run_create_unified_view():
+    spec = tag_test(base_spec, 'test_run_create_unified_view')
+    result = run_local(spec, command='../create_unified_view.py', workdir='./', artifact_path='./artifacts')
+    verify_state(result)
