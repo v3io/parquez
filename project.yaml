@@ -16,6 +16,10 @@ functions:
   name: create_kv_view
   kind: job
   image: aviaigz/parquez
+- url: create_unified_view.py
+  name: create_unified_view
+  kind: job
+  image: aviaigz/parquez
 workflows:
 - name: main
   path: workflow.py
