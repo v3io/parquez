@@ -1,10 +1,10 @@
-#!/usr/bin/bash
+#!/bin/bash
 
-exec &> >(logger -t /home/iguazio/parquez/parquetinizer.sh -s)
+#exec &> >(logger -t /home/iguazio/parquez/parquetinizer.sh -s)
 
 utc_time=$(date +%Y-%m-%d-%H-%M)
 
-log_dir="$(pwd)""/logs/"
+log_dir=$PWD"/logs/"
 
 mkdir -p ${log_dir}
 
@@ -50,14 +50,6 @@ coalesce=$8
 
 running_user=`whoami`
 echo "user is: $running_user" 2>&1 | tee -a $log_file
-
-
-#export HADOOP_HOME=/opt/hadoop
-#export JAVA_HOME=/opt/iguazio/java
-#export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
-#export SPARK_HOME=/opt/spark2
-export KUBECTL_PATH=/usr/local/bin/
-export PATH=$PATH:${KUBECTL_PATH}
 
 now=`date -u`
 
@@ -107,10 +99,6 @@ echo "day is: $old_day"
 old_hour=`date '+%H' -u -d "$old_window"`
 echo "hour is: $old_hour"
 
-
-
-#source="v3io://$v3io_container/$kv_table_name/year=$year/month=$month/day=$day/hour=$hour"
-
 if [ $partition_by == 'y' ]
 then
     source="v3io://$v3io_container/$kv_table_name/year=$year"
@@ -157,8 +145,6 @@ while [[ 1 ]]
 		sleep 10
 
 	done
-#sleep 10
-
 ##########################################################################
 # build KV where clause
 clause="where year >= $year"
@@ -236,14 +222,9 @@ fi
 echo "query: $clause" 2>&1 | tee -a $log_file
 ##################################################################################################
 
-pushd /home/iguazio
-
-shell_container=`kubectl -n default-tenant get pods --no-headers -o custom-columns=":metadata.name" | grep shell`
-echo $shell_container 2>&1 | tee -a $log_file
-
 spark_command="/spark/bin/spark-submit --driver-memory 8g --class io.iguaz.v3io.spark2.tools.KVTo${compression_type} /v3io/${v3io_container}/v3io-spark2-tools_2.11.jar ${source} ${target} ${coalesce}"
 
-kubectl -n default-tenant exec -it $shell_container -- /bin/bash -c "$spark_command" 2>&1 | tee -a $log_file
+spark_command | tee -a $log_file
 
 if [ $? -eq 0 ]; then
     echo KV to parquet finished with success 2>&1 | tee -a $log_file
@@ -253,8 +234,6 @@ else
 fi
 
 popd
-
-pushd $parquez_dir
 
 alter_view_command="${parquez_dir}/sh/alter_kv_view.sh ${kv_table_name} '${kv_window}'"
 
