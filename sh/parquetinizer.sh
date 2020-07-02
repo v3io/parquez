@@ -225,7 +225,7 @@ echo "query: $clause" 2>&1 | tee -a $log_file
 spark_command="/spark/bin/spark-submit --driver-memory 8g --class io.iguaz.v3io.spark2.tools.KVTo${compression_type} /v3io/${v3io_container}/v3io-spark2-tools_2.11.jar ${source} ${target} ${coalesce}"
 
 
-echo $spark_command
+eval $spark_command
 
 spark_command | tee -a $log_file
 
