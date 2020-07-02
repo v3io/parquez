@@ -1,5 +1,6 @@
 import os
 import re
+from core.params import Params
 
 PARTITION_BY_RE = r"([0-9]+)([a-zA-Z]+)"
 
@@ -26,16 +27,15 @@ def window_parser(window_type):
 
 
 class CronTab(object):
-    def __init__(self, logger, conf, kv_table_name, partition_interval, key_value_window, historical_retention
-                 , partition_by):
+    def __init__(self, logger, conf, params: Params):
 
         self.logger = logger
         self.conf = conf
-        self.kv_table_name = kv_table_name
-        self.partition_interval = partition_interval
-        self.key_value_window = key_value_window
-        self.historical_retention = historical_retention
-        self.partition_by = partition_by
+        self.kv_table_name = params.real_time_table_name
+        self.partition_interval = params.partition_interval
+        self.key_value_window = params.real_time_window
+        self.historical_retention = params.historical_retention
+        self.partition_by = params.partition_by
         self.shell_path = get_shell_path()
 
     def partition_interval_parser(self):
@@ -67,5 +67,6 @@ class CronTab(object):
         command = "\"" + self.partition_interval_parser() + self.shell_path + "parquetinizer.sh " + self.kv_table_name + " " +\
                   args2 + " " + args3 + " " + args4 + " " + args5+" " + args6+" "+args7+" "+args8+"\""
         self.logger.debug(command)
-        os.system(self.shell_path + "parquetCronJob.sh " + command)
+        return command
+        #os.system(self.shell_path + "parquetCronJob.sh " + command)
 

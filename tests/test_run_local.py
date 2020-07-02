@@ -37,3 +37,9 @@ def test_run_create_unified_view():
     spec = tag_test(base_spec, 'test_run_create_unified_view')
     result = run_local(spec, command='../create_unified_view.py', workdir='./', artifact_path='./artifacts')
     verify_state(result)
+
+
+def test_run_create_crontab():
+    spec = tag_test(base_spec, 'test_run_create_crontab')
+    result = run_local(spec, command='../create_crontab.py', workdir='./', artifact_path='./artifacts')
+    verify_state(result)
