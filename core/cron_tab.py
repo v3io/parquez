@@ -64,7 +64,9 @@ class CronTab(object):
         args7 = "'"+self.conf.compression+"'"
         args8 = "'" + self.conf.coalesce+"'"
 
-        command = "\"" + self.partition_interval_parser() + self.shell_path + "parquetinizer.sh " + self.kv_table_name + " " +\
+        cron_comm = "\"" + self.partition_interval_parser()
+
+        command = self.shell_path + "parquetinizer.sh " + self.kv_table_name + " " +\
                   args2 + " " + args3 + " " + args4 + " " + args5+" " + args6+" "+args7+" "+args8+"\""
         self.logger.debug(command)
         return command
