@@ -6,8 +6,8 @@ PARTITION_BY_RE = r"([0-9]+)([a-zA-Z]+)"
 
 
 def get_shell_path():
-    shell_path = os.getcwd()+"/sh/"
-    if "/tests" in shell_path:
+    shell_path = os.getcwd()+"sh/"
+    if "/tests/" in shell_path:
         shell_path = shell_path.replace('/tests','')
     return shell_path
 
@@ -27,7 +27,7 @@ def window_parser(window_type):
 
 
 class CronTab(object):
-    def __init__(self, logger, conf, params: Params):
+    def __init__(self, logger, conf, params: Params, project_path=""):
 
         self.logger = logger
         self.conf = conf
@@ -36,7 +36,7 @@ class CronTab(object):
         self.key_value_window = params.real_time_window
         self.historical_retention = params.historical_retention
         self.partition_by = params.partition_by
-        self.shell_path = get_shell_path()
+        self.shell_path = project_path+get_shell_path()
 
     def partition_interval_parser(self):
         m = re.match(PARTITION_BY_RE, self.partition_interval)
@@ -66,8 +66,9 @@ class CronTab(object):
 
         cron_comm = "\"" + self.partition_interval_parser()
 
-        command = self.shell_path + "parquetinizer.sh " + self.kv_table_name + " " +\
-                  args2 + " " + args3 + " " + args4 + " " + args5+" " + args6+" "+args7+" "+args8+"\""
+        command = "parquez/sh/parquetinizer.sh " + self.kv_table_name + " " +\
+                  args2 + " " + args3 + " " + args4 + " " + args5+" " + args6+" "+args7+" "+args8
+        
         self.logger.debug(command)
         return command
         #os.system(self.shell_path + "parquetCronJob.sh " + command)

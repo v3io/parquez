@@ -10,7 +10,7 @@ mkdir -p ${log_dir}
 
 log_file=${log_dir}"parquetinizer.log."${utc_time}
 
-parquez_dir='/home/iguazio/parquez'
+parquez_dir='/parquez'
 
 echo parquez_dir:$parquez_dir 2>&1 | tee -a $log_file
 
@@ -222,7 +222,7 @@ fi
 echo "query: $clause" 2>&1 | tee -a $log_file
 ##################################################################################################
 
-spark_command="/spark/bin/spark-submit --driver-memory 8g --class io.iguaz.v3io.spark2.tools.KVTo${compression_type} /v3io/${v3io_container}/v3io-spark2-tools_2.11.jar ${source} ${target} ${coalesce}"
+spark_command="/spark/bin/spark-submit --driver-memory 8g --class io.iguaz.v3io.spark2.tools.KVTo${compression_type} /igz/java/libs/v3io-spark2-tools_2.11-435956327165934200101.jar ${source} ${target} ${coalesce}"
 
 
 eval $spark_command
@@ -248,11 +248,11 @@ ${parquez_dir}/sh/hive_partition.sh add $hive_schema $parquet_table_name $year $
 
 kvDeleteCommand="hdfs dfs -rm -R ${source}"
 
-kubectl -n default-tenant exec -it $shell_container -- /bin/bash -c "$kvDeleteCommand"  2>&1 | tee -a $log_file
+$kvDeleteCommand  2>&1 | tee -a $log_file
 
 parquetDeleteCommand="hdfs dfs -rm -R ${parquetToDelete}"
 
-kubectl -n default-tenant exec -it $shell_container -- /bin/bash -c "$parquetDeleteCommand" 2>&1 | tee -a $log_file
+$parquetDeleteCommand 2>&1 | tee -a $log_file
 
 ${parquez_dir}/sh/hive_partition.sh drop $hive_schema $parquet_table_name $old_year $old_month $old_day $old_hour $target $partition_by  2>&1 | tee -a $log_file
 
