@@ -10,7 +10,7 @@ mkdir -p ${log_dir}
 
 log_file=${log_dir}"parquetinizer.log."${utc_time}
 
-parquez_dir='/parquez'
+parquez_dir='parquez'
 
 echo parquez_dir:$parquez_dir 2>&1 | tee -a $log_file
 
