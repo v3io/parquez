@@ -1,14 +1,15 @@
 import os
 import re
 from core.params import Params
+from core.k8s_client import K8SClient
 
 PARTITION_BY_RE = r"([0-9]+)([a-zA-Z]+)"
 
 
 def get_shell_path():
-    shell_path = os.getcwd()+"sh/"
+    shell_path = os.getcwd() + "sh/"
     if "/tests/" in shell_path:
-        shell_path = shell_path.replace('/tests','')
+        shell_path = shell_path.replace('/tests', '')
     return shell_path
 
 
@@ -36,9 +37,10 @@ class CronTab(object):
         self.key_value_window = params.real_time_window
         self.historical_retention = params.historical_retention
         self.partition_by = params.partition_by
-        self.shell_path = project_path+get_shell_path()
+        self.shell_path = project_path + get_shell_path()
+        self.k8sClient = K8SClient(logger)
 
-    def partition_interval_parser(self):
+    def create_cron_string(self):
         m = re.match(PARTITION_BY_RE, self.partition_interval)
         if m.group(2) == 'm':
             result = "*/" + m.group(1) + " * * * * "
@@ -55,21 +57,24 @@ class CronTab(object):
             result = "0 0 0 0 " + "*/" + m.group(1)
         return result
 
-    def create_cron_job(self):
+    def create_cron_command(self):
         args2 = "'" + window_parser(self.key_value_window) + "'"
         args3 = "'" + window_parser(self.historical_retention) + "'"
         args4 = "'" + self.partition_by + "'"
         args5 = "'" + self.conf.v3io_container + "'"
-        args6 = "'"+self.conf.hive_schema+"'"
-        args7 = "'"+self.conf.compression+"'"
-        args8 = "'" + self.conf.coalesce+"'"
+        args6 = "'" + self.conf.hive_schema + "'"
+        args7 = "'" + self.conf.compression + "'"
+        args8 = "'" + self.conf.coalesce + "'"
 
-        cron_comm = "\"" + self.partition_interval_parser()
+        #cron_comm = "\"" + self.create_cron_string()
 
-        command = "parquez/sh/parquetinizer.sh " + self.kv_table_name + " " +\
-                  args2 + " " + args3 + " " + args4 + " " + args5+" " + args6+" "+args7+" "+args8
-        
+        command = "parquez/sh/parquetinizer.sh " + self.kv_table_name + " " + \
+                  args2 + " " + args3 + " " + args4 + " " + args5 + " " + args6 + " " + args7 + " " + args8
+
         self.logger.debug(command)
         return command
-        #os.system(self.shell_path + "parquetCronJob.sh " + command)
 
+    def run_command(self):
+        cron_comm = "\"" + self.create_cron_string()
+        command = self.create_cron_command()
+        self.k8sClient.exec_shell_cmd(command)

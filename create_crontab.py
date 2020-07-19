@@ -72,7 +72,7 @@ def main(context):
     params.set_params_from_context(context)
     context.logger.info("generating cronJob")
     cr = CronTab(context.logger, conf, params,PROJECT_PATH)
-    cmd =cr.create_cron_job()
+    cmd =cr.create_cron_command()
     context.logger.info(cmd)
     cli = K8SClient(context.logger)
     cli.exec_shell_cmd(cmd)

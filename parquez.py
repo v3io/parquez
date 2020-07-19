@@ -70,7 +70,7 @@ def main(context
     context.logger.info("generating cronJob")
     cr = CronTab(context.logger, conf, args.real_time_table_name, args.partition_interval, args.real_time_window,
                  args.historical_retention, args.partition_by)
-    cr.create_cron_job()
+    cr.create_cron_command()
 
 
 if __name__ == '__main__':
