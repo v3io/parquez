@@ -80,5 +80,5 @@ def main(context):
 
 
 if __name__ == '__main__':
-    context = get_or_create_ctx('generating presto view')
+    context = get_or_create_ctx('run parquez interval')
     main(context)
