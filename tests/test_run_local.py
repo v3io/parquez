@@ -39,7 +39,13 @@ def test_run_create_unified_view():
     verify_state(result)
 
 
-def test_run_create_crontab():
-    spec = tag_test(base_spec, 'test_run_create_crontab')
+def test_run_parquez_interval():
+    spec = tag_test(base_spec, 'test_run_parquez_interval')
     result = run_local(spec, command='../run_parquez_interval.py', workdir='./', artifact_path='./artifacts')
+    verify_state(result)
+
+
+def test_run_scheduler():
+    spec = tag_test(base_spec, 'test_run_scheduler')
+    result = run_local(spec, command='../run_scheduler.py', workdir='./', artifact_path='./artifacts')
     verify_state(result)

@@ -29,10 +29,14 @@ def main(context):
     context.logger.info("")
     params = Params()
     params.set_params_from_context(context)
+    params_dic = params.__dict__
     context.logger.info("generating cronJob")
     cron_str = create_cron_string(params.partition_interval)
     fn = code_to_function(name="run_interval", filename="run_parquez_interval.py")
-    fn.run(artifact_path='/User/artifacts', schedule=cron_str)
+    fn.spec.artifact_path = 'User/artifacts'
+    fn.spec.service_account = 'mlrun-api'
+    fn.run(params=params_dic, artifact_path='/User/artifacts', schedule=cron_str)
+
 
 if __name__ == '__main__':
     context = get_or_create_ctx('run scheduler')
