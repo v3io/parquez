@@ -4,6 +4,8 @@ from core.params import Params
 from core.cron_tab import CronTab
 import re
 from mlrun import code_to_function
+import run_parquez_interval
+from mlrun import import_function
 
 
 def create_cron_string(partition_interval):
@@ -32,7 +34,7 @@ def main(context):
     params_dic = params.__dict__
     context.logger.info("generating cronJob")
     cron_str = create_cron_string(params.partition_interval)
-    fn = code_to_function(name="run_interval", filename="run_parquez_interval.py")
+    fn = import_function(url="db://parquez/run-parquez-interval:latest")
     fn.spec.artifact_path = 'User/artifacts'
     fn.spec.service_account = 'mlrun-api'
     fn.run(params=params_dic, artifact_path='/User/artifacts', schedule=cron_str)
