@@ -222,7 +222,7 @@ fi
 echo "query: $clause" 2>&1 | tee -a $log_file
 ##################################################################################################
 
-spark_command="/spark/bin/spark-submit --driver-memory 8g --class io.iguaz.v3io.spark2.tools.KVTo${compression_type} /igz/java/libs/v3io-spark2-tools_2.11-435956327165934200101.jar ${source} ${target} ${coalesce}"
+spark_command="/spark/bin/spark-submit --driver-memory 8g --class io.iguaz.v3io.spark2.tools.KVTo${compression_type} /igz/java/libs/v3io-spark2-tools_2.11.jar ${source} ${target} ${coalesce}"
 
 
 eval $spark_command
