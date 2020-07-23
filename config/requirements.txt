@@ -2,3 +2,4 @@ requests
 colorlog
 configparser
 PyHive
+kubernetes

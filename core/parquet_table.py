@@ -1,3 +1,5 @@
+
+
 K8S = 'kubectl -n default-tenant exec $(kubectl -n default-tenant get pods --no-headers -o ' \
       'custom-columns=":metadata.name" | grep shell)  -- /bin/bash -c "/hive/bin/hive -hiveconf ' \
       'hive.metastore.uris=thrift://hive:9083 '
@@ -78,3 +80,6 @@ class ParquetTable(object):
             return K8S
         if self.conf.environment == 'vanilla':
             return VANILLA
+
+
+
