@@ -271,7 +271,7 @@ eval ${alter_view_command} 2>&1 | tee -a $log_file
 
 ${parquez_dir}/sh/hive_partition.sh add $hive_schema $parquet_table_name $year $month $day $hour ${target} $partition_by
 
-delete_partition_command="${parquez_dir}/sh/delete_partition_command.sh '${source}' '${target}'"
+delete_partition_command="${parquez_dir}/sh/delete_partitions.sh '${source}' '${target}'"
 
 echo ${delete_partition_command} 2>&1 | tee -a $log_file
 
