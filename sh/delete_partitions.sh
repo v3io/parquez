@@ -12,7 +12,7 @@ else
 fi
 
 
-echo alter_kv_view "${1}" "${2}"
+echo delete_partition "${1}" "${2}"
 
 python core/delete_partition.py "${1}" "${2}"
 

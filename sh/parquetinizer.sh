@@ -252,16 +252,21 @@ then
     kubectl -n default-tenant exec -it $shell_container -- /bin/bash -c "$spark_command" 2>&1 | tee -a $log_file
 fi
 
-if [ $? -eq 0 ]; then
-    echo KV to parquet finished with success 2>&1 | tee -a $log_file
-else
-    echo KV to parquet finished with failed 2>&1 | tee -a $log_file
-    exit 1
-fi
+#if [ $? -eq 0 ]; then
+#    echo KV to parquet finished with success 2>&1 | tee -a $log_file
+#else
+#    echo KV to parquet finished with failed 2>&1 | tee -a $log_file
+#    exit 1
+#fi
 
-popd
+#popd
 
 pushd $parquez_dir
+
+alter_view_command="${parquez_dir}/sh/alter_kv_view.sh ${kv_table_name} '${kv_window}'"
+
+echo ${alter_view_command} 2>&1 | tee -a $log_file
+
 
 alter_view_command="${parquez_dir}/sh/alter_kv_view.sh ${kv_table_name} '${kv_window}'"
 
@@ -271,13 +276,19 @@ eval ${alter_view_command} 2>&1 | tee -a $log_file
 
 ${parquez_dir}/sh/hive_partition.sh add $hive_schema $parquet_table_name $year $month $day $hour ${target} $partition_by
 
-kvDeleteCommand="hdfs dfs -rm -R ${source}"
+delete_partition_command="${parquez_dir}/sh/delete_partition_command.sh ${source} '${target}'"
 
-kubectl -n default-tenant exec -it $shell_container -- /bin/bash -c "$kvDeleteCommand"  2>&1 | tee -a $log_file
+echo ${delete_partition_command} 2>&1 | tee -a $log_file
 
-parquetDeleteCommand="hdfs dfs -rm -R ${parquetToDelete}"
+eval ${delete_partition_command} 2>&1 | tee -a $log_file
 
-kubectl -n default-tenant exec -it $shell_container -- /bin/bash -c "$parquetDeleteCommand" 2>&1 | tee -a $log_file
+#kvDeleteCommand="hdfs dfs -rm -R ${source}"
+#
+#kubectl -n default-tenant exec -it $shell_container -- /bin/bash -c "$kvDeleteCommand"  2>&1 | tee -a $log_file
+#
+#parquetDeleteCommand="hdfs dfs -rm -R ${parquetToDelete}"
+#
+#kubectl -n default-tenant exec -it $shell_container -- /bin/bash -c "$parquetDeleteCommand" 2>&1 | tee -a $log_file
 
 ${parquez_dir}/sh/hive_partition.sh drop $hive_schema $parquet_table_name $old_year $old_month $old_day $old_hour $target $partition_by  2>&1 | tee -a $log_file
 
