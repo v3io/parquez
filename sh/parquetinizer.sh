@@ -247,7 +247,7 @@ then
     shell_container=`kubectl -n default-tenant get pods --no-headers -o custom-columns=":metadata.name" | grep shell`
     echo $shell_container 2>&1 | tee -a $log_file
 
-    spark_command="/spark/bin/spark-submit --driver-memory 8g --class io.iguaz.v3io.spark2.tools.KVTo${compression_type} /v3io/${v3io_container}/v3io-spark2-tools_2.11.jar ${source} ${target} ${coalesce}"
+    spark_command="/spark/bin/spark-submit --driver-memory 8g --class io.iguaz.v3io.spark2.tools.KVTo${compression_type} /igz/java/libs/v3io-spark2-tools_2.11.jar ${source} ${target} ${coalesce}"
 
     kubectl -n default-tenant exec -it $shell_container -- /bin/bash -c "$spark_command" 2>&1 | tee -a $log_file
 fi
@@ -267,16 +267,11 @@ alter_view_command="${parquez_dir}/sh/alter_kv_view.sh ${kv_table_name} '${kv_wi
 
 echo ${alter_view_command} 2>&1 | tee -a $log_file
 
-
-alter_view_command="${parquez_dir}/sh/alter_kv_view.sh ${kv_table_name} '${kv_window}'"
-
-echo ${alter_view_command} 2>&1 | tee -a $log_file
-
 eval ${alter_view_command} 2>&1 | tee -a $log_file
 
 ${parquez_dir}/sh/hive_partition.sh add $hive_schema $parquet_table_name $year $month $day $hour ${target} $partition_by
 
-delete_partition_command="${parquez_dir}/sh/delete_partition_command.sh ${source} '${target}'"
+delete_partition_command="${parquez_dir}/sh/delete_partition_command.sh '${source}' '${target}'"
 
 echo ${delete_partition_command} 2>&1 | tee -a $log_file
 
