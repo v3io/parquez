@@ -4,7 +4,7 @@ from core.params import Params
 from core.cron_tab import CronTab
 import re
 from mlrun import code_to_function
-import run_parquez_interval
+import functions.run_parquez_interval
 from mlrun import import_function
 
 
