@@ -51,7 +51,7 @@ def test_run_scheduler():
     verify_state(result)
 
 
-def test_run_scheduler():
-    spec = tag_test(base_spec, 'test_run_scheduler')
+def test_clean_parquez():
+    spec = tag_test(base_spec, 'test_clean_parquez')
     result = run_local(spec, command='../functions/clean_parquez.py', workdir='./', artifact_path='./artifacts')
     verify_state(result)
