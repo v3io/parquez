@@ -1,3 +1,4 @@
+from core.table import Table
 from core.params import Params
 
 HIVE_PREFIX = "/hive/bin/hive -hiveconf hive.metastore.uris=thrift://hive:9083 -e "
@@ -8,8 +9,8 @@ PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
 # TODO: Add verification that hive table created (handle Trying to send on a closed client exception
 
 
-class ParquetTable(object):
-    def __init__(self, logger, conf, utils, params: Params, schema, k8s_client):
+class ParquetTable(Table):
+    def __init__(self, logger, conf, params: Params, schema, k8s_client):
         self.logger = logger
         self.schema = schema
         self.partition_str = params.partition_by
@@ -17,7 +18,6 @@ class ParquetTable(object):
         self.partition = []
         self.parquet_table_name = params.real_time_table_name + "_" + conf.compression
         self.conf = conf
-        self.utils = utils
         self.compression = conf.compression
         self.k8s_client = k8s_client
 
@@ -47,7 +47,7 @@ class ParquetTable(object):
         self.logger.debug("read schema {0}".format(schema_str))
         return schema_str
 
-    def generate_script(self):
+    def create(self):
         try:
             self.logger.debug("generating script")
             parquet_command = HIVE_PREFIX
@@ -61,7 +61,7 @@ class ParquetTable(object):
             self.logger.error(e)
             raise
 
-    def drop_table(self):
+    def drop(self):
         try:
             self.logger.debug("generating script")
             parquet_command = HIVE_PREFIX

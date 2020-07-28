@@ -1,18 +1,18 @@
 from mlrun import get_or_create_ctx
 from core.kv_table import KVTable
 from config.app_conf import AppConf
-
-CONFIG_PATH = '/User/parquez/config/parquez.ini'
-REAL_TIME_TABLE_NAME = 'faker'
+from core.params import Params
 
 
-def main(context, config_path=CONFIG_PATH):
+def main(context):
     context.logger.info("loading configuration")
     p_config_path = context.parameters['config_path']
     if p_config_path:
         config_path = p_config_path
     conf = AppConf(context.logger, config_path)
-    kv_table = KVTable(context.logger, conf, REAL_TIME_TABLE_NAME)
+    params = Params()
+    params.set_params_from_context(context)
+    kv_table = KVTable(context.logger, conf, params.real_time_table_name)
     kv_table.import_table_schema()
     parquet_schema = kv_table.get_schema_fields_and_types()
     context.logger.info("logging schema")
