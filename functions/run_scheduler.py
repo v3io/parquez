@@ -1,10 +1,6 @@
 from mlrun import get_or_create_ctx
-from config.app_conf import AppConf
 from core.params import Params
-from core.cron_tab import CronTab
 import re
-from mlrun import code_to_function
-import functions.run_parquez_interval
 from mlrun import import_function
 
 
