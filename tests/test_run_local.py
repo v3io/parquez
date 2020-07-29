@@ -9,8 +9,8 @@ ARTIFACTS_PATH = ''
 base_spec = NewTask(params={'view_name': 'view_name'
     , 'partition_by': 'h'
     , 'partition_interval': '1h'
-    , 'real_time_window': '1d'
-    , 'historical_retention': '7d'
+    , 'real_time_window': '3h'
+    , 'historical_retention': '21h'
     , 'real_time_table_name': 'faker'
     , 'config_path': 'test.ini'}, out_path=out_path)
 

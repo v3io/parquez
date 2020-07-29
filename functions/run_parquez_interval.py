@@ -5,9 +5,8 @@ from core.cron_tab import CronTab
 from kubernetes import config, client
 from kubernetes.stream import stream
 
-CONFIG_PATH = '/User/parquez/config/parquez.ini'
 PROJECT_PATH = '/User/parquez'
-REAL_TIME_TABLE_NAME = 'faker'
+
 
 def get_bytes_from_file(filename):
     with open(filename, "r") as f:
@@ -46,7 +45,7 @@ class K8SClient(object):
                 break
         return shell_name
 
-    def exec_shell_cmd(self, cmd, shell_pod_name = 'shell'):
+    def exec_shell_cmd(self, cmd, shell_pod_name='shell'):
         shell_name = self.get_shell_pod_name(shell_pod_name)
         # Calling exec and waiting for response
         exec_command = [
@@ -71,12 +70,11 @@ def main(context):
     params = Params()
     params.set_params_from_context(context)
     context.logger.info("generating cronJob")
-    cr = CronTab(context.logger, conf, params,PROJECT_PATH)
+    cr = CronTab(context.logger, conf, params, PROJECT_PATH)
     cmd =cr.create_cron_command()
     context.logger.info(cmd)
     cli = K8SClient(context.logger)
     cli.exec_shell_cmd(cmd)
-
 
 
 if __name__ == '__main__':

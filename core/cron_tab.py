@@ -1,16 +1,16 @@
 import os
 import re
 from core.params import Params
-from core.k8s_client import K8SClient
+from config.app_conf import AppConf
 
 PARTITION_BY_RE = r"([0-9]+)([a-zA-Z]+)"
 
 
-def get_shell_path():
-    shell_path = os.getcwd() + "sh/"
-    if "/tests/" in shell_path:
-        shell_path = shell_path.replace('/tests', '')
-    return shell_path
+# def get_shell_path():
+#     shell_path = os.getcwd() + "sh/"
+#     if "/tests/" in shell_path:
+#         shell_path = shell_path.replace('/tests', '')
+#     return shell_path
 
 
 def window_parser(window_type):
@@ -28,8 +28,7 @@ def window_parser(window_type):
 
 
 class CronTab(object):
-    def __init__(self, logger, conf, params: Params, project_path=""):
-
+    def __init__(self, logger, conf: AppConf, params: Params, project_path=""):
         self.logger = logger
         self.conf = conf
         self.kv_table_name = params.real_time_table_name
@@ -37,8 +36,8 @@ class CronTab(object):
         self.key_value_window = params.real_time_window
         self.historical_retention = params.historical_retention
         self.partition_by = params.partition_by
-        self.shell_path = project_path + get_shell_path()
-        self.k8sClient = K8SClient(logger)
+        #self.shell_path = project_path + get_shell_path()
+        #self.k8sClient = K8SClient(logger)
 
     def create_cron_string(self):
         m = re.match(PARTITION_BY_RE, self.partition_interval)
@@ -66,15 +65,12 @@ class CronTab(object):
         args7 = "'" + self.conf.compression + "'"
         args8 = "'" + self.conf.coalesce + "'"
 
-        #cron_comm = "\"" + self.create_cron_string()
-
-        command = "parquez/sh/parquetinizer.sh " + self.kv_table_name + " " + \
+        command = "~/parquez/sh/parquetinizer.sh " + self.kv_table_name + " " + \
                   args2 + " " + args3 + " " + args4 + " " + args5 + " " + args6 + " " + args7 + " " + args8
 
-        self.logger.debug(command)
+        self.logger.info(command)
         return command
 
-    def run_command(self):
-        cron_comm = "\"" + self.create_cron_string()
-        command = self.create_cron_command()
-        self.k8sClient.exec_shell_cmd(command)
+    # def run_command(self):
+    #     command = self.create_cron_command()
+    #     self.k8sClient.exec_shell_cmd(command)

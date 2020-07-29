@@ -44,9 +44,9 @@ echo compression_type:$compression_type 2>&1 | tee -a $log_file
 
 parquet_table_name="${kv_table_name}_${compression_type}"
 
-echo coalesce:$coalesce 2>&1 | tee -a $log_file
-
 coalesce=$8
+
+echo coalesce:$coalesce 2>&1 | tee -a $log_file
 
 running_user=`whoami`
 echo "user is: $running_user" 2>&1 | tee -a $log_file
