@@ -5,8 +5,6 @@ from core.cron_tab import CronTab
 from kubernetes import config, client
 from kubernetes.stream import stream
 
-PROJECT_PATH = '/User/parquez'
-
 
 def get_bytes_from_file(filename):
     with open(filename, "r") as f:
@@ -70,7 +68,7 @@ def main(context):
     params = Params()
     params.set_params_from_context(context)
     context.logger.info("generating cronJob")
-    cr = CronTab(context.logger, conf, params, PROJECT_PATH)
+    cr = CronTab(context.logger, conf, params, params.project_path)
     cmd =cr.create_cron_command()
     context.logger.info(cmd)
     cli = K8SClient(context.logger)

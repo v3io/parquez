@@ -7,9 +7,9 @@ PARTITION_BY_RE = r"([0-9]+)([a-zA-Z]+)"
 
 
 # def get_shell_path():
-#     shell_path = os.getcwd() + "sh/"
+#     shell_path = os.getcwd() + "/sh/"
 #     if "/tests/" in shell_path:
-#         shell_path = shell_path.replace('/tests', '')
+#         shell_path = shell_path.replace('tests/', '')
 #     return shell_path
 
 
@@ -36,8 +36,7 @@ class CronTab(object):
         self.key_value_window = params.real_time_window
         self.historical_retention = params.historical_retention
         self.partition_by = params.partition_by
-        #self.shell_path = project_path + get_shell_path()
-        #self.k8sClient = K8SClient(logger)
+        self.project_path = project_path
 
     def create_cron_string(self):
         m = re.match(PARTITION_BY_RE, self.partition_interval)
@@ -65,7 +64,7 @@ class CronTab(object):
         args7 = "'" + self.conf.compression + "'"
         args8 = "'" + self.conf.coalesce + "'"
 
-        command = "~/parquez/sh/parquetinizer.sh " + self.kv_table_name + " " + \
+        command = self.project_path + "/sh/parquetinizer.sh " + self.kv_table_name + " " + \
                   args2 + " " + args3 + " " + args4 + " " + args5 + " " + args6 + " " + args7 + " " + args8
 
         self.logger.info(command)

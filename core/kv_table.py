@@ -17,7 +17,7 @@ def get_request_headers(access_key):
     }
 
 
-def send_request(logger, url, headers, username):
+def send_request(logger, url, headers):
     try:
         response = requests.get(url, headers=headers, timeout=10, verify=False)
         logger.debug(response.status_code)
@@ -39,7 +39,7 @@ class KVTable(object):
         url = get_request_url(self.conf.v3io_container, self.name, self.conf.v3io_api_endpoint_host,
                               self.conf.v3io_api_endpoint_port)
         headers = get_request_headers(self.conf.v3io_access_key)
-        schema = send_request(self.logger, url, headers, self.conf.username)
+        schema = send_request(self.logger, url, headers)
         self.logger.info('KV table schema {}'.format(schema))
         self.schema = schema
         return schema
