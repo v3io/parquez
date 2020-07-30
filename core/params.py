@@ -9,7 +9,7 @@ class Params(object):
                  , real_time_table_name="real_time_table_name"
                  , config_path='parquez.ini'
                  , project_path='~/parquez'
-                 , shell_pod_name ='~/parquez'
+                 , shell_pod_name='shell'
                  ):
         self.view_name = view_name
         self.partition_by = partition_by
@@ -28,7 +28,10 @@ class Params(object):
         self.real_time_window = context.parameters['real_time_window']
         self.historical_retention = context.parameters['historical_retention']
         self.real_time_table_name = context.parameters['real_time_table_name']
-        self.config_path = context.parameters['config_path']
-        self.project_path = context.parameters['project_path']
-        self.shell_pod_name = context.parameters['shell_pod_name']
+        if 'config_path' in context.parameters:
+            self.config_path = context.parameters['config_path']
+        if 'project_path' in context.parameters:
+            self.project_path = context.parameters['project_path']
+        if 'shell_pod_name' in context.parameters:
+            self.shell_pod_name = context.parameters['shell_pod_name']
 
