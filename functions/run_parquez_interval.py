@@ -72,7 +72,7 @@ def main(context):
     cmd =cr.create_cron_command()
     context.logger.info(cmd)
     cli = K8SClient(context.logger)
-    cli.exec_shell_cmd(cmd)
+    cli.exec_shell_cmd(cmd, params.shell_pod_name)
 
 
 if __name__ == '__main__':
