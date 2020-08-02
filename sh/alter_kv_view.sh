@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-SOURCE_PATH='/home/iguazio/parquez'
-
 if ! [ -d venv  ] ; then
         mkdir venv
         virtualenv venv
