@@ -224,9 +224,9 @@ echo "query: $clause" 2>&1 | tee -a $log_file
 
 spark_command="/spark/bin/spark-submit --class io.iguaz.v3io.spark2.tools.KVTo${compression_type} /igz/java/libs/v3io-spark2-tools_2.11.jar ${source} ${target} ${coalesce}"
 
-echo "${spark_command}"
+echo "${spark_command}" 2>&1 | tee -a "${log_file}"
 
-eval "${spark_command}" | tee -a "${log_file}"
+eval "${spark_command}" 2>&1 | tee -a "${log_file}"
 
 if [ $? -eq 0 ]; then
     echo KV to parquet finished with success 2>&1 | tee -a $log_file
@@ -235,13 +235,8 @@ else
     exit 1
 fi
 
-popd || exit 1
+popd
 
-alter_view_command="${parquez_dir}/sh/alter_kv_view.sh '${kv_table_name}' '${kv_window}'"
-
-echo "${alter_view_command}" 2>&1 | tee -a "${log_file}"
-
-eval "${alter_view_command}" 2>&1 | tee -a "${log_file}"
 
 ${parquez_dir}/sh/hive_partition.sh add $hive_schema $parquet_table_name $year $month $day $hour ${target} $partition_by
 

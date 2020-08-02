@@ -9,8 +9,11 @@ else
         source venv/bin/activate
 fi
 
+parquez_dir='parquez'
 
-echo alter_kv_view "${1}" "${2}"
+command='python ${parquez_dir}/core/alter_kv_view.py "${1}" "${2}"'
 
-python core/alter_kv_view.py "${1}" "${2}"
+echo "${command}" 2>&1
+
+eval "${command}" 2>&1
 

@@ -4,6 +4,7 @@ from core.params import Params
 from core.cron_tab import CronTab
 from kubernetes import config, client
 from kubernetes.stream import stream
+from mlrun import import_function
 
 
 def get_bytes_from_file(filename):
@@ -67,12 +68,18 @@ def main(context):
     conf = AppConf(context.logger, config_path)
     params = Params()
     params.set_params_from_context(context)
+    params_dic = params.__dict__
     context.logger.info("generating cronJob")
     cr = CronTab(context.logger, conf, params, params.project_path)
     cmd =cr.create_cron_command()
     context.logger.info(cmd)
     cli = K8SClient(context.logger)
     cli.exec_shell_cmd(cmd, params.shell_pod_name)
+    fn = import_function(url="db://parquez/create-kv-view:latest")
+    fn.spec.artifact_path = 'User/artifacts'
+    fn.spec.service_account = 'mlrun-api'    
+    fn.run(params=params_dic, artifact_path='/User/artifacts')
+
 
 
 if __name__ == '__main__':
