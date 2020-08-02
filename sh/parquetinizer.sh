@@ -222,12 +222,11 @@ fi
 echo "query: $clause" 2>&1 | tee -a $log_file
 ##################################################################################################
 
-spark_command="/spark/bin/spark-submit --driver-memory 8g --class io.iguaz.v3io.spark2.tools.KVTo${compression_type} /igz/java/libs/v3io-spark2-tools_2.11.jar ${source} ${target} ${coalesce}"
+spark_command="/spark/bin/spark-submit --class io.iguaz.v3io.spark2.tools.KVTo${compression_type} /igz/java/libs/v3io-spark2-tools_2.11.jar ${source} ${target} ${coalesce}"
 
+echo ${spark_command}
 
-eval $spark_command
-
-spark_command | tee -a $log_file
+eval ${spark_command} | tee -a $log_file
 
 if [ $? -eq 0 ]; then
     echo KV to parquet finished with success 2>&1 | tee -a $log_file
