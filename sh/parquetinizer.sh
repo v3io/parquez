@@ -257,7 +257,12 @@ parquetDeleteCommand="hdfs dfs -rm -R ${parquetToDelete}"
 
 $parquetDeleteCommand 2>&1 | tee -a $log_file
 
-${parquez_dir}/sh/hive_partition.sh drop $hive_schema $parquet_table_name $old_year $old_month $old_day $old_hour $target $partition_by  2>&1 | tee -a $log_file
+drop_partition_command="${parquez_dir}/sh/hive_partition.sh drop $hive_schema $parquet_table_name $old_year $old_month $old_day $old_hour $target $partition_by"
+
+echo "${drop_partition_command}" 2>&1 | tee -a "${log_file}"
+
+eval "${drop_partition_command}" 2>&1 | tee -a "${log_file}"
+
 
 popd
 
