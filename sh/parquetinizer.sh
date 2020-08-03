@@ -237,7 +237,7 @@ fi
 
 popd
 
-alter_view_command="${parquez_dir}/sh/alter_kv_view.sh '${kv_table_name}' '${kv_window}'"
+alter_view_command=${parquez_dir}"/sh/alter_kv_view.sh '${kv_table_name}' '${kv_window}'"
 
 echo "${alter_view_command}" 2>&1 | tee -a "${log_file}"
 
