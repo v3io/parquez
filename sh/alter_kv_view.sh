@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-
-if ! [ -d venv  ] ; then
-        mkdir venv
-        virtualenv venv
-        source venv/bin/activate
-        pip install -r config/requirements.txt
-else
-        source venv/bin/activate
-fi
+pip install requests
+#if ! [ -d venv  ] ; then
+#        mkdir venv
+#        virtualenv venv
+#        source venv/bin/activate
+#        pip install -r config/requirements.txt
+#else
+#        source venv/bin/activate
+#fi
 
 parquez_dir='parquez'
 
