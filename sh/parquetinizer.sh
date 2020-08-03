@@ -243,7 +243,11 @@ echo "${alter_view_command}" 2>&1 | tee -a "${log_file}"
 
 eval "${alter_view_command}" 2>&1 | tee -a "${log_file}"
 
-${parquez_dir}/sh/hive_partition.sh add $hive_schema $parquet_table_name $year $month $day $hour ${target} $partition_by
+add_partition_command="${parquez_dir}/sh/hive_partition.sh add $hive_schema $parquet_table_name $year $month $day $hour ${target} $partition_by"
+
+echo "${add_partition_command}" 2>&1 | tee -a "${log_file}"
+
+eval "${add_partition_command}" 2>&1 | tee -a "${log_file}"
 
 kvDeleteCommand="hdfs dfs -rm -R ${source}"
 
