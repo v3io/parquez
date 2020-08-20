@@ -36,7 +36,11 @@ class KVTable(object):
         self.conf = conf
 
     def import_table_schema(self):
-        url = get_request_url(self.conf.v3io_container, self.name, self.conf.v3io_api_endpoint_host,
+
+        # Remove https:// if supplied
+        v3io_api_endpoint_host = self.conf.v3io_api_endpoint_host.replace('https://','')
+
+        url = get_request_url(self.conf.v3io_container, self.name, v3io_api_endpoint_host,
                               self.conf.v3io_api_endpoint_port)
         headers = get_request_headers(self.conf.v3io_access_key)
         schema = send_request(self.logger, url, headers)
@@ -75,6 +79,3 @@ class KVTable(object):
         parquet_name = self.name + '_'+self.conf.compression
         self.logger.debug('parquet table name {}'.format(parquet_name))
         return parquet_name
-
-
-
