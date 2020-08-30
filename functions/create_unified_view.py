@@ -22,7 +22,7 @@ def main(context):
     conf = AppConf(context.logger, config_path)
     params = Params()
     params.set_params_from_context(context)
-    kv_table = KVTable(context.logger, conf, params.real_time_table_name)
+    kv_table = KVTable(context.logger, conf, params)
     kv_table.import_table_schema()
     schema = get_bytes_from_file(context.artifact_path + "/parquet_schema.txt")
     parquet = ParquetTable(context.logger, conf, params, schema, K8SClient(context.logger))

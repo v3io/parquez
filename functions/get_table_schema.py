@@ -12,7 +12,7 @@ def main(context):
     conf = AppConf(context.logger, config_path)
     params = Params()
     params.set_params_from_context(context)
-    kv_table = KVTable(context.logger, conf, params.real_time_table_name)
+    kv_table = KVTable(context.logger, conf, params)
     kv_table.import_table_schema()
     parquet_schema = kv_table.get_schema_fields_and_types()
     context.logger.info("logging schema")
