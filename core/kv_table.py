@@ -30,13 +30,13 @@ def send_request(logger, url, headers):
 
 class KVTable(object):
     def __init__(self, logger, conf, params):
-        self.name = params.real_time_table_name
         self.logger = logger
         self.schema = "init_schema"
+        self.params = params
         self.conf = conf
 
     def import_table_schema(self):
-        url = get_request_url(self.conf.v3io_container, self.name, self.conf.v3io_api_endpoint_host,
+        url = get_request_url(self.conf.v3io_container, self.params.real_time_table_name, self.conf.v3io_api_endpoint_host,
                               self.conf.v3io_api_endpoint_port)
         headers = get_request_headers(self.params.access_key)
         schema = send_request(self.logger, url, headers)
@@ -72,7 +72,7 @@ class KVTable(object):
         return parsed_schema
 
     def get_parquet_table_name(self):
-        parquet_name = self.name + '_'+self.conf.compression
+        parquet_name = self.params.real_time_table_name + '_'+self.conf.compression
         self.logger.debug('parquet table name {}'.format(parquet_name))
         return parquet_name
 
