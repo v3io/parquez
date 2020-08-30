@@ -20,8 +20,8 @@ class KVView(object):
         self.cursor = None
 
     def connect(self):
-        req_kw = {'auth': (self.conf.username, self.conf.v3io_access_key), 'verify': False}
-        self.cursor = presto.connect(self.uri, port=443, username=self.conf.username,
+        req_kw = {'auth': (self.params.user_name, self.params.access_key), 'verify': False}
+        self.cursor = presto.connect(self.uri, port=443, username=self.params.user_name,
                                      protocol='https', requests_kwargs=req_kw).cursor()
         self.logger.info("connected to presto")
 

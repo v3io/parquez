@@ -8,8 +8,11 @@ class Params(object):
                  , historical_retention='7d'
                  , real_time_table_name="real_time_table_name"
                  , config_path='parquez.ini'
+                 , user_name='iguazio'
+                 , access_key='access_key'
                  , project_path='~/parquez'
                  , shell_pod_name='shell'
+
                  ):
         self.view_name = view_name
         self.partition_by = partition_by
@@ -18,6 +21,8 @@ class Params(object):
         self.historical_retention = historical_retention
         self.real_time_table_name = real_time_table_name
         self.config_path = config_path
+        self.user_name = user_name
+        self.access_key = access_key
         self.project_path = project_path
         self.shell_pod_name = shell_pod_name
 
@@ -30,6 +35,8 @@ class Params(object):
         self.real_time_table_name = context.parameters['real_time_table_name']
         if 'config_path' in context.parameters:
             self.config_path = context.parameters['config_path']
+        self.user_name = context.parameters['user_name']
+        self.access_key = context.parameters['access_key']
         if 'project_path' in context.parameters:
             self.project_path = context.parameters['project_path']
         if 'shell_pod_name' in context.parameters:

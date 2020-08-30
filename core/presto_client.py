@@ -12,8 +12,8 @@ class PrestoClient(object):
         self.logger = logger
         self.partition_str = params.partition_by
         self.uri = conf.presto_uri
-        self.user_name = conf.username
-        self.access_key = conf.v3io_access_key
+        self.user_name = params.user_name
+        self.access_key = params.access_key
         self.view_name = view_name
         self.kv_view_name = kv_view.name
         self.hive_schema = conf.hive_schema
