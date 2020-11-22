@@ -1,18 +1,20 @@
 from conftest import (
     examples_path, has_secrets, here, out_path, tag_test, verify_state
 )
-from mlrun import NewTask, run_local, code_to_function
-from mlrun import NewTask, get_run_db, new_function
+from mlrun import new_task, get_run_db, new_function, run_local, code_to_function
 
 ARTIFACTS_PATH = ''
 
-base_spec = NewTask(params={'view_name': 'view_name'
-    , 'partition_by': 'h'
-    , 'partition_interval': '1h'
-    , 'real_time_window': '3h'
-    , 'historical_retention': '21h'
-    , 'real_time_table_name': 'faker'
-    , 'config_path': 'test.ini'}, out_path=out_path)
+base_spec = new_task(params={'view_name': 'view_name',
+                             'partition_by': 'h',
+                             'partition_interval': '1h',
+                             'real_time_window': '3h',
+                             'historical_retention': '21h',
+                             'real_time_table_name': 'faker',
+                             'user_name': 'avia',
+                             'access_key': '950573f3-1ff5-4b7e-892c-6255d284232c',
+                             'config_path': 'test.ini'}
+                     , out_path=out_path)
 
 
 def test_run_local_get_schema():
