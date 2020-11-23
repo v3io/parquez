@@ -1,12 +1,8 @@
 from pyhive import presto  # or import hive
 from core.params import Params
 
-STORED_AS_PARQUET_STR = " STORED AS PARQUET;"
-PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
-
 
 class PrestoClientDev(object):
-
     def __init__(self, logger, conf, params: Params):
         self.logger = logger
         self.partition_str = params.partition_by
@@ -35,10 +31,3 @@ class PrestoClientDev(object):
     def fetch_results(self):
         return self.cursor.fetchall()
 
-    # def fetch_show_columns(self):
-    #     self.connect()
-    #     presto_cursor = self.cursor
-    #
-    #     presto_cursor.execute('show columns from v3io.parquez.faker')
-    #
-    #     print(presto_cursor.fetchall())

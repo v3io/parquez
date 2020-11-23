@@ -46,6 +46,9 @@ coalesce = 6 <br />
 ### Prerequisites
 1. parquez scripts
 2. partitioned kv table 
+3. enable hive in presto service
+4. set hive.allow-drop-table=true 
+5. set hive.non-managed-table-writes-enabled=true
 
 ### Building / deploying the functions
 

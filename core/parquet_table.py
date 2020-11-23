@@ -12,7 +12,7 @@ def create_delete_external_table(logger: Logger, conf: AppConf, params: Params, 
     headers = get_request_headers(params.access_key)
     send_request(logger,
                  url,
-                 headers,request_type)
+                 headers, request_type)
 
 
 def get_external_location(conf: AppConf, params: Params):
@@ -70,9 +70,9 @@ class ParquetTable(Table):
         columns = self.get_table_schema()
         with_clause = self.create_with_clause_script()
         create_script = "CREATE TABLE hive.{}.{} {} {}".format(self.conf.hive_schema,
-                                                                self.table_name,
-                                                                columns,
-                                                                with_clause)
+                                                               self.table_name,
+                                                               columns,
+                                                               with_clause)
         return create_script
 
     def generate_partition_by_list(self):
@@ -126,13 +126,53 @@ class ParquetTable(Table):
             self.logger.error(e)
             raise
 
+    def add_partition(self, year=None, month=None, day=None, hour=None):
+        vals = ""
+        if self.partition_str == 'y':
+            vals += "['{}']".format(str(year))
+        if self.partition_str == 'm':
+            vals += "['{}','{}']".format(str(year), str(month))
+        if self.partition_str == 'd':
+            vals += "['{}','{}','{}']".format(str(year), str(month), str(day))
+        if self.partition_str == 'h':
+            vals += "['{}','{}','{}','{}']".format(str(year), str(month), str(day), str(hour))
+        command_prefix = "CALL hive.system.create_empty_partition(schema_name =>'{}'" \
+                         ",table_name =>'{}'" \
+                         ",partition_columns=>ARRAY{}" \
+                         ",partition_values =>ARRAY{})".format(self.conf.hive_schema,
+                                                               self.table_name,
+                                                               self.partition_by_list,
+                                                               vals)
+        self.presto_client.connect()
+        self.presto_client.execute_command(command_prefix)
+        self.presto_client.fetch_results()
+        self.presto_client.disconnect()
+
+    def drop_partition(self, year=None, month=None, day=None, hour=None):
+        where_cluase = ""
+        if self.partition_str == 'y':
+            where_cluase += "year = {}]".format(year)
+        if self.partition_str == 'm':
+            where_cluase += "year = {} AND month = {}".format(str(year), str(month))
+        if self.partition_str == 'd':
+            where_cluase += "year = {} AND month = {} AND day={}".format(str(year), str(month), str(day))
+        if self.partition_str == 'h':
+            where_cluase += "year = {} AND month = {} AND day={} AND hour ={}".format(year,
+                                                                                      month,
+                                                                                      day,
+                                                                                      hour)
+        command_prefix = "DELETE FROM hive.{}.{} " \
+                         "WHERE {}".format(self.conf.hive_schema,
+                                           self.table_name,
+                                           where_cluase)
+        self.presto_client.connect()
+        self.presto_client.execute_command(command_prefix)
+        self.presto_client.fetch_results()
+        self.presto_client.disconnect()
+
     def drop(self):
         try:
             self.logger.debug("generating script")
-            # parquet_command = HIVE_PREFIX
-            # parquet_command += '" DROP TABLE IF EXISTS ' + self.conf.hive_schema + '.' + self.parquet_table_name + ';"'
-            # self.logger.info(parquet_command)
-            # self.k8s_client.exec_shell_cmd(parquet_command)
         except Exception as e:
             self.logger.error(e)
             raise
