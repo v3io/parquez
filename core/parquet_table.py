@@ -2,7 +2,7 @@ from core.table import Table
 from core.params import Params
 from config.app_conf import AppConf
 from utils.logger import Logger
-from core.presto_client_dev import PrestoClientDev
+from core.presto_client import PrestoClient
 import requests
 
 
@@ -44,7 +44,7 @@ def send_request(logger, url, headers, request_type):
 
 
 class ParquetTable(Table):
-    def __init__(self, logger, conf: AppConf, params: Params, presto_client: PrestoClientDev):
+    def __init__(self, logger, conf: AppConf, params: Params, presto_client: PrestoClient):
         self.logger = logger
         self.conf = conf
         self.params = params

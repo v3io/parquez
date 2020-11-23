@@ -3,7 +3,7 @@ from core.parquet_table import ParquetTable
 from config.app_conf import AppConf
 from core.params import Params
 from core.parquet_table import create_delete_external_table
-from core.presto_client_dev import PrestoClientDev
+from core.presto_client import PrestoClient
 
 PARAMS = Params(partition_by='h',
                 real_time_table_name="faker",
@@ -17,7 +17,7 @@ def test_parquet_table_generator():
     logger = Logger()
     conf = AppConf(logger, "test.ini")
     params = PARAMS
-    presto_client = PrestoClientDev(logger, conf, params)
+    presto_client = PrestoClient(logger, conf, params)
     parquet = ParquetTable(logger, conf, params, presto_client)
     parquet.create()
     parquet.drop()
@@ -44,7 +44,7 @@ def test_add_partition():
     logger = Logger()
     conf = AppConf(logger, "test.ini")
     params = PARAMS
-    presto_client = PrestoClientDev(logger, conf, params)
+    presto_client = PrestoClient(logger, conf, params)
     parquet = ParquetTable(logger, conf, params, presto_client)
     parquet.add_partition(year=2020, month=11, day=23, hour=14)
 
@@ -53,6 +53,6 @@ def test_drop_partition():
     logger = Logger()
     conf = AppConf(logger, "test.ini")
     params = PARAMS
-    presto_client = PrestoClientDev(logger, conf, params)
+    presto_client = PrestoClient(logger, conf, params)
     parquet = ParquetTable(logger, conf, params, presto_client)
     parquet.drop_partition(year=2020, month=11, day=23, hour=14)
