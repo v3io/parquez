@@ -34,7 +34,7 @@ def test_create_table():
     logger = Logger()
     conf = AppConf(logger, "test.ini")
     params = PARAMS
-    presto_client = PrestoClientDev(logger, conf, params)
+    presto_client = PrestoClient(logger, conf, params)
     create_delete_external_table(logger, conf, params, 'DELETE')
     parquet = ParquetTable(logger, conf, params, presto_client)
     parquet.create()
