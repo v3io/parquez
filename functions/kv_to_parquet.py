@@ -1,16 +1,13 @@
-#!/usr/local/bin/python
-
-# Locate v3iod:
-from subprocess import run
-
-run(["/bin/bash", "/etc/config/v3io/v3io-spark-operator.sh"])
+from mlrun import get_or_create_ctx
+from pyspark.sql import SparkSession
+from os import path
 
 
 def generate_kv_parquet_path(container='parquez',
                              table='faker',
                              compress_type='parquet',
                              partition_by='h',
-                             real_time_window='3h'):
+                             real_time_window='0h'):
     real_time_window_delta = int(real_time_window[:-1])
     print(real_time_window_delta)
     from datetime import datetime, timezone, timedelta
@@ -28,30 +25,27 @@ def generate_kv_parquet_path(container='parquez',
     elif partition_by == 'y':
         current_date_path = (datetime.now(timezone.utc) - relativedelta(years=real_time_window_delta)).strftime(
             "year=%Y")
-    kv_path = "v3io://{}/{}/{}".format(container, table, current_date_path)
-    parquet_path = "v3io://{}/{}_{}/{}".format(container, table, compress_type, current_date_path)
-    print("kv path: {} , parquet_path : {} ".format(kv_path, parquet_path))
-    return {'kv_path': kv_path, 'parquet_path': parquet_path}
+    kv_path = "v3io://{}/{}/{}/".format(container, table, current_date_path)
+    parquet_path = "v3io://{}/{}_{}/{}/".format(container, table, compress_type, current_date_path)
+    fuse_kv_path = "/v3io/{}/{}/{}/".format(container, table, current_date_path)
+    return {'kv_path': kv_path, 'parquet_path': parquet_path, 'fuse_kv_path': fuse_kv_path}
 
 
-coalesce = 6
-# The pyspark code:
-import os
-from pyspark.sql import SparkSession
-import os.path
-from os import path
+def main(ctx):
+    paths = generate_kv_parquet_path()
+    ctx.logger.info("paths : {}".format(paths))
+    if path.isdir(paths['fuse_kv_path']):
+        coalesce = 6
+        # Initiate a Spark Session
+        spark = SparkSession.builder.appName("Spark JDBC to Databases - ipynb").getOrCreate()
+
+        df = spark.read.format('io.iguaz.v3io.spark.sql.kv').load(paths['kv_path'])
+        df.show()
+        df.repartition(coalesce).write.mode('overwrite').parquet(paths['parquet_path'])
+    else:
+        print("Directory {} Doesnt exist".format(paths['fuse_kv_path']))
 
 
-paths = generate_kv_parquet_path()
-if path.isdir(paths['kv_path']):
-    os.environ["PYSPARK_SUBMIT_ARGS"] = "--packages mysql:mysql-connector-java:5.1.39 pyspark-shell"
-    spark = SparkSession.builder.appName("Spark JDBC to Databases - ipynb").config("spark.driver.extraClassPath",
-                                                                                   "/v3io/users/admin/mysql-connector"
-                                                                                   "-java-5.1.45.jar").config(
-        "spark.executor.extraClassPath", "/v3io/users/admin/mysql-connector-java-5.1.45.jar").getOrCreate()
-
-    df = spark.read.format('io.iguaz.v3io.spark.sql.kv').load(paths['kv_path'])
-    df.show()
-    df.repartition(coalesce).write.mode('overwrite').parquet(paths['parquet_path'])
-else:
-    print("Directory {} Doesnt exist".format(paths['kv_path']))
+if __name__ == '__main__':
+    context = get_or_create_ctx('run kv to parquet')
+    main(context)
