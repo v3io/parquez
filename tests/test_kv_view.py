@@ -10,13 +10,11 @@ PARAMS = Params(partition_by='h',
                 access_key='c8595589-097a-496d-8a46-e5dc3689ee37',
                 )
 
+
 def test_kv_view():
     logger = Logger()
     conf = AppConf(logger, "test.ini")
     params = PARAMS
-    kv_table = KVTable(logger, conf , params)
-    kv_table.import_table_schema()
-    parquet_schema = kv_table.get_schema_fields_and_types()
     kv_view = KVView(logger, params, conf)
     kv_view.generate_crete_view_script()
 

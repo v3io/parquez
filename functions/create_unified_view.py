@@ -3,8 +3,7 @@ from config.app_conf import AppConf
 from core.params import Params
 from core.presto_client import PrestoClient
 from core.kv_table import KVTable
-from core.parquet_table import ParquetTable
-from core.kv_view import KVView
+from core.unified_view import UnifiedView
 
 
 def get_bytes_from_file(filename):
@@ -21,17 +20,14 @@ def main(context):
     conf = AppConf(context.logger, config_path)
     params = Params()
     params.set_params_from_context(context)
-    p_client = PrestoClient(context.logger, conf, params)
     kv_table = KVTable(context.logger, conf, params)
     kv_table.import_table_schema()
-    schema = get_bytes_from_file(context.artifact_path + "/parquet_schema.txt")
-    parquet = ParquetTable(context.logger, conf, params, p_client)
-    context.logger.info("generating presto view")
-    kv_view = KVView(context.logger, params, conf)
-    #prest = PrestoClient(context.logger, conf, params, parquet, kv_view, kv_table)
-    prest.generate_unified_view()
+    schema = kv_table.get_schema_fields()
+    p_client = PrestoClient(context.logger, conf, params)
+    uv = UnifiedView(context.logger, params, conf, schema, p_client)
+    uv.execute_script_in_presto()
 
 
 if __name__ == '__main__':
-    context = get_or_create_ctx('generating presto view')
-    main(context)
+    ctx = get_or_create_ctx('generating presto view')
+    main(ctx)
