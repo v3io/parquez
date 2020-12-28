@@ -4,7 +4,6 @@ from config.app_conf import AppConf
 from core.kv_table import KVTable
 from core.kv_view import KVView
 from core.presto_client import PrestoClient
-from core.k8s_client import K8SClient
 from core.params import Params
 
 

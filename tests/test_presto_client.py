@@ -5,8 +5,6 @@ from core.parquet_table import ParquetTable
 from core.kv_table import KVTable
 from core.kv_view import KVView
 from core.presto_client import PrestoClient
-from core.k8s_client import K8SClient
-
 
 KVTABLE_NAME = "faker"
 # test_kv_view.py
