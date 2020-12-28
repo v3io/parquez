@@ -2,17 +2,22 @@ from utils.logger import Logger
 from config.app_conf import AppConf
 from core.kv_table import KVTable
 from core.kv_view import KVView
+from core.params import Params
 
-KVTABLE_NAME = "faker"
-# test_kv_view.py
-
+PARAMS = Params(partition_by='h',
+                real_time_table_name="faker",
+                user_name='avia',
+                access_key='c8595589-097a-496d-8a46-e5dc3689ee37',
+                )
 
 def test_kv_view():
     logger = Logger()
     conf = AppConf(logger, "test.ini")
-    kv_table = KVTable(logger, conf, KVTABLE_NAME)
+    params = PARAMS
+    kv_table = KVTable(logger, conf , params)
     kv_table.import_table_schema()
-    kv_view = KVView(logger, '1d', conf, kv_table)
+    parquet_schema = kv_table.get_schema_fields_and_types()
+    kv_view = KVView(logger, params, conf)
     kv_view.generate_crete_view_script()
-    kv_view.drop_view()
+
 

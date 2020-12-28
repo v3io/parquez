@@ -3,14 +3,6 @@ from config.app_conf import AppConf
 from core.params import Params
 from core.kv_view import KVView
 
-CONFIG_PATH = '/User/parquez/config/parquez.ini'
-REAL_TIME_TABLE_NAME = 'faker'
-
-def get_bytes_from_file(filename):
-    with open(filename, "r") as f:
-        output = f.read()
-    return output
-
 
 def main(context):
     context.logger.info("loading configuration")
@@ -26,5 +18,5 @@ def main(context):
 
 
 if __name__ == '__main__':
-    context = get_or_create_ctx('create-parquet-table')
-    main(context)
+    ctx = get_or_create_ctx('create-parquet-table')
+    main(ctx)

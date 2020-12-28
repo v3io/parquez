@@ -81,7 +81,7 @@ class KVView(object):
             prefix = self.create_view_prefix()
             clause = self.generate_where_clause()
             script = prefix + clause
-            self.logger.debug("create kv view script {}".format(script))
+            self.logger.info("create kv view script {}".format(script))
             self.create_view(script)
         except Exception as e:
             self.logger.error(e)
