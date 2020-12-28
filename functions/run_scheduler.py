@@ -30,7 +30,7 @@ def main(context):
     params_dic = params.__dict__
     context.logger.info("generating cronJob")
     cron_str = create_cron_string(params.partition_interval)
-    fn = import_function(url="db://parquez/run-parquez-interval:latest")
+    fn = import_function(url="db://parquez/run_parquez_interval:latest")
     fn.spec.artifact_path = 'User/artifacts'
     fn.spec.service_account = 'mlrun-api'    
     fn.run(params=params_dic, artifact_path='/User/artifacts', schedule=cron_str)
