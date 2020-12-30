@@ -49,3 +49,16 @@ class UnifiedView(object):
         self.logger.info(self.presto_client.fetch_results())
         self.presto_client.disconnect()
 
+    def drop_view(self):
+        try:
+            self.logger.info("dropping unified view ")
+            hive_prefix = "hive." + self.conf.hive_schema + "."
+            command = "DROP VIEW IF EXISTS " + hive_prefix + self.params.view_name
+            self.presto_client.connect()
+            self.presto_client.execute_command(command)
+            self.logger.info(self.presto_client.fetch_results())
+            self.presto_client.disconnect()
+        except Exception as e:
+            self.logger.error(e)
+            raise
+

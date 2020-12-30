@@ -5,6 +5,7 @@ from core.kv_table import KVTable
 from core.kv_view import KVView
 from core.presto_client import PrestoClient
 from core.params import Params
+from core.unified_view import UnifiedView
 
 
 def get_bytes_from_file(filename):
@@ -21,27 +22,26 @@ def main(context):
     conf = AppConf(context.logger, config_path)
     params = Params()
     params.set_params_from_context(context)
+    presto_client = PrestoClient(context.logger, conf, params)
 
     context.logger.info("validating kv table")
-    kv_table = KVTable(context.logger, conf, params.real_time_table_name)
-
-    context.logger.info("generating parquet table")
-    schema = get_bytes_from_file(context.artifact_path+"/parquet_schema.txt")
-    parquet = ParquetTable(context.logger, conf, params, schema, K8SClient(context.logger))
+    kv_table = KVTable(context.logger, conf, params)
+    kv_table.import_table_schema()
+    schema = kv_table.get_schema_fields_and_types()
+    parquet = ParquetTable(context.logger, conf, params, presto_client)
     parquet.drop()
 
     context.logger.info("generating view over kv")
     kv_view = KVView(context.logger, params, conf)
     kv_view.drop_view()
 
-    context.logger.info("generating presto view")
-    prest = PrestoClient(context.logger, conf, params, parquet, kv_view, kv_table)
-    prest.drop_unified_view()
+    unified_view = UnifiedView(context.logger, params, conf, schema, presto_client)
+    unified_view.drop_view()
 
 
 if __name__ == '__main__':
-    context = get_or_create_ctx('parquez')
-    main(context)
+    ctx = get_or_create_ctx('clean_parquez')
+    main(ctx)
 
 
 
