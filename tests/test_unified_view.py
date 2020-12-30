@@ -5,11 +5,8 @@ from core.unified_view import UnifiedView
 from core.params import Params
 from core.presto_client import PrestoClient
 
-PARAMS = Params(partition_by='h',
-                real_time_table_name="faker",
-                user_name='avia',
-                access_key='c8595589-097a-496d-8a46-e5dc3689ee37',
-                )
+PARAMS = Params(partition_by='h', real_time_table_name="faker", user_name='avia',
+                access_key='c8595589-097a-496d-8a46-e5dc3689ee37')
 
 
 def test_unified_view():

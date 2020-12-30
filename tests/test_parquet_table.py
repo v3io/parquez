@@ -5,11 +5,8 @@ from core.params import Params
 from core.parquet_table import create_delete_external_table
 from core.presto_client import PrestoClient
 
-PARAMS = Params(partition_by='h',
-                real_time_table_name="faker",
-                user_name='avia',
-                access_key='950573f3-1ff5-4b7e-892c-6255d284232c',
-                )
+PARAMS = Params(partition_by='h', real_time_table_name="faker", user_name='avia',
+                access_key='950573f3-1ff5-4b7e-892c-6255d284232c')
 
 
 # parquet_table_generator.py
