@@ -1,13 +1,13 @@
-from mlrun import get_or_create_ctx
-from pyspark.sql import SparkSession
-from os import path
+from mlrun import get_or_create_ctx, import_function
+from core.params import Params
+from config.app_conf import AppConf
 
 
 def generate_kv_parquet_path(container='parquez',
                              table='faker',
                              compress_type='parquet',
                              partition_by='h',
-                             real_time_window='0h'):
+                             real_time_window='3h'):
     real_time_window_delta = int(real_time_window[:-1])
     print(real_time_window_delta)
     from datetime import datetime, timezone, timedelta
@@ -31,24 +31,30 @@ def generate_kv_parquet_path(container='parquez',
     return {'kv_path': kv_path, 'parquet_path': parquet_path, 'fuse_kv_path': fuse_kv_path}
 
 
-def main(ctx):
-    fuse_path = context.parameters['fuse_path']
-    kv_path = context.parameters['kv_path']
-    parquet_path = context.parameters['parquet_path']
-    #paths = generate_kv_parquet_path()
-    ctx.logger.info("paths : {} {} {}".format(fuse_path, kv_path , parquet_path))
-    if path.isdir(fuse_path):
-        coalesce = 6
-        # Initiate a Spark Session
-        spark = SparkSession.builder.appName("Spark JDBC to Databases - ipynb").getOrCreate()
-
-        df = spark.read.format('io.iguaz.v3io.spark.sql.kv').load(kv_path)
-        df.show()
-        df.repartition(coalesce).write.mode('overwrite').parquet(parquet_path)
-    else:
-        print("Directory {} Doesnt exist".format(fuse_path))
+def main(context):
+    params = Params()
+    params.set_params_from_context(context)
+    #params_dic = params.__dict__
+    context.logger.info("loading configuration")
+    p_config_path = context.parameters['config_path']
+    if p_config_path:
+        config_path = p_config_path
+    conf = AppConf(context.logger, config_path)
+    path = generate_kv_parquet_path(conf.v3io_container,
+                                    params.real_time_table_name,
+                                    conf.compression,
+                                    params.partition_by,
+                                    params.real_time_window)
+    fn = import_function(url="db://parquez/kv_to_parquet:latest")
+    fn.spec.artifact_path = 'User/artifacts'
+    fn.spec.service_account = 'mlrun-api'
+    fn.run(params={'kv_path': path['kv_path'], 'fuse_kv_path': path['fuse_kv_path']}, artifact_path='/User/artifacts')
+    fn = import_function(url="db://parquez/delete_kv_partition:latest")
+    fn.spec.artifact_path = 'User/artifacts'
+    fn.spec.service_account = 'mlrun-api'
+    fn.run(params={'parquet_path': path['parquet_path']}, artifact_path='/User/artifacts')
 
 
 if __name__ == '__main__':
-    context = get_or_create_ctx('run kv to parquet')
-    main(context)
+    ctx = get_or_create_ctx('run kv to parquet')
+    main(ctx)
