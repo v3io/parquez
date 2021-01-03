@@ -58,10 +58,10 @@ def main(context):
     func_create_kv_view.spec.service_account = 'mlrun-api'
     func_create_kv_view.run(params=params_dict, artifact_path='/User/artifacts')
 
-    func_create_kv_view = import_function(url="db://parquez/parquet_add_partition:latest")
-    func_create_kv_view.spec.artifact_path = 'User/artifacts'
-    func_create_kv_view.spec.service_account = 'mlrun-api'
-    func_create_kv_view.run(params=params_dict, artifact_path='/User/artifacts')
+    func_parquet_add_partition = import_function(url="db://parquez/parquet_add_partition:latest")
+    func_parquet_add_partition.spec.artifact_path = 'User/artifacts'
+    func_parquet_add_partition.spec.service_account = 'mlrun-api'
+    func_parquet_add_partition.run(params=params_dict, artifact_path='/User/artifacts')
 
     func_delete_kv_partition = import_function(url="db://parquez/delete_kv_partition:latest")
     func_delete_kv_partition.spec.artifact_path = 'User/artifacts'
