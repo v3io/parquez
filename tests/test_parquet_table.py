@@ -53,3 +53,12 @@ def test_drop_partition():
     presto_client = PrestoClient(logger, conf, params)
     parquet = ParquetTable(logger, conf, params, presto_client)
     parquet.drop_partition(year=2020, month=11, day=23, hour=14)
+
+
+def test_split_path():
+    logger = Logger()
+    conf = AppConf(logger, "test.ini")
+    params = PARAMS
+    presto_client = PrestoClient(logger, conf, params)
+    parquet = ParquetTable(logger, conf, params, presto_client)
+    parquet.split_parquet_path_to_values('v3io://parquez/faker_Parquet/year=2021/month=01/day=03/hour=01/')

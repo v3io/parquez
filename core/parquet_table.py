@@ -56,6 +56,24 @@ class ParquetTable(Table):
         self.compression = conf.compression
         self.table_name = "{}_{}".format(params.real_time_table_name, conf.compression)
 
+    def split_parquet_path_to_values(self, path:str):
+        split_values = path.split('/')
+        ret_dict = {}
+        for val in split_values:
+            if val.startswith('year='):
+                split_val = val.split('=')
+                ret_dict['year'] = split_val[1]
+            if val.startswith('month='):
+                split_val = val.split('=')
+                ret_dict['month'] = split_val[1]
+            if val.startswith('day='):
+                split_val = val.split('=')
+                ret_dict['day'] = split_val[1]
+            if val.startswith('hour='):
+                split_val = val.split('=')
+                ret_dict['hour'] = split_val[1]
+        return ret_dict
+
     def create_with_clause_script(self):
         external_location = "'v3io://{}/{}/'".format(self.conf.v3io_container, self.table_name)
         suffix = "WITH (" \
@@ -169,6 +187,13 @@ class ParquetTable(Table):
         self.presto_client.execute_command(command_prefix)
         self.presto_client.fetch_results()
         self.presto_client.disconnect()
+
+    def add_partition_from_path(self, path):
+        path_dict = self.split_parquet_path_to_values(path)
+        self.add_partition(year=path_dict['year'],
+                           month=path_dict['month'],
+                           day=path_dict['day'],
+                           hour=path_dict['hour'])
 
     def drop(self):
         try:
