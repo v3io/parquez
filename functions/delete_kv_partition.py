@@ -1,7 +1,7 @@
 from mlrun import get_or_create_ctx, new_function
 
-
-def main(context, partition):
+def main(context):
+    partition = context.parameters['kv_path']
     context.logger.info("deleting partition {}".format(partition))
     sj = new_function(kind='spark',
                       command='/igz/java/libs/v3io-spark2-tools_2.11-546107605231899641401.jar',
@@ -21,6 +21,5 @@ def main(context, partition):
 
 if __name__ == '__main__':
     # kv_partition = generate_kv_parquet_path()
-    ctx = get_or_create_ctx('delete_partition')
-    kv_partition = ctx.get_param("kv_path")
-    main(ctx, kv_partition['kv_path'])
+    ctx = get_or_create_ctx('delete_partition')    
+    main(ctx)

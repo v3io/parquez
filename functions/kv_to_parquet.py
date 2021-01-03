@@ -2,37 +2,8 @@ from mlrun import get_or_create_ctx
 from pyspark.sql import SparkSession
 from os import path
 
-
-def generate_kv_parquet_path(container='parquez',
-                             table='faker',
-                             compress_type='parquet',
-                             partition_by='h',
-                             real_time_window='0h'):
-    real_time_window_delta = int(real_time_window[:-1])
-    print(real_time_window_delta)
-    from datetime import datetime, timezone, timedelta
-    from dateutil.relativedelta import relativedelta
-    current_date_path = None
-    if partition_by == 'h':
-        current_date_path = (datetime.now(timezone.utc) - timedelta(hours=real_time_window_delta)).strftime(
-            "year=%Y/month=%m/day=%d/hour=%H")
-    elif partition_by == 'd':
-        current_date_path = (datetime.now(timezone.utc) - timedelta(days=real_time_window_delta)).strftime(
-            "year=%Y/month=%m/day=%d")
-    elif partition_by == 'm':
-        current_date_path = (datetime.now(timezone.utc) - relativedelta(months=real_time_window_delta)).strftime(
-            "year=%Y/month=%m")
-    elif partition_by == 'y':
-        current_date_path = (datetime.now(timezone.utc) - relativedelta(years=real_time_window_delta)).strftime(
-            "year=%Y")
-    kv_path = "v3io://{}/{}/{}/".format(container, table, current_date_path)
-    parquet_path = "v3io://{}/{}_{}/{}/".format(container, table, compress_type, current_date_path)
-    fuse_kv_path = "/v3io/{}/{}/{}/".format(container, table, current_date_path)
-    return {'kv_path': kv_path, 'parquet_path': parquet_path, 'fuse_kv_path': fuse_kv_path}
-
-
 def main(ctx):
-    fuse_path = context.parameters['fuse_path']
+    fuse_path = context.parameters['fuse_kv_path']
     kv_path = context.parameters['kv_path']
     parquet_path = context.parameters['parquet_path']
     #paths = generate_kv_parquet_path()

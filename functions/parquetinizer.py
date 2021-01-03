@@ -46,14 +46,14 @@ def main(context):
                                     params.partition_by,
                                     params.real_time_window)
     context.logger.info("path {}".format(path))
-    fn = import_function(url="db://parquez/kv_to_parquet:latest")
-    fn.spec.artifact_path = 'User/artifacts'
-    fn.spec.service_account = 'mlrun-api'
-    fn.run(params={'kv_path': path['kv_path'], 'fuse_kv_path': path['fuse_kv_path']}, artifact_path='/User/artifacts')
-    fn = import_function(url="db://parquez/delete_kv_partition:latest")
-    fn.spec.artifact_path = 'User/artifacts'
-    fn.spec.service_account = 'mlrun-api'
-    fn.run(params={'parquet_path': path['parquet_path']}, artifact_path='/User/artifacts')
+    func_kv_to_parquet = import_function(url="db://parquez/kv_to_parquet:latest")
+    func_kv_to_parquet.spec.artifact_path = 'User/artifacts'
+    func_kv_to_parquet.spec.service_account = 'mlrun-api'
+    func_kv_to_parquet.run(params=path, artifact_path='/User/artifacts')
+    func_delete_kv_partition = import_function(url="db://parquez/delete_kv_partition:latest")
+    func_delete_kv_partition.spec.artifact_path = 'User/artifacts'
+    func_delete_kv_partition.spec.service_account = 'mlrun-api'
+    func_delete_kv_partition.run(params=path, artifact_path='/User/artifacts')
 
 
 if __name__ == '__main__':
