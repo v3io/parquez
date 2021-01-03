@@ -34,7 +34,7 @@ def generate_kv_parquet_path(container='parquez',
 def main(context):
     params = Params()
     params.set_params_from_context(context)
-    #params_dic = params.__dict__
+    context.logger.info("Params list {}".format(params))
     context.logger.info("loading configuration")
     p_config_path = context.parameters['config_path']
     if p_config_path:
@@ -45,6 +45,7 @@ def main(context):
                                     conf.compression,
                                     params.partition_by,
                                     params.real_time_window)
+    context.logger.info("path {}".format(path))
     fn = import_function(url="db://parquez/kv_to_parquet:latest")
     fn.spec.artifact_path = 'User/artifacts'
     fn.spec.service_account = 'mlrun-api'
