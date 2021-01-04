@@ -18,5 +18,5 @@ def main(context):
 
 
 if __name__ == '__main__':
-    ctx = get_or_create_ctx('create-parquet-table')
+    ctx = get_or_create_ctx('create-kv-view')
     main(ctx)
