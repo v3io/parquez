@@ -5,7 +5,7 @@ def main(context):
     context.logger.info("deleting partition {}".format(partition))
     sj = new_function(kind='spark',
                       command='/igz/java/libs/v3io-spark2-tools_2.11-546107605231899641401.jar',
-                      name='delete_kv_partition')
+                      name='spark_delete_kv_partition')
     sj.with_driver_limits(cpu="1300m")
     sj.with_driver_requests(cpu=1, mem="512m")
     sj.with_executor_limits(cpu="1400m")
@@ -21,5 +21,5 @@ def main(context):
 
 if __name__ == '__main__':
     # kv_partition = generate_kv_parquet_path()
-    ctx = get_or_create_ctx('delete_partition')    
+    ctx = get_or_create_ctx('spark_delete_kv_partition')    
     main(ctx)
