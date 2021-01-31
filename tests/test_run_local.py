@@ -12,7 +12,7 @@ base_spec = new_task(params={'view_name': 'view_name',
                              'historical_retention': '21h',
                              'real_time_table_name': 'faker',
                              'user_name': 'avia',
-                             'access_key': '2992c456-f293-42e4-9915-622bbab9bcd6',
+                             'access_key': '051b75cc-019b-49da-83cc-c17495ed6d99',
                              'config_path': 'test.ini'}
                      , out_path=out_path)
 
