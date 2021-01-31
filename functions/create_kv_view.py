@@ -2,6 +2,7 @@ from mlrun import get_or_create_ctx
 from config.app_conf import AppConf
 from core.params import Params
 from core.kv_view import KVView
+from core.presto_client import PrestoClient
 
 
 def main(context):
@@ -13,7 +14,8 @@ def main(context):
     params = Params()
     params.set_params_from_context(context)
     context.logger.info("generating view over kv")
-    kv_view = KVView(context.logger, params, conf)
+    p_client = PrestoClient(context.logger, conf, params)
+    kv_view = KVView(context.logger, params, conf, p_client)
     kv_view.generate_crete_view_script()
 
 
