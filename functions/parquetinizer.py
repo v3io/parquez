@@ -50,6 +50,10 @@ def main(context):
 
     project_name = params.project_name
 
+    unified_params = {**params_dict, **path}
+
+    context.logger.info("unified params {}".format(unified_params))
+
     kv_to_parquet_url = "db://{}/kv-to-parquet:latest".format(project_name)
     func_kv_to_parquet = import_function(url=kv_to_parquet_url)
     func_kv_to_parquet.spec.artifact_path = 'User/artifacts'
@@ -61,8 +65,6 @@ def main(context):
     func_create_kv_view.spec.artifact_path = 'User/artifacts'
     func_create_kv_view.spec.service_account = 'mlrun-api'
     func_create_kv_view.run(params=params_dict, artifact_path='/User/artifacts')
-
-    unified_params = {**params_dict, **path}
 
     parquet_add_partition_url = "db://{}/parquet-add-partition:latest".format(project_name)
     func_parquet_add_partition = import_function(url=parquet_add_partition_url)
