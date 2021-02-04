@@ -36,5 +36,5 @@ class Params(object):
             self.config_path = context.parameters['config_path']
         self.user_name = context.parameters['user_name']
         self.access_key = context.parameters['access_key']
-        if 'project_path' in context.parameters:
+        if 'project_name' in context.parameters:
             self.project_name = context.parameters['project_name']
