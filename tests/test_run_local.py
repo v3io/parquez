@@ -13,7 +13,8 @@ base_spec = new_task(params={'view_name': 'view_name',
                              'real_time_table_name': 'faker',
                              'user_name': 'avia',
                              'access_key': '051b75cc-019b-49da-83cc-c17495ed6d99',
-                             'config_path': 'test.ini'}
+                             'config_path': 'test.ini',
+                             'project_name': 'project'}
                      , out_path=out_path)
 
 
@@ -56,4 +57,10 @@ def test_run_scheduler():
 def test_clean_parquez():
     spec = tag_test(base_spec, 'test_clean_parquez')
     result = run_local(spec, command='../functions/clean_parquez.py', workdir='./', artifact_path='./artifacts')
+    verify_state(result)
+
+
+def test_parquetinizer():
+    spec = tag_test(base_spec, 'test_parquetinizer')
+    result = run_local(spec, command='../functions/parquetinizer.py', workdir='./', artifact_path='./artifacts')
     verify_state(result)

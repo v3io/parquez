@@ -49,7 +49,7 @@ def main(context):
     context.logger.info("path {}".format(path))
 
     project_name = params.project_name
-    kv_to_parquet_url = "db://{}/kv_to_parquet:latest".format(project_name)
+    kv_to_parquet_url = "db://{}/kv-to-parquet:latest".format(project_name)
     func_kv_to_parquet = import_function(url=kv_to_parquet_url)
     func_kv_to_parquet.spec.artifact_path = 'User/artifacts'
     func_kv_to_parquet.spec.service_account = 'mlrun-api'
