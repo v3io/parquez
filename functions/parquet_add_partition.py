@@ -12,13 +12,14 @@ def get_bytes_from_file(filename):
 
 
 def main(context):
-    context.logger.info("loading configuration")
+    context.logger.info("starting parquet add partition job")
     p_config_path = context.parameters['config_path']
     if p_config_path:
         config_path = p_config_path
     conf = AppConf(context.logger, config_path)
     params = Params()
     params.set_params_from_context(context)
+    context.logger.info(params.__dict__)
     parquet_path = context.parameters['parquet_path']
     context.logger.info("generating parquet table")
     p_client = PrestoClient(context.logger, conf, params)
