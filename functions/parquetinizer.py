@@ -48,22 +48,27 @@ def main(context):
                                     params.real_time_window)
     context.logger.info("path {}".format(path))
 
-    func_kv_to_parquet = import_function(url="db://parquez/kv_to_parquet:latest")
+    project_name = params.project_name
+    kv_to_parquet_url = "db://{}/kv_to_parquet:latest".format(project_name)
+    func_kv_to_parquet = import_function(url=kv_to_parquet_url)
     func_kv_to_parquet.spec.artifact_path = 'User/artifacts'
     func_kv_to_parquet.spec.service_account = 'mlrun-api'
     func_kv_to_parquet.run(params=path, artifact_path='/User/artifacts')
 
-    func_create_kv_view = import_function(url="db://parquez/create-kv-view:latest")
+    create_kv_view_url = "db://{}/create-kv-view:latest".format(project_name)
+    func_create_kv_view = import_function(url=create_kv_view_url)
     func_create_kv_view.spec.artifact_path = 'User/artifacts'
     func_create_kv_view.spec.service_account = 'mlrun-api'
     func_create_kv_view.run(params=params_dict, artifact_path='/User/artifacts')
 
-    func_parquet_add_partition = import_function(url="db://parquez/parquet-add-partition:latest")
+    parquet_add_partition_url = "db://{}/parquet-add-partition:latest".format(project_name)
+    func_parquet_add_partition = import_function(url=parquet_add_partition_url)
     func_parquet_add_partition.spec.artifact_path = 'User/artifacts'
     func_parquet_add_partition.spec.service_account = 'mlrun-api'
     func_parquet_add_partition.run(params=params_dict, artifact_path='/User/artifacts')
 
-    func_delete_kv_partition = import_function(url="db://parquez/delete-kv-partition:latest")
+    delete_kv_partition_url = "db://{}/delete-kv-partition_url:latest".format(project_name)
+    func_delete_kv_partition = import_function(url=delete_kv_partition_url)
     func_delete_kv_partition.spec.artifact_path = 'User/artifacts'
     func_delete_kv_partition.spec.service_account = 'mlrun-api'
     func_delete_kv_partition.run(params=path, artifact_path='/User/artifacts')
