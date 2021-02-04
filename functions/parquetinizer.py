@@ -49,6 +49,7 @@ def main(context):
     context.logger.info("path {}".format(path))
 
     project_name = params.project_name
+
     kv_to_parquet_url = "db://{}/kv-to-parquet:latest".format(project_name)
     func_kv_to_parquet = import_function(url=kv_to_parquet_url)
     func_kv_to_parquet.spec.artifact_path = 'User/artifacts'
@@ -61,11 +62,13 @@ def main(context):
     func_create_kv_view.spec.service_account = 'mlrun-api'
     func_create_kv_view.run(params=params_dict, artifact_path='/User/artifacts')
 
+    unified_params = {**params_dict, **path}
+
     parquet_add_partition_url = "db://{}/parquet-add-partition:latest".format(project_name)
     func_parquet_add_partition = import_function(url=parquet_add_partition_url)
     func_parquet_add_partition.spec.artifact_path = 'User/artifacts'
     func_parquet_add_partition.spec.service_account = 'mlrun-api'
-    func_parquet_add_partition.run(params=params_dict, artifact_path='/User/artifacts')
+    func_parquet_add_partition.run(params=unified_params, artifact_path='/User/artifacts')
 
     delete_kv_partition_url = "db://{}/delete-kv-partition_url:latest".format(project_name)
     func_delete_kv_partition = import_function(url=delete_kv_partition_url)
