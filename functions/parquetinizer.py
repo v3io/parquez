@@ -35,7 +35,7 @@ def main(context):
     params = Params()
     params.set_params_from_context(context)
     params_dict = params.__dict__
-    context.logger.info("Params list {}".format(params))
+    context.logger.info("Params list {}".format(params_dict))
     context.logger.info("loading configuration")
     p_config_path = context.parameters['config_path']
     if p_config_path:
