@@ -72,7 +72,7 @@ def main(context):
     func_parquet_add_partition.spec.service_account = 'mlrun-api'
     func_parquet_add_partition.run(params=unified_params, artifact_path='/User/artifacts')
 
-    delete_kv_partition_url = "db://{}/delete-kv-partition_url:latest".format(project_name)
+    delete_kv_partition_url = "db://{}/delete-kv-partition:latest".format(project_name)
     func_delete_kv_partition = import_function(url=delete_kv_partition_url)
     func_delete_kv_partition.spec.artifact_path = 'User/artifacts'
     func_delete_kv_partition.spec.service_account = 'mlrun-api'
