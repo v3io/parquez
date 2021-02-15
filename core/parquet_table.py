@@ -197,7 +197,11 @@ class ParquetTable(Table):
 
     def drop(self):
         try:
-            self.logger.debug("generating script")
+            command = "DROP TABLE IF EXISTS hive.{}.{}".format(self.conf.hive_schema, self.parquet_table_name)
+            self.presto_client.connect()
+            self.presto_client.execute_command(command)
+            self.presto_client.fetch_results()
+            self.presto_client.disconnect()
         except Exception as e:
             self.logger.error(e)
             raise

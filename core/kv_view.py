@@ -84,10 +84,10 @@ class KVView(object):
             self.logger.info("dropping kv view ")
             hive_prefix = "hive." + self.conf.hive_schema + "."
             command = "DROP VIEW IF EXISTS " + hive_prefix + self.params.real_time_table_name + "_view"
-            self.connect()
-            self.execute_command(command)
-            self.logger.info(self.cursor.fetchall())
-            self.disconnect()
+            self.presto_client.connect()
+            self.presto_client.execute_command(command)
+            self.presto_client.fetch_results()
+            self.presto_client.disconnect()
         except Exception as e:
             self.logger.error(e)
             raise

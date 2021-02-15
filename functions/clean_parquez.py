@@ -32,7 +32,7 @@ def main(context):
     parquet.drop()
 
     context.logger.info("generating view over kv")
-    kv_view = KVView(context.logger, params, conf)
+    kv_view = KVView(context.logger, params, conf, presto_client)
     kv_view.drop_view()
 
     unified_view = UnifiedView(context.logger, params, conf, schema, presto_client)
