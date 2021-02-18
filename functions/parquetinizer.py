@@ -10,6 +10,8 @@ def generate_kv_parquet_path(container='parquez',
                              real_time_window='3h',
                              historical_retention='24h'):
     real_time_window_delta = int(real_time_window[:-1])
+    historical_retention_delta = int(historical_retention[:-1])
+
     print(real_time_window_delta)
     from datetime import datetime, timezone, timedelta
     from dateutil.relativedelta import relativedelta
@@ -17,22 +19,22 @@ def generate_kv_parquet_path(container='parquez',
     if partition_by == 'h':
         current_date_path = (datetime.now(timezone.utc) - timedelta(hours=real_time_window_delta)).strftime(
             "year=%Y/month=%m/day=%d/hour=%H")
-        historical_date_path = (datetime.now(timezone.utc) - timedelta(hours=historical_retention)).strftime(
+        historical_date_path = (datetime.now(timezone.utc) - timedelta(hours=historical_retention_delta)).strftime(
             "year=%Y/month=%m/day=%d/hour=%H")
     elif partition_by == 'd':
         current_date_path = (datetime.now(timezone.utc) - timedelta(days=real_time_window_delta)).strftime(
             "year=%Y/month=%m/day=%d")
-        historical_date_path = (datetime.now(timezone.utc) - timedelta(days=historical_retention)).strftime(
+        historical_date_path = (datetime.now(timezone.utc) - timedelta(days=historical_retention_delta)).strftime(
             "year=%Y/month=%m/day=%d")
     elif partition_by == 'm':
         current_date_path = (datetime.now(timezone.utc) - relativedelta(months=real_time_window_delta)).strftime(
             "year=%Y/month=%m")
-        historical_date_path = (datetime.now(timezone.utc) - relativedelta(months=historical_retention)).strftime(
+        historical_date_path = (datetime.now(timezone.utc) - relativedelta(months=historical_retention_delta)).strftime(
             "year=%Y/month=%m")
     elif partition_by == 'y':
         current_date_path = (datetime.now(timezone.utc) - relativedelta(years=real_time_window_delta)).strftime(
             "year=%Y")
-        historical_date_path = (datetime.now(timezone.utc) - relativedelta(years=historical_retention)).strftime(
+        historical_date_path = (datetime.now(timezone.utc) - relativedelta(years=historical_retention_delta)).strftime(
             "year=%Y")
     kv_path = "v3io://{}/{}/{}/".format(container, table, current_date_path)
     parquet_path = "v3io://{}/{}_{}/{}/".format(container, table, compress_type, current_date_path)
@@ -99,10 +101,10 @@ def main(context):
     func_delete_kv_partition.run(params=path, artifact_path='/User/artifacts')
 
     delete_historical_retention_url = "db://{}/delete-historical-retention:latest".format(project_name)
-    func_delete_kv_partition = import_function(url=delete_historical_retention_url)
-    func_delete_kv_partition.spec.artifact_path = 'User/artifacts'
-    func_delete_kv_partition.spec.service_account = 'mlrun-api'
-    func_delete_kv_partition.run(params=path, artifact_path='/User/artifacts')
+    func_delete_historical_retention = import_function(url=delete_historical_retention_url)
+    func_delete_historical_retention.spec.artifact_path = 'User/artifacts'
+    func_delete_historical_retention.spec.service_account = 'mlrun-api'
+    func_delete_historical_retention.run(params=path, artifact_path='/User/artifacts')
 
 
 if __name__ == '__main__':
