@@ -2,8 +2,11 @@ from core.table import Table
 from core.params import Params
 from config.app_conf import AppConf
 from utils.logger import Logger
+from utils.utils import Utils
 from core.presto_client import PrestoClient
 import requests
+import os.path
+from os import path
 
 
 # TODO: Add verification that hive table created (handle Trying to send on a closed client exception
@@ -56,7 +59,7 @@ class ParquetTable(Table):
         self.compression = conf.compression
         self.table_name = "{}_{}".format(params.real_time_table_name, conf.compression)
 
-    def split_parquet_path_to_values(self, path:str):
+    def split_parquet_path_to_values(self, path: str):
         split_values = path.split('/')
         ret_dict = {}
         for val in split_values:
@@ -167,33 +170,43 @@ class ParquetTable(Table):
         self.presto_client.disconnect()
 
     def drop_partition(self, year=None, month=None, day=None, hour=None):
-        where_cluase = ""
+        where_clause = ""
         if self.partition_str == 'y':
-            where_cluase += "year = {}]".format(year)
+            where_clause += "year = {}]".format(year)
         if self.partition_str == 'm':
-            where_cluase += "year = {} AND month = {}".format(str(year), str(month))
+            where_clause += "year = {} AND month = {}".format(str(year), str(month))
         if self.partition_str == 'd':
-            where_cluase += "year = {} AND month = {} AND day={}".format(str(year), str(month), str(day))
+            where_clause += "year = {} AND month = {} AND day={}".format(str(year), str(month), str(day))
         if self.partition_str == 'h':
-            where_cluase += "year = {} AND month = {} AND day={} AND hour ={}".format(year,
+            where_clause += "year = {} AND month = {} AND day={} AND hour ={}".format(year,
                                                                                       month,
                                                                                       day,
                                                                                       hour)
         command_prefix = "DELETE FROM hive.{}.{} " \
                          "WHERE {}".format(self.conf.hive_schema,
                                            self.table_name,
-                                           where_cluase)
+                                           where_clause)
         self.presto_client.connect()
         self.presto_client.execute_command(command_prefix)
         self.presto_client.fetch_results()
         self.presto_client.disconnect()
 
-    def add_partition_from_path(self, path):
-        path_dict = self.split_parquet_path_to_values(path)
+    def add_partition_from_path(self, partition_path):
+        path_dict = self.split_parquet_path_to_values(partition_path)
         self.add_partition(year=path_dict['year'],
                            month=path_dict['month'],
                            day=path_dict['day'],
                            hour=path_dict['hour'])
+
+    def drop_partition_from_path(self, partition_path):
+        if path.isdir(partition_path):
+            path_dict = self.split_parquet_path_to_values(partition_path)
+            self.drop_partition(year=path_dict['year'],
+                                month=path_dict['month'],
+                                day=path_dict['day'],
+                                hour=path_dict['hour'])
+            utils = Utils(self.logger, self.conf)
+            utils.delete_dir(partition_path)
 
     def drop(self):
         try:
