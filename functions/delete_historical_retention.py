@@ -3,7 +3,6 @@ from config.app_conf import AppConf
 from core.parquet_table import ParquetTable
 from core.presto_client import PrestoClient
 from core.params import Params
-from utils.utils import Utils
 
 
 def get_bytes_from_file(filename):
@@ -21,13 +20,11 @@ def main(context):
     params = Params()
     params.set_params_from_context(context)
     context.logger.info(params.__dict__)
-    delete_util = Utils(context.logger, conf)
-    parquet_path = context.parameters['parquet_path']
+    historical_path = context.parameters['historical_path']
     context.logger.info("generating parquet table")
     p_client = PrestoClient(context.logger, conf, params)
     parquet = ParquetTable(context.logger, conf, params, p_client)
-    parquet.drop_partition_from_path(parquet_path)
-    utils.delete_dir(parquet_path)
+    parquet.drop_partition_from_path(historical_path)
 
 
 if __name__ == '__main__':
