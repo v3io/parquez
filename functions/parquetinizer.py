@@ -39,7 +39,7 @@ def generate_kv_parquet_path(container='parquez',
     kv_path = "v3io://{}/{}/{}/".format(container, table, current_date_path)
     parquet_path = "v3io://{}/{}_{}/{}/".format(container, table, compress_type, current_date_path)
     fuse_kv_path = "/v3io/{}/{}/{}/".format(container, table, current_date_path)
-    historical_path = "v3io://{}/{}/{}/".format(container, table, historical_date_path)
+    historical_path = "/User/{}/{}_{}/{}/".format(container, table, compress_type, historical_date_path)
     return {'kv_path': kv_path,
             'parquet_path': parquet_path,
             'fuse_kv_path': fuse_kv_path,
