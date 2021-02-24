@@ -5,7 +5,6 @@ from utils.logger import Logger
 from utils.utils import Utils
 from core.presto_client import PrestoClient
 import requests
-import os.path
 from os import path
 
 
