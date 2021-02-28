@@ -94,12 +94,6 @@ def main(context):
     func_delete_kv_partition.spec.service_account = 'mlrun-api'
     func_delete_kv_partition.run(params=path, artifact_path='/User/artifacts')
 
-    delete_kv_partition_url = "db://{}/delete-kv-partition:latest".format(project_name)
-    func_delete_kv_partition = import_function(url=delete_kv_partition_url)
-    func_delete_kv_partition.spec.artifact_path = 'User/artifacts'
-    func_delete_kv_partition.spec.service_account = 'mlrun-api'
-    func_delete_kv_partition.run(params=path, artifact_path='/User/artifacts')
-
     delete_historical_retention_url = "db://{}/delete-historical-retention:latest".format(project_name)
     func_delete_historical_retention = import_function(url=delete_historical_retention_url)
     func_delete_historical_retention.spec.artifact_path = 'User/artifacts'
