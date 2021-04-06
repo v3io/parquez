@@ -7,7 +7,7 @@ def test_app_conf():
     logger = Logger()
     cf = AppConf(logger, config_path='test.ini')
     assert cf.v3io_container == "bigdata"
-    assert cf.v3io_access_key== "<access_key>"
+    assert cf.v3io_access_key == "<access_key>"
     assert cf.hive_schema == "default"
     assert cf.presto_uri == "<localhost>"
     assert cf.v3io_connector == "v3io"
