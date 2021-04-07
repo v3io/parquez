@@ -1,6 +1,7 @@
 from mlrun import get_or_create_ctx
 from pyspark.sql import SparkSession
 from os import path
+import sys
 
 def main(ctx):
     fuse_path = context.parameters['fuse_kv_path']
@@ -18,6 +19,7 @@ def main(ctx):
         df.repartition(coalesce).write.mode('overwrite').parquet(parquet_path)
     else:
         print("Directory {} Doesnt exist".format(fuse_path))
+        sys.exit(1)
 
 
 if __name__ == '__main__':
