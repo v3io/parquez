@@ -1,0 +1,6 @@
+config/__pycache__/
+core/__pycache__/
+tests/artifacts/
+tests/test_results/
+utils/__pycache__/
+venv/

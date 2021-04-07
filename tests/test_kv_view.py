@@ -1,18 +1,17 @@
 from utils.logger import Logger
 from config.app_conf import AppConf
-from core.kv_table import KVTable
 from core.kv_view import KVView
+from core.params import Params
+from core.presto_client import PrestoClient
 
-KVTABLE_NAME = "faker"
-# test_kv_view.py
+PARAMS = Params(partition_by='h', real_time_table_name="faker", user_name='avia',
+                access_key='051b75cc-019b-49da-83cc-c17495ed6d99')
 
 
 def test_kv_view():
     logger = Logger()
     conf = AppConf(logger, "test.ini")
-    kv_table = KVTable(logger, conf, KVTABLE_NAME)
-    kv_table.import_table_schema()
-    kv_view = KVView(logger, '1d', conf, kv_table)
+    params = PARAMS
+    presto_client = PrestoClient(logger, conf, params)
+    kv_view = KVView(logger, params, conf, presto_client)
     kv_view.generate_crete_view_script()
-    kv_view.drop_view()
-

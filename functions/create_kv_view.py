@@ -2,14 +2,7 @@ from mlrun import get_or_create_ctx
 from config.app_conf import AppConf
 from core.params import Params
 from core.kv_view import KVView
-
-CONFIG_PATH = '/User/parquez/config/parquez.ini'
-REAL_TIME_TABLE_NAME = 'faker'
-
-def get_bytes_from_file(filename):
-    with open(filename, "r") as f:
-        output = f.read()
-    return output
+from core.presto_client import PrestoClient
 
 
 def main(context):
@@ -21,10 +14,11 @@ def main(context):
     params = Params()
     params.set_params_from_context(context)
     context.logger.info("generating view over kv")
-    kv_view = KVView(context.logger, params, conf)
+    p_client = PrestoClient(context.logger, conf, params)
+    kv_view = KVView(context.logger, params, conf, p_client)
     kv_view.generate_crete_view_script()
 
 
 if __name__ == '__main__':
-    context = get_or_create_ctx('create-parquet-table')
-    main(context)
+    ctx = get_or_create_ctx('create-kv-view')
+    main(ctx)

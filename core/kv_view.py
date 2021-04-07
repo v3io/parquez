@@ -2,6 +2,8 @@ from datetime import datetime, timedelta
 import re
 from pyhive import presto
 from core.params import Params
+from config.app_conf import AppConf
+from core.presto_client import PrestoClient
 
 PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
 
@@ -10,31 +12,21 @@ PARTITION_INTERVAL_RE = r"([0-9]+)([a-zA-Z]+)"
 
 
 class KVView(object):
-    def __init__(self, logger, params: Params, conf):
+    def __init__(self, logger, params: Params, conf: AppConf, presto_client: PrestoClient):
         self.logger = logger
         self.params = params
-        self.name = params.real_time_table_name + "_view"
-        self.real_time_window = params.real_time_window
         self.conf = conf
-        self.uri = conf.presto_uri
-        self.cursor = None
-
-    def connect(self):
-        req_kw = {'auth': (self.params.user_name, self.params.access_key), 'verify': False}
-        self.cursor = presto.connect(self.uri, port=443, username=self.params.user_name,
-                                     protocol='https', requests_kwargs=req_kw).cursor()
-        self.logger.info("connected to presto")
-
-    def disconnect(self):
-        self.cursor.close()
-
-    def execute_command(self, command):
-        self.cursor.execute(command)
+        self.presto_client = presto_client
+        # self.name = params.real_time_table_name + "_view"
+        # self.real_time_window = params.real_time_window
+        # self.conf = conf
+        # self.uri = conf.presto_uri
+        # self.cursor = None
 
     def parse_real_time_window(self):
         now = datetime.utcnow()
-        part = re.match(PARTITION_INTERVAL_RE, self.real_time_window).group(2)
-        val = int(re.match(PARTITION_INTERVAL_RE, self.real_time_window).group(1))
+        part = re.match(PARTITION_INTERVAL_RE, self.params.real_time_window).group(2)
+        val = int(re.match(PARTITION_INTERVAL_RE, self.params.real_time_window).group(1))
         self.logger.debug("generate time window".format(part))
         if part == 'd':
             window_time = now - timedelta(days=val - 1)
@@ -45,7 +37,7 @@ class KVView(object):
 
     def generate_where_clause(self):
         window_time = self.parse_real_time_window()
-        part = re.match(PARTITION_INTERVAL_RE, self.real_time_window).group(2)
+        part = re.match(PARTITION_INTERVAL_RE, self.params.real_time_window).group(2)
         self.logger.debug("generate_partition_by {0}".format(part))
         condition = ''
         if part == 'y':
@@ -70,10 +62,10 @@ class KVView(object):
 
     def create_view(self, command):
         self.logger.debug("Create view command : " + command)
-        self.connect()
-        self.execute_command(command)
-        self.logger.info(self.cursor.fetchall())
-        self.disconnect()
+        self.presto_client.connect()
+        self.presto_client.execute_command(command)
+        self.logger.info(self.presto_client.fetch_results())
+        self.presto_client.disconnect()
 
     def generate_crete_view_script(self):
         try:
@@ -81,7 +73,7 @@ class KVView(object):
             prefix = self.create_view_prefix()
             clause = self.generate_where_clause()
             script = prefix + clause
-            self.logger.debug("create kv view script {}".format(script))
+            self.logger.info("create kv view script {}".format(script))
             self.create_view(script)
         except Exception as e:
             self.logger.error(e)
@@ -92,10 +84,10 @@ class KVView(object):
             self.logger.info("dropping kv view ")
             hive_prefix = "hive." + self.conf.hive_schema + "."
             command = "DROP VIEW IF EXISTS " + hive_prefix + self.params.real_time_table_name + "_view"
-            self.connect()
-            self.execute_command(command)
-            self.logger.info(self.cursor.fetchall())
-            self.disconnect()
+            self.presto_client.connect()
+            self.presto_client.execute_command(command)
+            self.presto_client.fetch_results()
+            self.presto_client.disconnect()
         except Exception as e:
             self.logger.error(e)
             raise

@@ -10,8 +10,8 @@ class Params(object):
                  , config_path='parquez.ini'
                  , user_name='iguazio'
                  , access_key='access_key'
-                 , project_path='~/parquez'
-                 , shell_pod_name='shell'
+                 , project_name='parquez'
+
 
                  ):
         self.view_name = view_name
@@ -23,8 +23,7 @@ class Params(object):
         self.config_path = config_path
         self.user_name = user_name
         self.access_key = access_key
-        self.project_path = project_path
-        self.shell_pod_name = shell_pod_name
+        self.project_name = project_name
 
     def set_params_from_context(self, context):
         self.view_name = context.parameters['view_name']
@@ -37,8 +36,5 @@ class Params(object):
             self.config_path = context.parameters['config_path']
         self.user_name = context.parameters['user_name']
         self.access_key = context.parameters['access_key']
-        if 'project_path' in context.parameters:
-            self.project_path = context.parameters['project_path']
-        if 'shell_pod_name' in context.parameters:
-            self.shell_pod_name = context.parameters['shell_pod_name']
-
+        if 'project_name' in context.parameters:
+            self.project_name = context.parameters['project_name']
