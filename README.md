@@ -23,7 +23,6 @@ config : config file path   <br />
 ### config file parametres
 [v3io] <br />
 v3io_container = bigdata <br />
-access_key = <access_key> <br />
 
 [hive] <br />
 hive_schema = default <br />
@@ -36,8 +35,7 @@ hive_connector = hive <br />
 
 [nginx] <br />
 v3io_api_endpoint_host = <v3io_api_endpoint_host> <br />
-v3io_api_endpoint_port = 8081 <br />
-username = <user_name> <br />
+v3io_api_endpoint_port = 443 <br />
 
 [compression] <br />
 type = Parquet  <br />
@@ -59,10 +57,7 @@ mkdir parquez && \
     cd parquez
 ```
 
-Run the parquez
+Run parquez
 ```
-./run_parquez.sh --view-name parquezView --partition-by h --partition-interval 1h --real-time-window 3h \
---historical-retention 21h --real-time-table-name table_name --config config/parquez.ini
-```
-
+from jupyter run parquez.ipynb
 
