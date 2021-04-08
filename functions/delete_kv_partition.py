@@ -5,7 +5,7 @@ def main(context):
     context.logger.info("deleting partition {}".format(partition))
     sj = new_function(kind='spark',
                       #command='/igz/java/libs/v3io-spark2-tools_2.11.jar',
-                      command='/igz/java/libs/v3io-spark2-tools_2.11-7098927429497484201.jar',
+                      command='/igz/java/libs/v3io-spark2-tools_2.11.jar',
                       name='spark_delete_kv_partition')
     sj.with_driver_limits(cpu="4000m")
     sj.with_driver_requests(cpu=2, mem="512m")
