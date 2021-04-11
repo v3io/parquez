@@ -8,9 +8,9 @@ def main(context):
                       command='/igz/java/libs/v3io-spark2-tools_2.11.jar',
                       name='spark_delete_kv_partition')
     sj.with_driver_limits(cpu="4000m")
-    sj.with_driver_requests(cpu=2, mem="512m")
+    sj.with_driver_requests(cpu=2, mem="2g")
     sj.with_executor_limits(cpu="4000m")
-    sj.with_executor_requests(cpu=2, mem="512m")
+    sj.with_executor_requests(cpu=2, mem="2g")
     # Not really needed in this case
     sj.with_igz_spark()
     sj.spec.replicas = 2
