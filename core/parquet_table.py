@@ -206,6 +206,8 @@ class ParquetTable(Table):
                                 hour=path_dict['hour'])
             utils = Utils(self.logger, self.conf)
             utils.delete_dir(partition_path)
+        else:
+            self.logger.info("path {} doesn't exist".format(partition_path))
 
     def drop(self):
         try:
