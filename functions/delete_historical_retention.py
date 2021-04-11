@@ -12,8 +12,9 @@ def get_bytes_from_file(filename):
 
 
 def main(context):
-    context.logger.info("starting parquet add partition job")
+    context.logger.info("starting delete historical retention job")
     p_config_path = context.parameters['config_path']
+    context.logger.info("config_path {}".format(p_config_path))
     if p_config_path:
         config_path = p_config_path
     conf = AppConf(context.logger, config_path)
