@@ -38,19 +38,12 @@ def main(context):
 
     unified_view = UnifiedView(context.logger, params, conf, schema, presto_client)
     unified_view.drop_view()
-    mlrun.get_run_db().delete_schedule(params.project_name, 'parquetinizer')
+    try:
+        mlrun.get_run_db().delete_schedule(params.project_name, 'parquetinizer')
+    except:
+        context.logger.error("deleting schedule failed")
 
 
 if __name__ == '__main__':
     ctx = get_or_create_ctx('clean_parquez')
     main(ctx)
-
-
-
-
-
-
-
-
-
-
