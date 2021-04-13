@@ -98,7 +98,7 @@ def main(context):
     func_delete_historical_retention = import_function(url=delete_historical_retention_url)
     func_delete_historical_retention.spec.artifact_path = 'User/artifacts'
     func_delete_historical_retention.spec.service_account = 'mlrun-api'
-    func_delete_historical_retention.run(params=path, artifact_path='/User/artifacts')
+    func_delete_historical_retention.run(params=unified_params, artifact_path='/User/artifacts')
 
 
 if __name__ == '__main__':
